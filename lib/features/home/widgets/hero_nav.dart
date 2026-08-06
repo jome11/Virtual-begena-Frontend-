@@ -12,7 +12,7 @@ class HeroNav extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         Image.asset(
-          'assets/images/vb2.png',
+          'assets/images/vb4.png',
           fit: BoxFit.contain,
         ),
         Positioned(

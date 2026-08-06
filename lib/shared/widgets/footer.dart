@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/responsive.dart';
+import '../../core/constants/app_strings.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
@@ -22,21 +23,21 @@ class Footer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'VIRTUAL BEGENA',
-                    style: TextStyle(
+                    AppStrings.get('app_title'),
+                    style: const TextStyle(
                       color: AppColors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
-                    'Bringing the ancient sounds\nto the modern world.',
-                    style: TextStyle(color: Colors.white70),
+                    AppStrings.get('footer_subtitle'),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
@@ -55,9 +56,9 @@ class Footer extends StatelessWidget {
             ],
           ),
           const Divider(color: Colors.white24, height: 40),
-          const Text(
-            '© 2026 Virtual Begena. All rights reserved.',
-            style: TextStyle(color: Colors.white38, fontSize: 12),
+          Text(
+            AppStrings.get('footer_copyright'),
+            style: const TextStyle(color: Colors.white38, fontSize: 12),
           ),
         ],
       ),

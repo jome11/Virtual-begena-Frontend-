@@ -8,31 +8,36 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/images/vb2.png',
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: 20,
-            right: 20,
-            child: const _LanguageToggle(),
-          ),
-          Positioned(
-            bottom: 80,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: _EnterButton(
-                onTap: () => context.go('/home'),
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, child) {
+        return Scaffold(
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'assets/images/vb4.png',
+                fit: BoxFit.cover,
               ),
-            ),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: const _LanguageToggle(),
+              ),
+              Positioned(
+                bottom: 80,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: _EnterButton(
+                    onTap: () => context.go('/home'),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -9,65 +9,70 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: Responsive.isDesktop(context)
-            ? AppConstants.desktopHorizontalPadding
-            : AppConstants.horizontalPadding,
-      ),
-      height: 80,
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            AppStrings.get('app_title'),
-            style: const TextStyle(
-              color: AppColors.primary,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, child) {
+        return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: Responsive.isDesktop(context)
+                ? AppConstants.desktopHorizontalPadding
+                : AppConstants.horizontalPadding,
           ),
-          Row(
+          height: 80,
+          decoration: const BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (Responsive.isDesktop(context))
-                Row(
-                  children: [
-                    _NavLink(title: AppStrings.get('home'), onTap: () {}),
-                    _NavLink(title: AppStrings.get('about'), onTap: () {}),
-                    _NavLink(title: AppStrings.get('lessons'), onTap: () {}),
-                    _NavLink(title: AppStrings.get('contact'), onTap: () {}),
-                    const SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondary,
-                        foregroundColor: AppColors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 16,
+              Text(
+                AppStrings.get('app_title'),
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              Row(
+                children: [
+                  if (Responsive.isDesktop(context))
+                    Row(
+                      children: [
+                        _NavLink(title: AppStrings.get('home'), onTap: () {}),
+                        _NavLink(title: AppStrings.get('about'), onTap: () {}),
+                        _NavLink(title: AppStrings.get('lessons'), onTap: () {}),
+                        _NavLink(title: AppStrings.get('contact'), onTap: () {}),
+                        const SizedBox(width: 20),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.secondary,
+                            foregroundColor: AppColors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 16,
+                            ),
+                          ),
+                          child: Text(AppStrings.get('get_started')),
                         ),
-                      ),
-                      child: Text(AppStrings.get('get_started')),
+                      ],
                     ),
-                  ],
-                ),
-              const SizedBox(width: 20),
-              const _LanguageToggle(),
-              if (!Responsive.isDesktop(context))
-                IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
+                  const SizedBox(width: 20),
+                  const _LanguageToggle(),
+                  if (!Responsive.isDesktop(context))
+                    IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        Scaffold.of(context).openEndDrawer();
+                      },
+                    ),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

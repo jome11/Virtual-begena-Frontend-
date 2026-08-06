@@ -29,6 +29,8 @@ class AppStrings {
       'feature_2_desc': 'Real-time feedback and virtual strings to master the melody.',
       'feature_3_title': 'Cultural Heritage',
       'feature_3_desc': 'Learn the history and spiritual significance of the Begena.',
+      'footer_subtitle': 'Bringing the ancient sounds\nto the modern world.',
+      'footer_copyright': '© 2026 Virtual Begena. All rights reserved.',
     },
     Language.am: {
       'app_title': 'ቪርቹዋል በገና',
@@ -48,6 +50,8 @@ class AppStrings {
       'feature_2_desc': 'ዜማውን ለመለማመድ የቀጥታ ግብረመልስ እና ምናባዊ አውታሮች።',
       'feature_3_title': 'ባህላዊ ቅርስ',
       'feature_3_desc': 'የበገናን ታሪክ እና መንፈሳዊ ጠቀሜታ ይወቁ።',
+      'footer_subtitle': 'ጥንታዊ ድምጾችን ወደ ዘመናዊው ዓለም ማምጣት።',
+      'footer_copyright': '© 2026 ቪርቹዋል በገና። መብቱ በሕግ የተጠበቀ ነው።',
     },
   };
 }
