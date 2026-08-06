@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/constants/app_strings.dart';
+import '../../core/theme/app_colors.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -15,6 +17,11 @@ class LandingScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Positioned(
+            top: 20,
+            right: 20,
+            child: const _LanguageToggle(),
+          ),
+          Positioned(
             bottom: 80,
             left: 0,
             right: 0,
@@ -26,6 +33,39 @@ class LandingScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _LanguageToggle extends StatelessWidget {
+  const _LanguageToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, child) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextButton(
+            onPressed: () {
+              languageNotifier.value =
+                  lang == Language.en ? Language.am : Language.en;
+            },
+            child: Text(
+              lang == Language.en ? 'አማ' : 'EN',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                shadows: [Shadow(color: Colors.black, blurRadius: 5)],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -65,12 +105,13 @@ class _EnterButtonState extends State<_EnterButton> {
               ),
             ],
           ),
-          child: const Text(
-            'Enter',
+          child: Text(
+            AppStrings.get('enter'),
             style: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
+              fontFamily: languageNotifier.value == Language.am ? 'BelaBereka' : null,
               letterSpacing: 1.2,
             ),
           ),

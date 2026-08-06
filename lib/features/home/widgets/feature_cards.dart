@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/constants/app_strings.dart';
 
 class FeatureCards extends StatelessWidget {
   const FeatureCards({super.key});
@@ -18,7 +19,7 @@ class FeatureCards extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Why Choose Virtual Begena?',
+            AppStrings.get('feature_title'),
             style: Theme.of(context).textTheme.displayMedium,
             textAlign: TextAlign.center,
           ),
@@ -39,20 +40,20 @@ class FeatureCards extends StatelessWidget {
 
   List<Widget> _buildCards() {
     return [
-      const _FeatureCard(
+      _FeatureCard(
         icon: Icons.school,
-        title: 'Structured Lessons',
-        description: 'Step-by-step guidance from beginners to advanced techniques.',
+        title: AppStrings.get('feature_1_title'),
+        description: AppStrings.get('feature_1_desc'),
       ),
-      const _FeatureCard(
+      _FeatureCard(
         icon: Icons.music_note,
-        title: 'Interactive Practice',
-        description: 'Real-time feedback and virtual strings to master the melody.',
+        title: AppStrings.get('feature_2_title'),
+        description: AppStrings.get('feature_2_desc'),
       ),
-      const _FeatureCard(
+      _FeatureCard(
         icon: Icons.history_edu,
-        title: 'Cultural Heritage',
-        description: 'Learn the history and spiritual significance of the Begena.',
+        title: AppStrings.get('feature_3_title'),
+        description: AppStrings.get('feature_3_desc'),
       ),
     ];
   }

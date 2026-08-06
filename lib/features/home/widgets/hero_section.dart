@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../shared/widgets/animated_button.dart';
+import '../../../core/constants/app_strings.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -48,7 +49,7 @@ class HeroSection extends StatelessWidget {
                   crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'VIRTUAL BEGENA',
+                      AppStrings.get('hero_title'),
                       textAlign: isMobile ? TextAlign.center : TextAlign.left,
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
                         color: AppColors.primary,
@@ -57,7 +58,7 @@ class HeroSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Master the Harp of David.\nExperience the spiritual depth of Ethiopian heritage through immersive digital lessons.',
+                      AppStrings.get('hero_subtitle'),
                       textAlign: isMobile ? TextAlign.center : TextAlign.left,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontSize: isMobile ? 18 : 22,
@@ -65,7 +66,7 @@ class HeroSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
                     AnimatedButton(
-                      text: 'START LEARNING',
+                      text: AppStrings.get('start_learning'),
                       onTap: () {},
                     ),
                   ],

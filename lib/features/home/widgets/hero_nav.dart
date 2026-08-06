@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/constants/app_strings.dart';
 
 class HeroNav extends StatelessWidget {
   const HeroNav({super.key});
@@ -20,10 +21,10 @@ class HeroNav extends StatelessWidget {
             spacing: 32,
             alignment: WrapAlignment.center,
             children: [
-              _NavText('Home', onTap: () => context.go('/home')),
-              _NavText('Lessons', onTap: () => context.go('/lessons')),
-              _NavText('About', onTap: () => context.go('/about')),
-              _NavText('Contact', onTap: () => context.go('/contact')),
+              _NavText(AppStrings.get('home'), onTap: () => context.go('/home')),
+              _NavText(AppStrings.get('lessons'), onTap: () => context.go('/lessons')),
+              _NavText(AppStrings.get('about'), onTap: () => context.go('/about')),
+              _NavText(AppStrings.get('contact'), onTap: () => context.go('/contact')),
             ],
           ),
         ),
