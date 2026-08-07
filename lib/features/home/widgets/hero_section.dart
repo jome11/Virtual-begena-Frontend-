@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_color_scheme.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 
@@ -9,35 +9,40 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: context.colors.background,
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 64),
-      child: LayoutBuilder(
-        builder: (context, c) {
-          final narrow = c.maxWidth < 900;
-          final text = _HeroText(narrow: narrow);
-          final art = _HeroArt(narrow: narrow);
-          if (narrow) {
-            return Column(children: [text, const SizedBox(height: 36), art]);
-          }
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(flex: 5, child: text),
-              const SizedBox(width: 48),
-              Expanded(flex: 4, child: art)
-            ],
-          );
-        },
-      ),
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return Container(
+          width: double.infinity,
+          color: AppColors.brandCream,
+          padding: const EdgeInsets.fromLTRB(32, 48, 32, 88),
+          child: LayoutBuilder(
+            builder: (context, c) {
+              final narrow = c.maxWidth < 900;
+              final text = _EditorialText(narrow: narrow);
+              final art = _FloatingArt(narrow: narrow);
+              if (narrow) {
+                return Column(children: [art, const SizedBox(height: 36), text]);
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(flex: 5, child: text),
+                  const SizedBox(width: 56),
+                  Expanded(flex: 5, child: art)
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
 
-class _HeroText extends StatelessWidget {
+class _EditorialText extends StatelessWidget {
   final bool narrow;
-  const _HeroText({required this.narrow});
+  const _EditorialText({required this.narrow});
 
   @override
   Widget build(BuildContext context) {
@@ -45,26 +50,41 @@ class _HeroText extends StatelessWidget {
       crossAxisAlignment: narrow ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Text(
-          AppStrings.get('hero_title'),
+          'ETHIOPIAN HERITAGE • DIGITAL LESSONS',
           textAlign: narrow ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
-            color: context.colors.textPrimary,
-            fontSize: 40,
-            fontWeight: FontWeight.w800,
-            height: 1.15,
+          style: const TextStyle(
+            color: AppColors.brandAmber,
+            fontSize: 11.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 2.2,
           ),
         ),
         const SizedBox(height: 18),
         Text(
-          AppStrings.get('hero_subtitle'),
+          AppStrings.get('hero_title'),
           textAlign: narrow ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
-            color: context.colors.textSecondary.withValues(alpha: 0.9),
-            fontSize: 16,
-            height: 1.6,
+          style: GoogleFonts.playfairDisplay(
+            color: AppColors.brandInk,
+            fontSize: narrow ? 42 : 58,
+            fontWeight: FontWeight.w700,
+            height: 1.08,
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: narrow ? null : 440,
+          child: Text(
+            AppStrings.get('hero_subtitle'),
+            textAlign: narrow ? TextAlign.center : TextAlign.left,
+            style: TextStyle(
+              color: AppColors.brandInk.withValues(alpha: 0.65),
+              fontSize: 15.5,
+              height: 1.65,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        const SizedBox(height: 34),
         Wrap(
           alignment: narrow ? WrapAlignment.center : WrapAlignment.start,
           spacing: 14,
@@ -73,27 +93,28 @@ class _HeroText extends StatelessWidget {
             ElevatedButton(
               onPressed: () => context.go('/login'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: context.colors.accent,
+                backgroundColor: AppColors.brandAmber,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),
               child: Text(
                 AppStrings.get('start_learning'),
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: 0.5),
               ),
             ),
-            TextButton.icon(
+            OutlinedButton(
               onPressed: () {},
-              icon: Icon(Icons.play_circle_outline, color: context.colors.textPrimary, size: 18),
-              label: Text(
-                'See how it works',
-                style: TextStyle(
-                  color: context.colors.textPrimary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.brandInk,
+                side: BorderSide(color: AppColors.brandInk.withValues(alpha: 0.3)),
+                padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 18),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+              ),
+              child: Text(
+                AppStrings.get('hero_how_it_works'),
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
               ),
             ),
           ],
@@ -103,25 +124,71 @@ class _HeroText extends StatelessWidget {
   }
 }
 
-class _HeroArt extends StatelessWidget {
+class _FloatingArt extends StatelessWidget {
   final bool narrow;
-  const _HeroArt({required this.narrow});
+  const _FloatingArt({required this.narrow});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: narrow ? 260 : 340,
-      decoration: BoxDecoration(
-        color: context.colors.background.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: context.colors.border),
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        Icons.music_note_rounded,
-        size: 96,
-        color: AppColors.sage.withValues(alpha: 0.5),
+    final size = narrow ? 260.0 : 380.0;
+    return SizedBox(
+      height: size,
+      width: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 0,
+            left: size * 0.05,
+            child: _Blob(diameter: size * 0.55, color: AppColors.brandBeige),
+          ),
+          Positioned(
+            bottom: 0,
+            right: size * 0.02,
+            child: _Blob(diameter: size * 0.45, color: AppColors.brandRose.withValues(alpha: 0.55)),
+          ),
+          Positioned(
+            top: size * 0.12,
+            right: 0,
+            child: Container(
+              width: 14,
+              height: 14,
+              decoration: const BoxDecoration(color: AppColors.brandInk, shape: BoxShape.circle),
+            ),
+          ),
+          Container(
+            width: size * 0.42,
+            height: size * 0.42,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.brandInk.withValues(alpha: 0.12),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                )
+              ],
+              border: Border.all(color: AppColors.brandAmber.withValues(alpha: 0.25), width: 1.5),
+            ),
+            alignment: Alignment.center,
+            child: Icon(Icons.music_note_rounded, size: size * 0.16, color: AppColors.brandAmber),
+          ),
+        ],
       ),
     );
   }
+}
+
+class _Blob extends StatelessWidget {
+  final double diameter;
+  final Color color;
+  const _Blob({required this.diameter, required this.color});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: diameter,
+    height: diameter,
+    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  );
 }

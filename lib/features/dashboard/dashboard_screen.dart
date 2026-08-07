@@ -19,13 +19,13 @@ class DashboardScreen extends StatelessWidget {
           valueListenable: languageNotifier,
           builder: (context, lang, child) {
             final items = [
-              (AppStrings.get('mode_exercise'), 'Guided drills', Icons.bolt_rounded, AppColors.modeExercise, '/exercise'),
-              (AppStrings.get('mode_free_play'), 'Explore freely', Icons.music_note_rounded, AppColors.modeFreePlay, '/free-play'),
-              (AppStrings.get('mode_tuning'), 'Get in tune', Icons.tune_rounded, AppColors.modeTuning, '/tuning'),
-              (AppStrings.get('mode_mezmur_tenat'), 'Learn Mezmurs', Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat'),
-              (AppStrings.get('mode_progress'), 'Track growth', Icons.bar_chart_rounded, AppColors.modeProgress, '/progress'),
-              (AppStrings.get('mode_training_plan'), 'AI-guided plan', Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan'),
-              (AppStrings.get('mode_real_play'), 'Play for real', Icons.graphic_eq_rounded, AppColors.modeRealPlay, '/real-play'),
+              (AppStrings.get('mode_exercise'), AppStrings.get('mode_exercise_sub'), Icons.bolt_rounded, AppColors.modeExercise, '/exercise'),
+              (AppStrings.get('mode_free_play'), AppStrings.get('mode_free_play_sub'), Icons.music_note_rounded, AppColors.modeFreePlay, '/free-play'),
+              (AppStrings.get('mode_tuning'), AppStrings.get('mode_tuning_sub'), Icons.tune_rounded, AppColors.modeTuning, '/tuning'),
+              (AppStrings.get('mode_mezmur_tenat'), AppStrings.get('mode_mezmur_tenat_sub'), Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat'),
+              (AppStrings.get('mode_progress'), AppStrings.get('mode_progress_sub'), Icons.bar_chart_rounded, AppColors.modeProgress, '/progress'),
+              (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan'),
+              (AppStrings.get('mode_real_play'), AppStrings.get('mode_real_play_sub'), Icons.graphic_eq_rounded, AppColors.modeRealPlay, '/real-play'),
             ];
 
             return Scaffold(

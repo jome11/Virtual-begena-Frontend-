@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/theme/app_color_scheme.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -19,8 +20,8 @@ class LandingScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Positioned(
-                top: 20,
-                right: 20,
+                top: 30,
+                right: 30,
                 child: const _LanguageToggle(),
               ),
               Positioned(
@@ -51,7 +52,7 @@ class _LanguageToggle extends StatelessWidget {
       builder: (context, lang, child) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(20),
           ),
           child: TextButton(
@@ -59,12 +60,14 @@ class _LanguageToggle extends StatelessWidget {
               languageNotifier.value =
                   lang == Language.en ? Language.am : Language.en;
             },
-            child: Text(
-              lang == Language.en ? 'አማ' : 'EN',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                shadows: [Shadow(color: Colors.black, blurRadius: 5)],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                lang == Language.en ? 'አማ' : 'EN',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -98,12 +101,12 @@ class _EnterButtonState extends State<_EnterButton> {
           padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
           decoration: BoxDecoration(
             color: _hovering
-                ? const Color(0xFF2E4A3D)
-                : const Color(0xFF2E4A3D).withValues(alpha: 0.85),
+                ? context.colors.accent
+                : context.colors.accent.withValues(alpha: 0.85),
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: _hovering ? 0.25 : 0.15),
+                color: Colors.black.withValues(alpha: _hovering ? 0.3 : 0.15),
                 blurRadius: _hovering ? 12 : 6,
                 offset: const Offset(0, 3),
               ),

@@ -1,61 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme/app_color_scheme.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import 'theme_toggle_button.dart';
 
-class NavBar extends StatefulWidget implements PreferredSizeWidget {
+class NavBar extends StatelessWidget implements PreferredSizeWidget {
   const NavBar({super.key});
 
   @override
-  State<NavBar> createState() => _NavBarState();
-
-  @override
   Size get preferredSize => const Size.fromHeight(80);
-}
 
-class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.colors.surface,
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-      child: Row(
-        children: [
-          Text(
-            AppStrings.get('app_title'),
-            style: TextStyle(
-              color: context.colors.textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.4,
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return Container(
+          color: AppColors.brandCream,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+          child: Row(
+            children: [
+              Text(
+                AppStrings.get('app_title'),
+                style: const TextStyle(
+                  color: AppColors.brandInk,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const Spacer(),
+              if (MediaQuery.of(context).size.width > 700) ...[
+                _NavLink(label: AppStrings.get('home'), onTap: () => context.go('/home')),
+                _NavLink(label: AppStrings.get('lessons'), onTap: () => context.go('/lessons')),
+                _NavLink(label: AppStrings.get('about'), onTap: () => context.go('/about')),
+                _NavLink(label: AppStrings.get('contact'), onTap: () => context.go('/contact')),
+                const SizedBox(width: 8),
+              ],
+              const _LanguageToggle(),
+              const SizedBox(width: 8),
+              const ThemeToggleButton(),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () => context.go('/login'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.brandAmber,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                ),
+                child: Text(
+                  AppStrings.get('get_started'),
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LanguageToggle extends StatelessWidget {
+  const _LanguageToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return TextButton(
+          onPressed: () {
+            languageNotifier.value = lang == Language.en ? Language.am : Language.en;
+          },
+          child: Text(
+            lang == Language.en ? 'አማ' : 'EN',
+            style: const TextStyle(
+              color: AppColors.brandAmber,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
             ),
           ),
-          const Spacer(),
-          if (MediaQuery.of(context).size.width > 700) ...[
-            _NavLink(label: AppStrings.get('home'), onTap: () => context.go('/home')),
-            _NavLink(label: AppStrings.get('lessons'), onTap: () => context.go('/lessons')),
-            _NavLink(label: AppStrings.get('about'), onTap: () => context.go('/about')),
-            _NavLink(label: AppStrings.get('contact'), onTap: () => context.go('/contact')),
-            const SizedBox(width: 12),
-          ],
-          const ThemeToggleButton(),
-          const SizedBox(width: 8),
-          OutlinedButton(
-            onPressed: () => context.go('/login'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: context.colors.textPrimary,
-              side: BorderSide(color: context.colors.border),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-            child: Text(
-              AppStrings.get('get_started'),
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -73,9 +102,9 @@ class _NavLink extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          color: context.colors.textSecondary,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+          color: AppColors.brandInk.withValues(alpha: 0.7),
+          fontSize: 13.5,
+          fontWeight: FontWeight.w600,
         ),
       ),
     ),

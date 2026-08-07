@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
+import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/camera_panel.dart';
 import '../../shared/widgets/stat_tile.dart';
@@ -42,33 +43,38 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: ModeAppBar(
-        modeLabel: 'EXERCISE MODE',
-        modeColor: AppColors.modeExercise,
-        leading: QenetSelector(selected: _qenet, onChanged: (q) => setState(() => _qenet = q)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: LayoutBuilder(
-          builder: (context, c) {
-            final camera = CameraPanel(service: handTrackingService);
-            final sidebar = _sidebar();
-            if (c.maxWidth < 800) {
-              return SingleChildScrollView(child: Column(children: [camera, const SizedBox(height: 16), sidebar]));
-            }
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 2, child: camera),
-                const SizedBox(width: 20),
-                SizedBox(width: 280, child: sidebar)
-              ],
-            );
-          },
-        ),
-      ),
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return Scaffold(
+          backgroundColor: context.colors.background,
+          appBar: ModeAppBar(
+            modeLabel: AppStrings.get('mode_exercise').toUpperCase(),
+            modeColor: AppColors.modeExercise,
+            leading: QenetSelector(selected: _qenet, onChanged: (q) => setState(() => _qenet = q)),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: LayoutBuilder(
+              builder: (context, c) {
+                final camera = CameraPanel(service: handTrackingService);
+                final sidebar = _sidebar();
+                if (c.maxWidth < 800) {
+                  return SingleChildScrollView(child: Column(children: [camera, const SizedBox(height: 16), sidebar]));
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 2, child: camera),
+                    const SizedBox(width: 20),
+                    SizedBox(width: 280, child: sidebar)
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -77,7 +83,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     children: [
       PanelCard(
         child: Column(children: [
-          Text('Session', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          Text(AppStrings.get('session'), style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
           Text(
             '#$_session',
@@ -91,16 +97,16 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       ),
       const SizedBox(height: 12),
       Row(children: [
-        Expanded(child: StatTile(label: 'Correct', value: '$_correct', valueColor: AppColors.success)),
+        Expanded(child: StatTile(label: AppStrings.get('correct'), value: '$_correct', valueColor: AppColors.success)),
         const SizedBox(width: 12),
-        Expanded(child: StatTile(label: 'Wrong', value: '$_wrong', valueColor: AppColors.danger)),
+        Expanded(child: StatTile(label: AppStrings.get('wrong'), value: '$_wrong', valueColor: AppColors.danger)),
       ]),
       const SizedBox(height: 12),
-      StatTile(label: 'Accuracy', value: '${_accuracy.toStringAsFixed(0)}%', valueColor: AppColors.modeExercise),
+      StatTile(label: AppStrings.get('accuracy'), value: '${_accuracy.toStringAsFixed(0)}%', valueColor: AppColors.modeExercise),
       const SizedBox(height: 12),
       PanelCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Training Finger', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          Text(AppStrings.get('mode_exercise'), style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
           Text(
             _fingerOrder[_fingerIndex],
@@ -118,7 +124,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            '$_fingerSessions/5 sessions',
+            '$_fingerSessions/5 ${AppStrings.get('session').toLowerCase()}',
             style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
           ),
         ]),
@@ -126,10 +132,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       const SizedBox(height: 12),
       PanelCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Mastered', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          Text(AppStrings.get('ready'), style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
           Text(
-            _mastered.isEmpty ? 'none yet' : _mastered.join(', '),
+            _mastered.isEmpty ? AppStrings.get('coming_soon') : _mastered.join(', '),
             style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
           ),
         ]),
@@ -138,7 +144,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       OutlinedButton.icon(
         onPressed: handTrackingService.recalibrate,
         icon: const Icon(Icons.settings, size: 16),
-        label: const Text('Recalibrate'),
+        label: Text(AppStrings.get('back')),
       ),
     ],
   );

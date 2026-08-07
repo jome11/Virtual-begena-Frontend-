@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_strings.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/mode_app_bar.dart';
 
@@ -21,31 +22,40 @@ class _TuningScreenState extends State<TuningScreen> {
   Widget build(BuildContext context) {
     final target = _targets[_selected];
     final current = _current[_selected];
+    // ignore: unused_local_variable
     final inTune = current == target;
 
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: const ModeAppBar(modeLabel: 'TUNING MODE', modeColor: AppColors.modeTuning),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: LayoutBuilder(
-          builder: (context, c) {
-            final diagram = _buildDiagram();
-            final panel = _buildPanel(target, current, inTune);
-            if (c.maxWidth < 800) {
-              return SingleChildScrollView(child: Column(children: [diagram, const SizedBox(height: 16), panel]));
-            }
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 2, child: diagram),
-                const SizedBox(width: 20),
-                SizedBox(width: 300, child: panel)
-              ],
-            );
-          },
-        ),
-      ),
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return Scaffold(
+          backgroundColor: context.colors.background,
+          appBar: ModeAppBar(
+            modeLabel: AppStrings.get('mode_tuning').toUpperCase(),
+            modeColor: AppColors.modeTuning,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: LayoutBuilder(
+              builder: (context, c) {
+                final diagram = _buildDiagram();
+                final panel = _buildPanel(target, current);
+                if (c.maxWidth < 800) {
+                  return SingleChildScrollView(child: Column(children: [diagram, const SizedBox(height: 16), panel]));
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 2, child: diagram),
+                    const SizedBox(width: 20),
+                    SizedBox(width: 300, child: panel)
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -65,7 +75,6 @@ class _TuningScreenState extends State<TuningScreen> {
       ),
       child: Column(
         children: [
-          // pegs
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(10, (i) {
@@ -100,7 +109,6 @@ class _TuningScreenState extends State<TuningScreen> {
             }),
           ),
           const SizedBox(height: 12),
-          // converging strings, painted
           SizedBox(
             height: 220,
             child: CustomPaint(
@@ -113,7 +121,6 @@ class _TuningScreenState extends State<TuningScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          // resonator box with note buttons
           Container(
             padding: const EdgeInsets.symmetric(vertical: 18),
             decoration: BoxDecoration(
@@ -143,14 +150,17 @@ class _TuningScreenState extends State<TuningScreen> {
     );
   }
 
-  Widget _buildPanel(String target, String current, bool inTune) => Column(
+  Widget _buildPanel(String target, String current) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       PanelCard(
         child: Column(children: [
-          Text('Selected String', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          Text(AppStrings.get('mode_tuning'), style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
-          Text('String ${_selected + 1}', style: const TextStyle(color: AppColors.modeTuning, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(
+            '${AppStrings.get('ready')} ${_selected + 1}',
+            style: const TextStyle(color: AppColors.modeTuning, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 10),
           Text(current, style: TextStyle(color: context.colors.textPrimary, fontSize: 36, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
@@ -164,16 +174,15 @@ class _TuningScreenState extends State<TuningScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          Text('Scroll ↑↓ to tune', style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.7), fontSize: 12)),
+          Text(AppStrings.get('accuracy'), style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.7), fontSize: 12)),
         ]),
       ),
       const SizedBox(height: 16),
       PanelCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Click a peg to select', style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
+          Text(AppStrings.get('ready'), style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
           const SizedBox(height: 4),
-          Text('Scroll ↑ = anticlockwise = tighten', style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
-          Text('Scroll ↓ = clockwise = loosen', style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
+          Text(AppStrings.get('mode_tuning_sub'), style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
         ]),
       ),
       const SizedBox(height: 16),
@@ -185,13 +194,13 @@ class _TuningScreenState extends State<TuningScreen> {
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
         icon: const Icon(Icons.check),
-        label: const Text('Check Tuning', style: TextStyle(fontWeight: FontWeight.bold)),
+        label: Text(AppStrings.get('ready'), style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
       const SizedBox(height: 10),
       OutlinedButton.icon(
         onPressed: () => setState(() => _current[_selected] = _targets[_selected] == 'D' ? 'C#' : _targets[_selected]),
         icon: const Icon(Icons.refresh, size: 16),
-        label: const Text('Reset'),
+        label: Text(AppStrings.get('restart')),
       ),
     ],
   );

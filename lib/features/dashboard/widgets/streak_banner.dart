@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_color_scheme.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 
 class StreakBanner extends StatelessWidget {
   final String username;
@@ -37,12 +38,12 @@ class StreakBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Welcome back, $username',
+                  '${AppStrings.get('streak_welcome')} $username',
                   style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Ready to keep your streak going?',
+                  AppStrings.get('streak_subtitle'),
                   style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 13),
                 ),
               ],

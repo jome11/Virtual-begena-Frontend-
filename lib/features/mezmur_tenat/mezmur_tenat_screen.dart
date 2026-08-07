@@ -3,6 +3,7 @@ import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/constants/mezmur_data.dart';
+import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/camera_panel.dart';
 import '../../shared/widgets/panel_card.dart';
@@ -29,21 +30,29 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: _step == _Step.practice
-          ? ModeAppBar(
-              modeLabel: (_qenet ?? Qenet.selamta).label,
-              modeColor: (_qenet ?? Qenet.selamta).color,
-              onBack: () => setState(() => _step = _Step.song),
-            )
-          : const ModeAppBar(modeLabel: 'MEZMUR TENAT', modeColor: AppColors.modeMezmurTenat),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 24),
-          child: _buildStep(),
-        ),
-      ),
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return Scaffold(
+          backgroundColor: context.colors.background,
+          appBar: _step == _Step.practice
+              ? ModeAppBar(
+                  modeLabel: (_qenet ?? Qenet.selamta).label,
+                  modeColor: (_qenet ?? Qenet.selamta).color,
+                  onBack: () => setState(() => _step = _Step.song),
+                )
+              : ModeAppBar(
+                  modeLabel: AppStrings.get('mode_mezmur_tenat').toUpperCase(),
+                  modeColor: AppColors.modeMezmurTenat,
+                ),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: _buildStep(),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -65,7 +74,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
         children: [
           const SizedBox(height: 8),
           Text(
-            'Mezmur Tenat',
+            AppStrings.get('mode_mezmur_tenat'),
             style: TextStyle(
               color: AppColors.modeMezmurTenat,
               fontSize: 22,
@@ -73,7 +82,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
             ),
           ),
           const SizedBox(height: 6),
-          Text('Choose a Qenet', style: TextStyle(color: context.colors.textSecondary)),
+          Text(AppStrings.get('feature_1_title'), style: TextStyle(color: context.colors.textSecondary)),
           const SizedBox(height: 16),
           Divider(color: context.colors.border),
           const SizedBox(height: 16),
@@ -107,7 +116,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
           children: [
             const SizedBox(height: 8),
             Text(
-              'Mezmur Tenat',
+              AppStrings.get('mode_mezmur_tenat'),
               style: TextStyle(
                 color: AppColors.modeMezmurTenat,
                 fontSize: 22,
@@ -116,7 +125,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              '${(_qenet ?? Qenet.selamta).label} — CHOOSE A MEZMUR',
+              '${(_qenet ?? Qenet.selamta).label} — ${AppStrings.get('feature_1_title').toUpperCase()}',
               style: TextStyle(
                 color: context.colors.accent,
                 fontWeight: FontWeight.bold,
@@ -166,7 +175,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
             const SizedBox(height: 4),
             TextButton(
               onPressed: () => setState(() => _step = _Step.qenet),
-              child: const Text('← Back to Qenet'),
+              child: Text('← ${AppStrings.get('back')}'),
             ),
           ],
         ),
@@ -183,7 +192,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
           children: [
             PanelCard(
               child: Column(children: [
-                Text('Progress', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+                Text(AppStrings.get('accuracy'), style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
                 const SizedBox(height: 4),
                 Text(
                   '$_progress/$_total',
@@ -197,18 +206,18 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
             ),
             const SizedBox(height: 12),
             Row(children: [
-              Expanded(child: StatTile(label: 'Correct', value: '$_correct', valueColor: AppColors.success)),
+              Expanded(child: StatTile(label: AppStrings.get('correct'), value: '$_correct', valueColor: AppColors.success)),
               const SizedBox(width: 12),
-              Expanded(child: StatTile(label: 'Wrong', value: '$_wrong', valueColor: AppColors.danger)),
+              Expanded(child: StatTile(label: AppStrings.get('wrong'), value: '$_wrong', valueColor: AppColors.danger)),
             ]),
             const SizedBox(height: 12),
             StatTile(
-              label: 'Accuracy',
+              label: AppStrings.get('accuracy'),
               value: (_correct + _wrong) == 0 ? '0%' : '${(_correct / (_correct + _wrong) * 100).toStringAsFixed(0)}%',
               valueColor: AppColors.modeMezmurTenat,
             ),
             const SizedBox(height: 12),
-            OutlinedButton.icon(onPressed: () => setState(() {}), icon: const Icon(Icons.refresh, size: 16), label: const Text('Restart')),
+            OutlinedButton.icon(onPressed: () => setState(() {}), icon: const Icon(Icons.refresh, size: 16), label: Text(AppStrings.get('restart'))),
             const SizedBox(height: 10),
             OutlinedButton.icon(
               onPressed: () {
@@ -217,7 +226,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
               },
               style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger, side: const BorderSide(color: AppColors.danger)),
               icon: const Icon(Icons.close, size: 16),
-              label: const Text('Exit'),
+              label: Text(AppStrings.get('exit')),
             ),
           ],
         );
