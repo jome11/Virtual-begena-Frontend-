@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/services/auth_service.dart';
 import '../../shared/widgets/gradient_background.dart';
 
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     constraints: const BoxConstraints(maxWidth: 400),
                     child: Card(
                       margin: const EdgeInsets.all(24),
-                      color: AppColors.white,
+                      color: context.colors.surface,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       child: Padding(
                         padding: const EdgeInsets.all(32),
@@ -65,8 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               AppStrings.get('sign_in'),
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
+                              style: TextStyle(
+                                color: context.colors.textPrimary,
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -74,17 +74,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 32),
                             TextField(
                               controller: _usernameController,
-                              style: const TextStyle(color: AppColors.textPrimary),
+                              style: TextStyle(color: context.colors.textPrimary),
                               decoration: InputDecoration(
                                 labelText: AppStrings.get('username'),
-                                labelStyle: const TextStyle(color: AppColors.textSecondary),
+                                labelStyle: TextStyle(color: context.colors.textSecondary),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: AppColors.textSecondary.withValues(alpha: 0.2),
+                                    color: context.colors.textSecondary.withValues(alpha: 0.2),
                                   ),
                                 ),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: AppColors.modeExercise),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: context.colors.accent),
                                 ),
                               ),
                             ),
@@ -92,17 +92,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             TextField(
                               controller: _passwordController,
                               obscureText: true,
-                              style: const TextStyle(color: AppColors.textPrimary),
+                              style: TextStyle(color: context.colors.textPrimary),
                               decoration: InputDecoration(
                                 labelText: AppStrings.get('password'),
-                                labelStyle: const TextStyle(color: AppColors.textSecondary),
+                                labelStyle: TextStyle(color: context.colors.textSecondary),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: AppColors.textSecondary.withValues(alpha: 0.2),
+                                    color: context.colors.textSecondary.withValues(alpha: 0.2),
                                   ),
                                 ),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: AppColors.modeExercise),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: context.colors.accent),
                                 ),
                               ),
                             ),
@@ -116,8 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: ElevatedButton(
                                 onPressed: _isLoading ? null : _handleSignIn,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.modeExercise,
-                                  foregroundColor: AppColors.white,
+                                  backgroundColor: context.colors.accent,
+                                  foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                 ),
                                 child: _isLoading
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () => context.go('/home'),
                               child: Text(
                                 AppStrings.get('home'),
-                                style: const TextStyle(color: AppColors.textSecondary),
+                                style: TextStyle(color: context.colors.textSecondary),
                               ),
                             ),
                           ],

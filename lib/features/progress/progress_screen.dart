@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/stat_tile.dart';
@@ -10,7 +11,7 @@ class ProgressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       appBar: const ModeAppBar(modeLabel: 'MY PROGRESS', modeColor: AppColors.modeProgress),
       body: Center(
         child: ConstrainedBox(
@@ -24,7 +25,7 @@ class ProgressScreen extends StatelessWidget {
                     final tiles = [
                       StatTile(label: 'Total Sessions', value: '0', valueColor: AppColors.modeExercise),
                       StatTile(label: 'Avg Accuracy', value: '0%', valueColor: AppColors.success),
-                      StatTile(label: 'Total Correct', value: '0', valueColor: AppColors.secondary),
+                      StatTile(label: 'Total Correct', value: '0', valueColor: context.colors.accent),
                     ];
                     
                     if (c.maxWidth < 500) {
@@ -43,12 +44,22 @@ class ProgressScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Session History', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text(
+                        'Session History',
+                        style: TextStyle(
+                          color: context.colors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                       const SizedBox(height: 12),
-                      const Divider(),
+                      Divider(color: context.colors.border),
                       const SizedBox(height: 24),
                       Center(
-                        child: Text('No sessions yet — start practicing!', style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.8))),
+                        child: Text(
+                          'No sessions yet — start practicing!',
+                          style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.8)),
+                        ),
                       ),
                       const SizedBox(height: 24),
                     ],

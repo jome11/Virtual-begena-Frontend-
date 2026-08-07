@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/services/hand_tracking_service.dart';
 
 class CameraPanel extends StatelessWidget {
@@ -16,11 +16,15 @@ class CameraPanel extends StatelessWidget {
         aspectRatio: 4 / 3,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.white,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.2)),
+            border: Border.all(color: context.colors.textSecondary.withValues(alpha: 0.2)),
             boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4)),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
             ],
           ),
           child: Center(
@@ -29,10 +33,18 @@ class CameraPanel extends StatelessWidget {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.videocam_outlined, size: 36, color: AppColors.textSecondary),
+                      Icon(
+                        Icons.videocam_outlined,
+                        size: 36,
+                        color: context.colors.textSecondary,
+                      ),
                       const SizedBox(height: 10),
-                      Text('Starting camera…',
-                          style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.8))),
+                      Text(
+                        'Starting camera…',
+                        style: TextStyle(
+                          color: context.colors.textSecondary.withValues(alpha: 0.8),
+                        ),
+                      ),
                     ],
                   ),
           ),

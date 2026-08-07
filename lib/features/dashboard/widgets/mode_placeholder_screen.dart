@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_scheme.dart';
 
 /// Shared placeholder shell for a mode screen. Each mode file just supplies
 /// its title, emoji, and accent color — real logic gets built inside later
@@ -20,7 +20,7 @@ class ModePlaceholderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -29,7 +29,7 @@ class ModePlaceholderScreen extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+                    icon: Icon(Icons.arrow_back, color: context.colors.textPrimary),
                     onPressed: () => context.go('/dashboard'),
                   ),
                 ],
@@ -47,9 +47,9 @@ class ModePlaceholderScreen extends StatelessWidget {
                       style: TextStyle(color: color, fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Coming soon',
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      style: TextStyle(color: context.colors.textSecondary, fontSize: 14),
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/mode_app_bar.dart';
@@ -23,7 +24,7 @@ class _TuningScreenState extends State<TuningScreen> {
     final inTune = current == target;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       appBar: const ModeAppBar(modeLabel: 'TUNING MODE', modeColor: AppColors.modeTuning),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -36,7 +37,11 @@ class _TuningScreenState extends State<TuningScreen> {
             }
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Expanded(flex: 2, child: diagram), const SizedBox(width: 20), SizedBox(width: 300, child: panel)],
+              children: [
+                Expanded(flex: 2, child: diagram),
+                const SizedBox(width: 20),
+                SizedBox(width: 300, child: panel)
+              ],
             );
           },
         ),
@@ -48,9 +53,15 @@ class _TuningScreenState extends State<TuningScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
       child: Column(
         children: [
@@ -66,14 +77,22 @@ class _TuningScreenState extends State<TuningScreen> {
                     width: 26,
                     height: 26,
                     decoration: BoxDecoration(
-                      color: active ? AppColors.modeTuning : AppColors.background,
+                      color: active ? AppColors.modeTuning : context.colors.background,
                       shape: BoxShape.circle,
-                      border: Border.all(color: active ? AppColors.modeTuning : AppColors.textSecondary.withValues(alpha: 0.4), width: 2),
+                      border: Border.all(
+                        color: active ? AppColors.modeTuning : context.colors.textSecondary.withValues(alpha: 0.4),
+                        width: 2,
+                      ),
                     ),
                     child: Center(
-                      child: Text('${i + 1}',
-                          style: TextStyle(
-                              color: active ? AppColors.white : AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.bold)),
+                      child: Text(
+                        '${i + 1}',
+                        style: TextStyle(
+                          color: active ? Colors.white : context.colors.textSecondary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ]),
@@ -86,22 +105,35 @@ class _TuningScreenState extends State<TuningScreen> {
             height: 220,
             child: CustomPaint(
               size: Size.infinite,
-              painter: _StringsPainter(selected: _selected, color: AppColors.modeTuning),
+              painter: _StringsPainter(
+                selected: _selected,
+                color: AppColors.modeTuning,
+                secondaryColor: context.colors.textSecondary,
+              ),
             ),
           ),
           const SizedBox(height: 12),
           // resonator box with note buttons
           Container(
             padding: const EdgeInsets.symmetric(vertical: 18),
-            decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(
+              color: context.colors.background,
+              borderRadius: BorderRadius.circular(14),
+            ),
             child: Wrap(
               alignment: WrapAlignment.center,
               spacing: 10,
               children: _notes.map((n) {
                 final active = n == _current[_selected];
                 return Chip(
-                  label: Text(n, style: TextStyle(color: active ? AppColors.white : AppColors.textPrimary, fontWeight: FontWeight.bold)),
-                  backgroundColor: active ? AppColors.modeTuning : AppColors.white,
+                  label: Text(
+                    n,
+                    style: TextStyle(
+                      color: active ? Colors.white : context.colors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: active ? AppColors.modeTuning : context.colors.surface,
                 );
               }).toList(),
             ),
@@ -116,35 +148,42 @@ class _TuningScreenState extends State<TuningScreen> {
     children: [
       PanelCard(
         child: Column(children: [
-          const Text('Selected String', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          Text('Selected String', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
           Text('String ${_selected + 1}', style: const TextStyle(color: AppColors.modeTuning, fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          Text(current, style: const TextStyle(color: AppColors.textPrimary, fontSize: 36, fontWeight: FontWeight.bold)),
+          Text(current, style: TextStyle(color: context.colors.textPrimary, fontSize: 36, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           RichText(
             text: TextSpan(
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
-              children: [const TextSpan(text: 'Target: '), TextSpan(text: target, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold))],
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
+              children: [
+                const TextSpan(text: 'Target: '),
+                TextSpan(text: target, style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold))
+              ],
             ),
           ),
           const SizedBox(height: 4),
-          Text('Scroll ↑↓ to tune', style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.7), fontSize: 12)),
+          Text('Scroll ↑↓ to tune', style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.7), fontSize: 12)),
         ]),
       ),
       const SizedBox(height: 16),
-      const PanelCard(
+      PanelCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Click a peg to select', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
-          SizedBox(height: 4),
-          Text('Scroll ↑ = anticlockwise = tighten', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
-          Text('Scroll ↓ = clockwise = loosen', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+          Text('Click a peg to select', style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
+          const SizedBox(height: 4),
+          Text('Scroll ↑ = anticlockwise = tighten', style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
+          Text('Scroll ↓ = clockwise = loosen', style: TextStyle(color: context.colors.textSecondary, fontSize: 13)),
         ]),
       ),
       const SizedBox(height: 16),
       ElevatedButton.icon(
         onPressed: () => setState(() => _current[_selected] = target),
-        style: ElevatedButton.styleFrom(backgroundColor: AppColors.success, foregroundColor: AppColors.white, padding: const EdgeInsets.symmetric(vertical: 14)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.success,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+        ),
         icon: const Icon(Icons.check),
         label: const Text('Check Tuning', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
@@ -161,7 +200,8 @@ class _TuningScreenState extends State<TuningScreen> {
 class _StringsPainter extends CustomPainter {
   final int selected;
   final Color color;
-  _StringsPainter({required this.selected, required this.color});
+  final Color secondaryColor;
+  _StringsPainter({required this.selected, required this.color, required this.secondaryColor});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -172,7 +212,7 @@ class _StringsPainter extends CustomPainter {
       final startX = pegSpacing * (i + 1);
       final active = i == selected;
       final paint = Paint()
-        ..color = active ? color : AppColors.textSecondary.withValues(alpha: 0.35)
+        ..color = active ? color : secondaryColor.withValues(alpha: 0.35)
         ..strokeWidth = active ? 2.4 : 1.2;
       canvas.drawLine(Offset(startX, 0), Offset(boxCenterX, boxTop), paint);
     }

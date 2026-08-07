@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_scheme.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class StreakBanner extends StatelessWidget {
   final String username;
@@ -12,8 +13,8 @@ class StreakBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primary, Color(0xFF3D5470)],
+        gradient: LinearGradient(
+          colors: [AppColors.primary, Color.lerp(AppColors.primary, Colors.white, 0.15)!],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -25,7 +26,7 @@ class StreakBanner extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: AppColors.secondary.withValues(alpha: 0.9),
+              color: context.colors.accent.withValues(alpha: 0.9),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.local_fire_department_rounded, color: Colors.white, size: 28),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_color_scheme.dart';
 
 class AnimatedButton extends StatefulWidget {
   final String text;
@@ -25,8 +25,8 @@ class _AnimatedButtonState extends State<AnimatedButton> {
         child: ElevatedButton(
           onPressed: widget.onTap,
           style: ElevatedButton.styleFrom(
-            backgroundColor: _isHovered ? AppColors.secondary.withValues(alpha: 0.9) : AppColors.secondary,
-            foregroundColor: AppColors.white,
+            backgroundColor: _isHovered ? context.colors.accent.withValues(alpha: 0.9) : context.colors.accent,
+            foregroundColor: Colors.white, // Standard white text on gold button
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

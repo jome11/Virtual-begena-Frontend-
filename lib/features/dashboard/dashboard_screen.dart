@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/auth_service.dart';
@@ -28,7 +29,7 @@ class DashboardScreen extends StatelessWidget {
             ];
 
             return Scaffold(
-              backgroundColor: AppColors.background,
+              backgroundColor: context.colors.background,
               body: SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -41,12 +42,19 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         Text(
                           AppStrings.get('dashboard_title'),
-                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 32, fontWeight: FontWeight.w800),
+                          style: TextStyle(
+                            color: context.colors.textPrimary,
+                            fontSize: 32,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           AppStrings.get('dashboard_subtitle'),
-                          style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.9), fontSize: 15),
+                          style: TextStyle(
+                            color: context.colors.textSecondary.withValues(alpha: 0.9),
+                            fontSize: 15,
+                          ),
                         ),
                         const SizedBox(height: 24),
                         StreakBanner(
@@ -90,7 +98,13 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         Center(
-                          child: Text('v1.0.0', style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.5), fontSize: 12)),
+                          child: Text(
+                            'v1.0.0',
+                            style: TextStyle(
+                              color: context.colors.textSecondary.withValues(alpha: 0.5),
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ],
                     ),

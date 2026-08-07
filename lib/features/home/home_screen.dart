@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../shared/widgets/nav_bar.dart';
 import '../../shared/widgets/site_footer.dart';
 import 'widgets/hero_section.dart';
@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.colors.surface,
       body: SingleChildScrollView(
         child: Column(
           children: const [

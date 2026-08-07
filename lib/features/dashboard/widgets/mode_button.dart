@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_scheme.dart';
 
 class ModeButton extends StatefulWidget {
   final String label;
@@ -41,7 +41,7 @@ class _ModeButtonState extends State<ModeButton> {
               ? (Matrix4.identity()..translateByDouble(0.0, -2.0, 0.0, 1.0))
               : Matrix4.identity(),
           decoration: BoxDecoration(
-            color: AppColors.white,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -69,8 +69,8 @@ class _ModeButtonState extends State<ModeButton> {
                   children: [
                     Text(
                       widget.label,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
+                      style: TextStyle(
+                        color: context.colors.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -79,8 +79,8 @@ class _ModeButtonState extends State<ModeButton> {
                       const SizedBox(height: 2),
                       Text(
                         widget.subtitle!,
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
+                        style: TextStyle(
+                          color: context.colors.textSecondary,
                           fontSize: 13,
                         ),
                       ),
@@ -88,7 +88,10 @@ class _ModeButtonState extends State<ModeButton> {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: AppColors.textSecondary.withValues(alpha: 0.6)),
+              Icon(
+                Icons.chevron_right,
+                color: context.colors.textSecondary.withValues(alpha: 0.6),
+              ),
             ],
           ),
         ),

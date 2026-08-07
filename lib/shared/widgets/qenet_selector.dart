@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/constants/qenet.dart';
 
 class QenetSelector extends StatelessWidget {
@@ -19,12 +19,18 @@ class QenetSelector extends StatelessWidget {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: active ? q.color.withValues(alpha: 0.12) : AppColors.white,
-            border: Border.all(color: active ? q.color : AppColors.textSecondary.withValues(alpha: 0.3)),
+            color: active ? q.color.withValues(alpha: 0.12) : context.colors.surface,
+            border: Border.all(color: active ? q.color : context.colors.textSecondary.withValues(alpha: 0.3)),
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(q.label,
-              style: TextStyle(color: active ? q.color : AppColors.textSecondary, fontWeight: FontWeight.bold, fontSize: 12)),
+          child: Text(
+            q.label,
+            style: TextStyle(
+              color: active ? q.color : context.colors.textSecondary,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
         ),
       );
     }).toList(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_color_scheme.dart';
 
 class PanelCard extends StatelessWidget {
   final Widget child;
@@ -10,9 +10,15 @@ class PanelCard extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.white,
+      color: context.colors.surface,
       borderRadius: BorderRadius.circular(14),
-      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8, offset: const Offset(0, 3))],
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.05),
+          blurRadius: 8,
+          offset: const Offset(0, 3),
+        )
+      ],
     ),
     child: child,
   );

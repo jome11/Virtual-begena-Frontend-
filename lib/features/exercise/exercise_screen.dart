@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/services/hand_tracking_service.dart';
@@ -42,7 +43,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       appBar: ModeAppBar(
         modeLabel: 'EXERCISE MODE',
         modeColor: AppColors.modeExercise,
@@ -59,7 +60,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             }
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Expanded(flex: 2, child: camera), const SizedBox(width: 20), SizedBox(width: 280, child: sidebar)],
+              children: [
+                Expanded(flex: 2, child: camera),
+                const SizedBox(width: 20),
+                SizedBox(width: 280, child: sidebar)
+              ],
             );
           },
         ),
@@ -72,9 +77,16 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     children: [
       PanelCard(
         child: Column(children: [
-          const Text('Session', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          Text('Session', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
-          Text('#$_session', style: const TextStyle(color: AppColors.secondary, fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(
+            '#$_session',
+            style: TextStyle(
+              color: context.colors.accent,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ]),
       ),
       const SizedBox(height: 12),
@@ -88,26 +100,38 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       const SizedBox(height: 12),
       PanelCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Training Finger', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          Text('Training Finger', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
-          Text(_fingerOrder[_fingerIndex], style: const TextStyle(color: AppColors.warning, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(
+            _fingerOrder[_fingerIndex],
+            style: const TextStyle(color: AppColors.warning, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
-                value: _fingerSessions / 5, minHeight: 6, backgroundColor: AppColors.background, color: AppColors.warning),
+              value: _fingerSessions / 5,
+              minHeight: 6,
+              backgroundColor: context.colors.background,
+              color: AppColors.warning,
+            ),
           ),
           const SizedBox(height: 6),
-          Text('$_fingerSessions/5 sessions', style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          Text(
+            '$_fingerSessions/5 sessions',
+            style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+          ),
         ]),
       ),
       const SizedBox(height: 12),
       PanelCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Mastered', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          Text('Mastered', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 4),
-          Text(_mastered.isEmpty ? 'none yet' : _mastered.join(', '),
-              style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.bold)),
+          Text(
+            _mastered.isEmpty ? 'none yet' : _mastered.join(', '),
+            style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
+          ),
         ]),
       ),
       const SizedBox(height: 12),

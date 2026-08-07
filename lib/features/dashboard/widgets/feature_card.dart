@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_scheme.dart';
 
 class FeatureCard extends StatefulWidget {
   final String label;
@@ -38,10 +38,10 @@ class _FeatureCardState extends State<FeatureCard> {
           transform: _hovering ? (Matrix4.identity()..translateByDouble(0.0, -4.0, 0.0, 1.0)) : Matrix4.identity(),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.white,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
-              color: _hovering ? AppColors.secondary.withValues(alpha: 0.4) : Colors.transparent,
+              color: _hovering ? context.colors.accent.withValues(alpha: 0.4) : Colors.transparent,
               width: 1.5,
             ),
             boxShadow: [
@@ -67,8 +67,8 @@ class _FeatureCardState extends State<FeatureCard> {
               const Spacer(),
               Text(
                 widget.label,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: context.colors.textPrimary,
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                 ),
@@ -76,7 +76,10 @@ class _FeatureCardState extends State<FeatureCard> {
               const SizedBox(height: 4),
               Text(
                 widget.subtitle,
-                style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.85), fontSize: 12.5),
+                style: TextStyle(
+                  color: context.colors.textSecondary.withValues(alpha: 0.85),
+                  fontSize: 12.5,
+                ),
               ),
             ],
           ),

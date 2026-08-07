@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 
@@ -15,25 +16,45 @@ class HowItWorksSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.surfaceAlt,
+      color: context.colors.background.withValues(alpha: 0.6), // surfaceAlt equivalent
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 72),
       child: Column(
         children: [
           Text(
             AppStrings.get('feature_title'),
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.primary, fontSize: 28, fontWeight: FontWeight.w800),
+            style: TextStyle(
+              color: context.colors.textPrimary,
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+            ),
           ),
           const SizedBox(height: 48),
           LayoutBuilder(
             builder: (context, c) {
               final narrow = c.maxWidth < 800;
-              final tiles = List.generate(steps.length, (i) => _StepTile(index: i + 1, title: steps[i].$1, desc: steps[i].$2, narrow: narrow));
+              final tiles = List.generate(
+                steps.length,
+                (i) => _StepTile(
+                  index: i + 1,
+                  title: steps[i].$1,
+                  desc: steps[i].$2,
+                  narrow: narrow,
+                ),
+              );
               return ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 900),
                 child: narrow
-                    ? Column(children: [for (final t in tiles) Padding(padding: const EdgeInsets.only(bottom: 28), child: t)])
-                    : Row(crossAxisAlignment: CrossAxisAlignment.start, children: [for (final t in tiles) Expanded(child: t)]),
+                    ? Column(
+                        children: [
+                          for (final t in tiles)
+                            Padding(padding: const EdgeInsets.only(bottom: 28), child: t)
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [for (final t in tiles) Expanded(child: t)],
+                      ),
               );
             },
           ),
@@ -60,18 +81,37 @@ class _StepTile extends StatelessWidget {
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(color: AppColors.white, shape: BoxShape.circle, border: Border.all(color: AppColors.sage, width: 1.5)),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.sage, width: 1.5),
+            ),
             alignment: Alignment.center,
-            child: Text('$index', style: const TextStyle(color: AppColors.sage, fontWeight: FontWeight.w700, fontSize: 15)),
+            child: Text(
+              '$index',
+              style: const TextStyle(color: AppColors.sage, fontWeight: FontWeight.w700, fontSize: 15),
+            ),
           ),
           const SizedBox(height: 16),
-          Text(title,
-              textAlign: narrow ? TextAlign.center : TextAlign.left,
-              style: const TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            textAlign: narrow ? TextAlign.center : TextAlign.left,
+            style: TextStyle(
+              color: context.colors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 8),
-          Text(desc,
-              textAlign: narrow ? TextAlign.center : TextAlign.left,
-              style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.85), fontSize: 13.5, height: 1.55)),
+          Text(
+            desc,
+            textAlign: narrow ? TextAlign.center : TextAlign.left,
+            style: TextStyle(
+              color: context.colors.textSecondary.withValues(alpha: 0.85),
+              fontSize: 13.5,
+              height: 1.55,
+            ),
+          ),
         ],
       ),
     );

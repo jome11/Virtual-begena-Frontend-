@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/constants/mezmur_data.dart';
@@ -29,7 +30,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       appBar: _step == _Step.practice
           ? ModeAppBar(
               modeLabel: (_qenet ?? Qenet.selamta).label,
@@ -63,11 +64,18 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
       child: Column(
         children: [
           const SizedBox(height: 8),
-          const Text('Mezmur Tenat', style: TextStyle(color: AppColors.modeMezmurTenat, fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(
+            'Mezmur Tenat',
+            style: TextStyle(
+              color: AppColors.modeMezmurTenat,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 6),
-          const Text('Choose a Qenet', style: TextStyle(color: AppColors.textSecondary)),
+          Text('Choose a Qenet', style: TextStyle(color: context.colors.textSecondary)),
           const SizedBox(height: 16),
-          const Divider(),
+          Divider(color: context.colors.border),
           const SizedBox(height: 16),
           ...Qenet.values.map((q) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
@@ -98,12 +106,25 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
         child: Column(
           children: [
             const SizedBox(height: 8),
-            const Text('Mezmur Tenat', style: TextStyle(color: AppColors.modeMezmurTenat, fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(
+              'Mezmur Tenat',
+              style: TextStyle(
+                color: AppColors.modeMezmurTenat,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 6),
-            Text('${(_qenet ?? Qenet.selamta).label} — CHOOSE A MEZMUR',
-                style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold, fontSize: 13)),
+            Text(
+              '${(_qenet ?? Qenet.selamta).label} — CHOOSE A MEZMUR',
+              style: TextStyle(
+                color: context.colors.accent,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
             const SizedBox(height: 16),
-            const Divider(),
+            Divider(color: context.colors.border),
             const SizedBox(height: 12),
             ...songs.map((s) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -118,22 +139,35 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.25)),
+                    border: Border.all(color: context.colors.textSecondary.withValues(alpha: 0.25)),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(s.title, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 15)),
+                      Text(
+                        s.title,
+                        style: TextStyle(
+                          color: context.colors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
                       const SizedBox(height: 2),
-                      Text(s.amharic, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                      Text(
+                        s.amharic,
+                        style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
+                      ),
                     ],
                   ),
                 ),
               ),
             )),
             const SizedBox(height: 4),
-            TextButton(onPressed: () => setState(() => _step = _Step.qenet), child: const Text('← Back to Qenet')),
+            TextButton(
+              onPressed: () => setState(() => _step = _Step.qenet),
+              child: const Text('← Back to Qenet'),
+            ),
           ],
         ),
       ),
@@ -149,9 +183,16 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
           children: [
             PanelCard(
               child: Column(children: [
-                const Text('Progress', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                Text('Progress', style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
                 const SizedBox(height: 4),
-                Text('$_progress/$_total', style: const TextStyle(color: AppColors.modeMezmurTenat, fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(
+                  '$_progress/$_total',
+                  style: TextStyle(
+                    color: AppColors.modeMezmurTenat,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ]),
             ),
             const SizedBox(height: 12),
@@ -162,9 +203,10 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
             ]),
             const SizedBox(height: 12),
             StatTile(
-                label: 'Accuracy',
-                value: (_correct + _wrong) == 0 ? '0%' : '${(_correct / (_correct + _wrong) * 100).toStringAsFixed(0)}%',
-                valueColor: AppColors.modeMezmurTenat),
+              label: 'Accuracy',
+              value: (_correct + _wrong) == 0 ? '0%' : '${(_correct / (_correct + _wrong) * 100).toStringAsFixed(0)}%',
+              valueColor: AppColors.modeMezmurTenat,
+            ),
             const SizedBox(height: 12),
             OutlinedButton.icon(onPressed: () => setState(() {}), icon: const Icon(Icons.refresh, size: 16), label: const Text('Restart')),
             const SizedBox(height: 10),
@@ -184,7 +226,11 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
         }
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Expanded(flex: 2, child: camera), const SizedBox(width: 20), SizedBox(width: 280, child: sidebar)],
+          children: [
+            Expanded(flex: 2, child: camera),
+            const SizedBox(width: 20),
+            SizedBox(width: 280, child: sidebar)
+          ],
         );
       },
     );

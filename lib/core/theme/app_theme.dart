@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
+import 'app_color_scheme.dart';
+
+final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier(ThemeMode.light);
 
 class AppTheme {
-  static ThemeData get lightTheme {
-    final base = ThemeData(
-      brightness: Brightness.light,
-      primaryColor: AppColors.secondary,
-      scaffoldBackgroundColor: AppColors.background,
-    );
+  static ThemeData get lightTheme => _build(AppColorsExt.light, Brightness.light);
+  static ThemeData get darkTheme => _build(AppColorsExt.dark, Brightness.dark);
+
+  static ThemeData _build(AppColorsExt colors, Brightness brightness) {
+    final base = brightness == Brightness.light ? ThemeData.light() : ThemeData.dark();
     
     return base.copyWith(
+      useMaterial3: true,
+      scaffoldBackgroundColor: colors.background,
+      extensions: [colors],
       textTheme: GoogleFonts.poppinsTextTheme(base.textTheme).apply(
-        bodyColor: AppColors.textPrimary,
-        displayColor: AppColors.textPrimary,
+        bodyColor: colors.textPrimary,
+        displayColor: colors.textPrimary,
       ),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.secondary,
-        primary: AppColors.secondary,
-        secondary: AppColors.accent,
-        surface: AppColors.white,
+      colorScheme: base.colorScheme.copyWith(
+        primary: colors.accent,
+        secondary: colors.accent,
+        surface: colors.surface,
+        brightness: brightness,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.white,
+      appBarTheme: AppBarTheme(
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
         elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: colors.textPrimary),
       ),
+      dividerColor: colors.border,
     );
   }
 }
