@@ -6,6 +6,7 @@ import '../../core/constants/mezmur_data.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/camera_panel.dart';
+import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/stat_tile.dart';
 import '../../shared/widgets/mode_app_bar.dart';
@@ -37,14 +38,14 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
           backgroundColor: context.colors.background,
           appBar: _step == _Step.practice
               ? ModeAppBar(
-                  modeLabel: (_qenet ?? Qenet.selamta).label,
-                  modeColor: (_qenet ?? Qenet.selamta).color,
-                  onBack: () => setState(() => _step = _Step.song),
-                )
+            modeLabel: (_qenet ?? Qenet.selamta).label,
+            modeColor: (_qenet ?? Qenet.selamta).color,
+            onBack: () => setState(() => _step = _Step.song),
+          )
               : ModeAppBar(
-                  modeLabel: AppStrings.get('mode_mezmur_tenat').toUpperCase(),
-                  modeColor: AppColors.modeMezmurTenat,
-                ),
+            modeLabel: AppStrings.get('mode_mezmur_tenat').toUpperCase(),
+            modeColor: AppColors.modeMezmurTenat,
+          ),
           body: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 24),
@@ -186,7 +187,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
   Widget _practicePanel() {
     return LayoutBuilder(
       builder: (context, c) {
-        final camera = CameraPanel(service: handTrackingService);
+        final camera = CameraPanel(service: handTrackingService, readyChild: const CameraFeedView());
         final sidebar = Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

@@ -6,6 +6,7 @@ import '../../core/constants/qenet.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/camera_panel.dart';
+import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/qenet_selector.dart';
 import '../../shared/widgets/mode_app_bar.dart';
@@ -47,7 +48,7 @@ class _FreePlayScreenState extends State<FreePlayScreen> {
             padding: const EdgeInsets.all(20),
             child: LayoutBuilder(
               builder: (context, c) {
-                final camera = CameraPanel(service: handTrackingService);
+                final camera = CameraPanel(service: handTrackingService, readyChild: const CameraFeedView());
                 final panel = Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

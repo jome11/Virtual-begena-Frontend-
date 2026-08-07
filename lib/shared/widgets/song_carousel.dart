@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/brand_palette.dart';
 import '../../core/constants/carousel_images.dart';
 
 class SongCarousel extends StatefulWidget {
@@ -52,6 +52,7 @@ class _SongCarouselState extends State<SongCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     final narrow = MediaQuery.of(context).size.width < 700;
     return Column(
       children: [
@@ -62,7 +63,6 @@ class _SongCarouselState extends State<SongCarousel> {
             children: [
               PageView.builder(
                 controller: _controller,
-                // Using a very large number for infinite scroll simulation or just the length
                 itemCount: carouselImages.length * 1000, 
                 onPageChanged: (_) => _pauseThenResume(),
                 itemBuilder: (context, index) {
@@ -81,9 +81,9 @@ class _SongCarouselState extends State<SongCarousel> {
                             carouselImages[i].assetPath,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stack) => Container(
-                              color: AppColors.brandBeige,
+                              color: brand.beige,
                               alignment: Alignment.center,
-                              child: const Icon(Icons.music_note_rounded, color: AppColors.brandAmber, size: 32),
+                              child: Icon(Icons.music_note_rounded, color: brand.amber, size: 32),
                             ),
                           ),
                         ),
@@ -92,8 +92,20 @@ class _SongCarouselState extends State<SongCarousel> {
                   );
                 },
               ),
-              Positioned(left: 4, child: _ArrowButton(icon: Icons.chevron_left, onTap: () => _goTo(_currentIndex - 1))),
-              Positioned(right: 4, child: _ArrowButton(icon: Icons.chevron_right, onTap: () => _goTo(_currentIndex + 1))),
+              Positioned(
+                left: 4,
+                child: _ArrowButton(
+                  icon: Icons.chevron_left,
+                  onTap: () => _goTo(_currentIndex - 1),
+                ),
+              ),
+              Positioned(
+                right: 4,
+                child: _ArrowButton(
+                  icon: Icons.chevron_right,
+                  onTap: () => _goTo(_currentIndex + 1),
+                ),
+              ),
             ],
           ),
         ),
@@ -104,9 +116,6 @@ class _SongCarouselState extends State<SongCarousel> {
             final active = i == (_currentIndex % carouselImages.length);
             return GestureDetector(
               onTap: () {
-                // This logic needs to find the "closest" page i to navigate correctly in a huge range
-                // For simplicity, just jump to the clicked dot's index in the first set for now 
-                // or improve the _goTo to handle the large itemCount.
                 _goTo(i);
                 _pauseThenResume();
               },
@@ -116,7 +125,7 @@ class _SongCarouselState extends State<SongCarousel> {
                 width: active ? 20 : 6,
                 height: 6,
                 decoration: BoxDecoration(
-                  color: active ? AppColors.brandAmber : AppColors.brandBeige,
+                  color: active ? brand.amber : brand.beige,
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
@@ -135,13 +144,14 @@ class _ArrowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 38,
         height: 38,
         decoration: BoxDecoration(
-          color: AppColors.brandInk.withValues(alpha: 0.85),
+          color: brand.ink.withValues(alpha: 0.85),
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: Colors.white, size: 20),

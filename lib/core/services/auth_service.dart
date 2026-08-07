@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'api_client.dart';
+import 'token_storage.dart';
 
-/// Abstract contract for authentication. UI code (login screen, dashboard)
-/// only ever talks to this interface — never to a specific backend.
-///
-/// TODO: when the real backend is chosen (Firebase Auth, custom API, etc.),
-/// create a new class implementing AuthService (e.g. FirebaseAuthService)
-/// and swap the singleton created below. No other file needs to change.
 abstract class AuthService extends ChangeNotifier {
   String? get currentUsername;
   bool get isSignedIn => currentUsername != null;
 
   Future<String?> signIn({required String username, required String password});
+  Future<String?> signUp({required String name, required String email, required String password});
   Future<void> signOut();
+  Future<void> restoreSession();
 }
 
-/// Placeholder implementation: accepts any non-empty username/password and
-/// "signs in" locally. No network calls, nothing persisted between app
-/// restarts. Replace with a real implementation once the backend is ready.
-class LocalAuthService extends AuthService {
+class ApiAuthService extends AuthService {
   String? _currentUsername;
 
   @override
@@ -25,22 +20,53 @@ class LocalAuthService extends AuthService {
 
   @override
   Future<String?> signIn({required String username, required String password}) async {
-    if (username.trim().isEmpty || password.isEmpty) {
-      return 'Enter a username and password';
+    try {
+      final data = await ApiClient.post('/auth/login', {'email': username, 'password': password}, auth: false);
+      await TokenStorage.save(data['token']);
+      _currentUsername = data['user']['name'];
+      notifyListeners();
+      return null;
+    } on ApiException catch (e) {
+      return e.message;
+    } catch (_) {
+      return 'Could not reach the server';
     }
-    // Simulate a network round-trip so the UI's loading state has something to show.
-    await Future.delayed(const Duration(milliseconds: 600));
-    _currentUsername = username.trim();
-    notifyListeners();
-    return null; // null = success
+  }
+
+  @override
+  Future<String?> signUp({required String name, required String email, required String password}) async {
+    try {
+      final data = await ApiClient.post('/auth/signup', {'name': name, 'email': email, 'password': password}, auth: false);
+      await TokenStorage.save(data['token']);
+      _currentUsername = data['user']['name'];
+      notifyListeners();
+      return null;
+    } on ApiException catch (e) {
+      return e.message;
+    } catch (_) {
+      return 'Could not reach the server';
+    }
   }
 
   @override
   Future<void> signOut() async {
+    await TokenStorage.clear();
     _currentUsername = null;
     notifyListeners();
   }
+
+  @override
+  Future<void> restoreSession() async {
+    final token = await TokenStorage.read();
+    if (token == null) return;
+    try {
+      final data = await ApiClient.get('/auth/me');
+      _currentUsername = data['user']['name'];
+      notifyListeners();
+    } catch (_) {
+      await TokenStorage.clear();
+    }
+  }
 }
 
-/// App-wide singleton. Swap this one line to change backends.
-final AuthService authService = LocalAuthService();
+final AuthService authService = ApiAuthService();

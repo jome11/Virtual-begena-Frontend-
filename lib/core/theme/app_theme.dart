@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_color_scheme.dart';
+import 'brand_palette.dart';
 
 final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier(ThemeMode.light);
 
@@ -14,7 +15,10 @@ class AppTheme {
     return base.copyWith(
       useMaterial3: true,
       scaffoldBackgroundColor: colors.background,
-      extensions: [colors],
+      extensions: [
+        colors,
+        brightness == Brightness.light ? BrandPalette.light : BrandPalette.dark,
+      ],
       textTheme: GoogleFonts.poppinsTextTheme(base.textTheme).apply(
         bodyColor: colors.textPrimary,
         displayColor: colors.textPrimary,

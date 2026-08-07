@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/brand_palette.dart';
 import '../../../core/constants/app_strings.dart';
 
 class HowItWorksSection extends StatelessWidget {
@@ -8,18 +8,19 @@ class HowItWorksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return ValueListenableBuilder<Language>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         final steps = [
-          (AppStrings.get('feature_1_title'), AppStrings.get('feature_1_desc'), AppColors.brandBeige),
-          (AppStrings.get('feature_2_title'), AppStrings.get('feature_2_desc'), AppColors.brandRose.withValues(alpha: 0.5)),
-          (AppStrings.get('feature_3_title'), AppStrings.get('feature_3_desc'), AppColors.brandAmber.withValues(alpha: 0.16)),
+          (AppStrings.get('feature_1_title'), AppStrings.get('feature_1_desc'), brand.beige),
+          (AppStrings.get('feature_2_title'), AppStrings.get('feature_2_desc'), brand.rose.withValues(alpha: 0.5)),
+          (AppStrings.get('feature_3_title'), AppStrings.get('feature_3_desc'), brand.amber.withValues(alpha: 0.16)),
         ];
 
         return Container(
           width: double.infinity,
-          color: Colors.white,
+          color: brand.surface,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 80),
           child: Column(
             children: [
@@ -27,7 +28,7 @@ class HowItWorksSection extends StatelessWidget {
                 AppStrings.get('feature_title'),
                 textAlign: TextAlign.center,
                 style: GoogleFonts.playfairDisplay(
-                  color: AppColors.brandInk,
+                  color: brand.ink,
                   fontSize: 30,
                   fontWeight: FontWeight.w700,
                 ),
@@ -82,6 +83,7 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return Container(
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(6)),
@@ -90,8 +92,8 @@ class _StepCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: AppColors.brandInk,
+            style: TextStyle(
+              color: brand.ink,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
@@ -100,7 +102,7 @@ class _StepCard extends StatelessWidget {
           Text(
             desc,
             style: TextStyle(
-              color: AppColors.brandInk.withValues(alpha: 0.6),
+              color: brand.ink.withValues(alpha: 0.6),
               fontSize: 13,
               height: 1.6,
             ),

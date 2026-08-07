@@ -98,17 +98,17 @@ class _EnterButtonState extends State<_EnterButton> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 56, vertical: 22),
           decoration: BoxDecoration(
             color: _hovering
                 ? context.colors.accent
                 : context.colors.accent.withValues(alpha: 0.85),
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(34),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: _hovering ? 0.3 : 0.15),
-                blurRadius: _hovering ? 12 : 6,
-                offset: const Offset(0, 3),
+                blurRadius: _hovering ? 14 : 8,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -119,7 +119,7 @@ class _EnterButtonState extends State<_EnterButton> {
               fontSize: 20,
               fontWeight: FontWeight.w600,
               fontFamily: languageNotifier.value == Language.am ? 'BelaBereka' : null,
-              letterSpacing: 1.2,
+              letterSpacing: 1.4,
             ),
           ),
         ),

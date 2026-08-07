@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/brand_palette.dart';
 import '../../core/constants/app_strings.dart';
 import 'theme_toggle_button.dart';
 
@@ -12,18 +12,19 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return ValueListenableBuilder<Language>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         return Container(
-          color: AppColors.brandCream,
+          color: brand.background,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
           child: Row(
             children: [
               Text(
                 AppStrings.get('app_title'),
-                style: const TextStyle(
-                  color: AppColors.brandInk,
+                style: TextStyle(
+                  color: brand.ink,
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
@@ -44,7 +45,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
               ElevatedButton(
                 onPressed: () => context.go('/login'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.brandAmber,
+                  backgroundColor: brand.amber,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
@@ -68,6 +69,7 @@ class _LanguageToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return ValueListenableBuilder<Language>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
@@ -77,8 +79,8 @@ class _LanguageToggle extends StatelessWidget {
           },
           child: Text(
             lang == Language.en ? 'አማ' : 'EN',
-            style: const TextStyle(
-              color: AppColors.brandAmber,
+            style: TextStyle(
+              color: brand.amber,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
@@ -95,18 +97,21 @@ class _NavLink extends StatelessWidget {
   const _NavLink({required this.label, required this.onTap});
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 14),
-    child: TextButton(
-      onPressed: onTap,
-      child: Text(
-        label,
-        style: TextStyle(
-          color: AppColors.brandInk.withValues(alpha: 0.7),
-          fontSize: 13.5,
-          fontWeight: FontWeight.w600,
+  Widget build(BuildContext context) {
+    final brand = context.brand;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: TextButton(
+        onPressed: onTap,
+        child: Text(
+          label,
+          style: TextStyle(
+            color: brand.ink.withValues(alpha: 0.7),
+            fontSize: 13.5,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/services/progress_service.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/mode_app_bar.dart';
 
@@ -48,28 +49,43 @@ class TrainingPlanScreen extends StatelessWidget {
                       ]),
                     ),
                     const SizedBox(height: 16),
-                    PanelCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            const Text('📋 ', style: TextStyle(fontSize: 14)),
-                            Text(
-                              AppStrings.get('mode_training_plan_sub').toUpperCase(),
-                              style: TextStyle(
-                                color: AppColors.success,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
+                    FutureBuilder<Map<String, dynamic>>(
+                      future: ProgressService.getRecommendations(),
+                      builder: (context, snapshot) {
+                        final data = snapshot.data;
+                        final String message;
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          message = 'Analyzing your progress...';
+                        } else if (snapshot.hasError || data == null) {
+                          message = AppStrings.get('coming_soon');
+                        } else {
+                          message = data['recommendations']?.toString() ?? AppStrings.get('coming_soon');
+                        }
+
+                        return PanelCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(children: [
+                                const Text('📋 ', style: TextStyle(fontSize: 14)),
+                                Text(
+                                  AppStrings.get('mode_training_plan_sub').toUpperCase(),
+                                  style: const TextStyle(
+                                    color: AppColors.success,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ]),
+                              const SizedBox(height: 10),
+                              Text(
+                                message,
+                                style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.9)),
                               ),
-                            ),
-                          ]),
-                          const SizedBox(height: 10),
-                          Text(
-                            AppStrings.get('coming_soon'),
-                            style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.9)),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 16),
                     OutlinedButton.icon(

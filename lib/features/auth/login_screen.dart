@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _error;
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final error = await authService.signIn(
-      username: _usernameController.text,
+      username: _emailController.text,
       password: _passwordController.text,
     );
 
@@ -73,10 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 32),
                             TextField(
-                              controller: _usernameController,
+                              controller: _emailController,
                               style: TextStyle(color: context.colors.textPrimary),
                               decoration: InputDecoration(
-                                labelText: AppStrings.get('username'),
+                                labelText: 'Email',
                                 labelStyle: TextStyle(color: context.colors.textSecondary),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -130,6 +130,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(height: 12),
+                            TextButton(
+                              onPressed: () => context.go('/signup'),
+                              child: Text(
+                                "Don't have an account? Sign up",
+                                style: TextStyle(color: context.colors.textSecondary),
+                              ),
+                            ),
                             TextButton(
                               onPressed: () => context.go('/home'),
                               child: Text(

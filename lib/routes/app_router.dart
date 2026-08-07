@@ -6,6 +6,7 @@ import '../features/about/about_screen.dart';
 import '../features/contact/contact_screen.dart';
 import '../features/lessons/lessons_screen.dart';
 import '../features/auth/login_screen.dart';
+import '../features/auth/signup_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
 import '../features/exercise/exercise_screen.dart';
 import '../features/free_play/free_play_screen.dart';
@@ -55,6 +56,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/signup',
+      builder: (context, state) => const SignupScreen(),
     ),
     GoRoute(
       path: '/dashboard',

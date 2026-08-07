@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'web_hand_tracking_service.dart';
+
 /// Every camera-driven screen talks to this interface only.
 /// Swap `handTrackingService` at the bottom for your real model —
 /// no screen needs to change.
@@ -45,4 +47,6 @@ class MockHandTrackingService extends HandTrackingService {
   }
 }
 
-final HandTrackingService handTrackingService = MockHandTrackingService();
+// Swap this back to MockHandTrackingService() if you need to develop UI
+// without a working JS hand-tracking model wired up yet.
+final HandTrackingService handTrackingService = WebHandTrackingService();

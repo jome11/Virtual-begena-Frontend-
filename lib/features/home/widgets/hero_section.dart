@@ -1,38 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/brand_palette.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../shared/widgets/stylized_cross.dart';
+import '../../../shared/widgets/interlace_border.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return ValueListenableBuilder<Language>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         return Container(
           width: double.infinity,
-          color: AppColors.brandCream,
-          padding: const EdgeInsets.fromLTRB(32, 48, 32, 88),
-          child: LayoutBuilder(
-            builder: (context, c) {
-              final narrow = c.maxWidth < 900;
-              final text = _EditorialText(narrow: narrow);
-              final art = _FloatingArt(narrow: narrow);
-              if (narrow) {
-                return Column(children: [art, const SizedBox(height: 36), text]);
-              }
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(flex: 5, child: text),
-                  const SizedBox(width: 56),
-                  Expanded(flex: 5, child: art)
-                ],
-              );
-            },
+          color: brand.background,
+          child: Column(
+            children: [
+              InterlaceBorder(color: brand.amber.withValues(alpha: 0.35)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 48, 32, 88),
+                child: LayoutBuilder(
+                  builder: (context, c) {
+                    final narrow = c.maxWidth < 900;
+                    final text = _EditorialText(narrow: narrow);
+                    final art = _FloatingArt(narrow: narrow);
+                    if (narrow) {
+                      return Column(children: [art, const SizedBox(height: 36), text]);
+                    }
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(flex: 5, child: text),
+                        const SizedBox(width: 56),
+                        Expanded(flex: 5, child: art)
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -46,14 +56,15 @@ class _EditorialText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     return Column(
       crossAxisAlignment: narrow ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Text(
           'ETHIOPIAN HERITAGE • DIGITAL LESSONS',
           textAlign: narrow ? TextAlign.center : TextAlign.left,
-          style: const TextStyle(
-            color: AppColors.brandAmber,
+          style: TextStyle(
+            color: brand.amber,
             fontSize: 11.5,
             fontWeight: FontWeight.w700,
             letterSpacing: 2.2,
@@ -64,7 +75,7 @@ class _EditorialText extends StatelessWidget {
           AppStrings.get('hero_title'),
           textAlign: narrow ? TextAlign.center : TextAlign.left,
           style: GoogleFonts.playfairDisplay(
-            color: AppColors.brandInk,
+            color: brand.ink,
             fontSize: narrow ? 42 : 58,
             fontWeight: FontWeight.w700,
             height: 1.08,
@@ -77,7 +88,7 @@ class _EditorialText extends StatelessWidget {
             AppStrings.get('hero_subtitle'),
             textAlign: narrow ? TextAlign.center : TextAlign.left,
             style: TextStyle(
-              color: AppColors.brandInk.withValues(alpha: 0.65),
+              color: brand.ink.withValues(alpha: 0.65),
               fontSize: 15.5,
               height: 1.65,
               fontWeight: FontWeight.w500,
@@ -93,7 +104,7 @@ class _EditorialText extends StatelessWidget {
             ElevatedButton(
               onPressed: () => context.go('/login'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.brandAmber,
+                backgroundColor: brand.amber,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
@@ -107,8 +118,8 @@ class _EditorialText extends StatelessWidget {
             OutlinedButton(
               onPressed: () {},
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.brandInk,
-                side: BorderSide(color: AppColors.brandInk.withValues(alpha: 0.3)),
+                foregroundColor: brand.ink,
+                side: BorderSide(color: brand.ink.withValues(alpha: 0.3)),
                 padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 18),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),
@@ -130,6 +141,7 @@ class _FloatingArt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brand = context.brand;
     final size = narrow ? 260.0 : 380.0;
     return SizedBox(
       height: size,
@@ -140,12 +152,12 @@ class _FloatingArt extends StatelessWidget {
           Positioned(
             top: 0,
             left: size * 0.05,
-            child: _Blob(diameter: size * 0.55, color: AppColors.brandBeige),
+            child: _Blob(diameter: size * 0.55, color: brand.beige),
           ),
           Positioned(
             bottom: 0,
             right: size * 0.02,
-            child: _Blob(diameter: size * 0.45, color: AppColors.brandRose.withValues(alpha: 0.55)),
+            child: _Blob(diameter: size * 0.45, color: brand.rose.withValues(alpha: 0.55)),
           ),
           Positioned(
             top: size * 0.12,
@@ -153,26 +165,26 @@ class _FloatingArt extends StatelessWidget {
             child: Container(
               width: 14,
               height: 14,
-              decoration: const BoxDecoration(color: AppColors.brandInk, shape: BoxShape.circle),
+              decoration: BoxDecoration(color: brand.ink, shape: BoxShape.circle),
             ),
           ),
           Container(
             width: size * 0.42,
             height: size * 0.42,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: brand.surface,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.brandInk.withValues(alpha: 0.12),
+                  color: brand.ink.withValues(alpha: 0.12),
                   blurRadius: 24,
                   offset: const Offset(0, 12),
                 )
               ],
-              border: Border.all(color: AppColors.brandAmber.withValues(alpha: 0.25), width: 1.5),
+              border: Border.all(color: brand.amber.withValues(alpha: 0.25), width: 1.5),
             ),
             alignment: Alignment.center,
-            child: Icon(Icons.music_note_rounded, size: size * 0.16, color: AppColors.brandAmber),
+            child: StylizedCross(size: size * 0.18, color: brand.amber),
           ),
         ],
       ),

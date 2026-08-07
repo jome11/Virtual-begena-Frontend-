@@ -5,6 +5,7 @@ import '../../core/constants/qenet.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/camera_panel.dart';
+import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/stat_tile.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/qenet_selector.dart';
@@ -57,7 +58,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             padding: const EdgeInsets.all(20),
             child: LayoutBuilder(
               builder: (context, c) {
-                final camera = CameraPanel(service: handTrackingService);
+                final camera = CameraPanel(service: handTrackingService, readyChild: const CameraFeedView());
                 final sidebar = _sidebar();
                 if (c.maxWidth < 800) {
                   return SingleChildScrollView(child: Column(children: [camera, const SizedBox(height: 16), sidebar]));
