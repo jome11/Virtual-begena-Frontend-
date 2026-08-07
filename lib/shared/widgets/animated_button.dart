@@ -21,11 +21,11 @@ class _AnimatedButtonState extends State<AnimatedButton> {
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        transform: _isHovered ? Matrix4.identity().scaled(1.05) : Matrix4.identity(),
+        transform: _isHovered ? Matrix4.identity().scaledByDouble(1.05, 1.05, 1.0, 1.0) : Matrix4.identity(),
         child: ElevatedButton(
           onPressed: widget.onTap,
           style: ElevatedButton.styleFrom(
-            backgroundColor: _isHovered ? AppColors.secondary.withOpacity(0.9) : AppColors.secondary,
+            backgroundColor: _isHovered ? AppColors.secondary.withValues(alpha: 0.9) : AppColors.secondary,
             foregroundColor: AppColors.white,
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
             shape: RoundedRectangleBorder(

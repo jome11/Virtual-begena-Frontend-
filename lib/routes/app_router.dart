@@ -5,6 +5,15 @@ import '../features/home/home_screen.dart';
 import '../features/about/about_screen.dart';
 import '../features/contact/contact_screen.dart';
 import '../features/lessons/lessons_screen.dart';
+import '../features/auth/login_screen.dart';
+import '../features/dashboard/dashboard_screen.dart';
+import '../features/exercise/exercise_screen.dart';
+import '../features/free_play/free_play_screen.dart';
+import '../features/tuning/tuning_screen.dart';
+import '../features/mezmur_tenat/mezmur_tenat_screen.dart';
+import '../features/progress/progress_screen.dart';
+import '../features/training_plan/training_plan_screen.dart';
+import '../features/real_play/real_play_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -42,6 +51,42 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/contact',
       builder: (context, state) => const ContactScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/dashboard',
+      builder: (context, state) => const DashboardScreen(),
+    ),
+    GoRoute(
+      path: '/exercise',
+      builder: (context, state) => const ExerciseScreen(),
+    ),
+    GoRoute(
+      path: '/free-play',
+      builder: (context, state) => const FreePlayScreen(),
+    ),
+    GoRoute(
+      path: '/tuning',
+      builder: (context, state) => const TuningScreen(),
+    ),
+    GoRoute(
+      path: '/mezmur-tenat',
+      builder: (context, state) => const MezmurTenatScreen(),
+    ),
+    GoRoute(
+      path: '/progress',
+      builder: (context, state) => const ProgressScreen(),
+    ),
+    GoRoute(
+      path: '/training-plan',
+      builder: (context, state) => const TrainingPlanScreen(),
+    ),
+    GoRoute(
+      path: '/real-play',
+      builder: (context, state) => const RealPlayScreen(),
     ),
   ],
 );

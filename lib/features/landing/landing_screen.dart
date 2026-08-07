@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
-import '../../core/theme/app_colors.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -52,7 +51,7 @@ class _LanguageToggle extends StatelessWidget {
       builder: (context, lang, child) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(20),
           ),
           child: TextButton(
@@ -100,11 +99,11 @@ class _EnterButtonState extends State<_EnterButton> {
           decoration: BoxDecoration(
             color: _hovering
                 ? const Color(0xFF2E4A3D)
-                : const Color(0xFF2E4A3D).withOpacity(0.85),
+                : const Color(0xFF2E4A3D).withValues(alpha: 0.85),
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(_hovering ? 0.25 : 0.15),
+                color: Colors.black.withValues(alpha: _hovering ? 0.25 : 0.15),
                 blurRadius: _hovering ? 12 : 6,
                 offset: const Offset(0, 3),
               ),
