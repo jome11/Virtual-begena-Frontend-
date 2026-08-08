@@ -61,6 +61,12 @@ class WebHandTrackingService extends HandTrackingService {
     HandTrackingInterop.captureCalibration();
   }
 
+  @override
+  void setVirtualStrings(bool on) => HandTrackingInterop.setVirtualStrings(on);
+
+  @override
+  bool captureCalibration() => HandTrackingInterop.captureCalibration();
+
   void _tick() {
     late final Map<String, dynamic> state;
     try {

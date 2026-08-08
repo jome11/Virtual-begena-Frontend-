@@ -21,6 +21,7 @@ class ExerciseScreen extends StatefulWidget {
 
 class _ExerciseScreenState extends State<ExerciseScreen> {
   Qenet _qenet = Qenet.selamta;
+  bool _showStrings = false;
   final int _session = 1;
   final int _correct = 0;
   final int _wrong = 0;
@@ -34,6 +35,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   void initState() {
     super.initState();
     handTrackingService.start();
+    handTrackingService.setVirtualStrings(_showStrings);
   }
 
   @override
@@ -142,10 +144,35 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         ]),
       ),
       const SizedBox(height: 12),
+      PanelCard(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Show Strings',
+                style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.w600)),
+            Switch(
+              value: _showStrings,
+              onChanged: (v) {
+                setState(() => _showStrings = v);
+                handTrackingService.setVirtualStrings(v);
+              },
+              activeThumbColor: AppColors.modeExercise,
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 12),
       OutlinedButton.icon(
-        onPressed: handTrackingService.recalibrate,
+        onPressed: () {
+          final ok = handTrackingService.captureCalibration();
+          if (!ok && context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Show your hand to the camera before calibrating')),
+            );
+          }
+        },
         icon: const Icon(Icons.settings, size: 16),
-        label: Text(AppStrings.get('back')),
+        label: const Text('Calibrate'),
       ),
     ],
   );

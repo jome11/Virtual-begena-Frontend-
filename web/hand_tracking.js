@@ -40,6 +40,8 @@ window.handTracking = (() => {
   let stringPositions = JSON.parse(localStorage.getItem(CALIBRATION_KEY) || 'null');
   let stringStates = Object.fromEntries(ALL_STRINGS.map((s) => [s, { vibrating: false, color: 'normal' }]));
   let vibrationTimers = {};
+  let shakeUntil = 0;
+  let glowUntil = {};
 
   const state = {
     ready: false,
@@ -115,10 +117,23 @@ window.handTracking = (() => {
 
   function vibrateString(stringNum, isCorrect) {
     if (vibrationTimers[stringNum]) clearTimeout(vibrationTimers[stringNum]);
-    stringStates[stringNum] = { vibrating: true, color: isCorrect ? 'green' : 'red' };
+    stringStates[stringNum] = { vibrating: true, color: isCorrect ? 'green' : 'red', vibrateStart: Date.now() };
     vibrationTimers[stringNum] = setTimeout(() => {
       stringStates[stringNum] = { vibrating: false, color: 'normal' };
     }, 600);
+  }
+
+  function triggerWrongStringFeedback() {
+    shakeUntil = Date.now() + 250;
+  }
+
+  function drawGlow(x, h) {
+    const gradient = ctx.createLinearGradient(x - 30, 0, x + 30, 0);
+    gradient.addColorStop(0, 'rgba(0,255,136,0)');
+    gradient.addColorStop(0.5, 'rgba(0,255,136,0.15)');
+    gradient.addColorStop(1, 'rgba(0,255,136,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x - 30, 0, 60, h);
   }
 
   function processMovement(hand, w, h) {
@@ -156,6 +171,7 @@ window.handTracking = (() => {
         const onString = Math.abs(fingerTipX - expectedX) < 40;
         if (!onString) {
           vibrateString(expectedString, false);
+          triggerWrongStringFeedback();
           state.lastPluck = { finger: fingerNum, string: expectedString, onString: false, timestamp: Date.now() };
           soundReady = false;
           setTimeout(() => { soundReady = true; }, 400);
@@ -165,6 +181,7 @@ window.handTracking = (() => {
 
       playSound(fingerNum, qenet);
       state.lastPluck = { finger: fingerNum, string: expectedString, onString: true, timestamp: Date.now() };
+      glowUntil[expectedString] = Date.now() + 400;
 
       soundReady = false;
       setTimeout(() => { soundReady = true; }, 300);
@@ -201,6 +218,8 @@ window.handTracking = (() => {
     const targetString = targetFinger ? FINGER_TO_STRING[targetFinger] : null;
     ALL_STRINGS.forEach((stringNum) => {
       const x = getStringX(stringNum, w);
+      if (glowUntil[stringNum] && time < glowUntil[stringNum]) drawGlow(x, h);
+
       const isActive = ACTIVE_STRINGS_REAL.includes(stringNum);
       const isTarget = stringNum === targetString;
       const s = stringStates[stringNum];
@@ -216,8 +235,11 @@ window.handTracking = (() => {
       ctx.lineWidth = width;
       ctx.globalAlpha = opacity;
       if (s.vibrating) {
+        const elapsed = time - (s.vibrateStart || time);
+        const decay = Math.max(0, 1 - elapsed / 600);
+        const amplitude = 10 * decay;
         ctx.moveTo(x, 0);
-        for (let y = 0; y < h; y += 8) ctx.lineTo(x + Math.sin(y * 0.04 + time * 0.02) * 6, y);
+        for (let y = 0; y < h; y += 6) ctx.lineTo(x + Math.sin(y * 0.05 + elapsed * 0.05) * amplitude, y);
       } else {
         ctx.moveTo(x, 0);
         ctx.lineTo(x, h);
@@ -243,6 +265,13 @@ window.handTracking = (() => {
       canvasEl.height = videoEl.videoHeight;
       const results = handLandmarker.detectForVideo(videoEl, performance.now());
       ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      const shakeNow = Date.now();
+      const isShaking = shakeNow < shakeUntil;
+      if (isShaking) {
+        ctx.save();
+        ctx.translate(Math.sin(shakeNow * 0.08) * 4, 0);
+      }
+
       if (virtualStrings) drawVirtualStrings(canvasEl.width, canvasEl.height);
 
       if (results.landmarks && results.landmarks.length > 0) {
@@ -253,6 +282,13 @@ window.handTracking = (() => {
       } else {
         currentHand = null;
         state.handVisible = false;
+      }
+
+      if (isShaking) {
+        ctx.restore();
+        const alpha = (shakeUntil - shakeNow) / 250 * 0.15;
+        ctx.fillStyle = `rgba(255, 23, 68, ${alpha})`;
+        ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
       }
     }
     rafId = requestAnimationFrame(loop);

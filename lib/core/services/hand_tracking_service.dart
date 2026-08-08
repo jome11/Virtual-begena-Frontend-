@@ -14,6 +14,8 @@ abstract class HandTrackingService extends ChangeNotifier {
   Future<void> start();
   Future<void> stop();
   Future<void> recalibrate();
+  void setVirtualStrings(bool on);
+  bool captureCalibration();
 }
 
 class MockHandTrackingService extends HandTrackingService {
@@ -45,6 +47,12 @@ class MockHandTrackingService extends HandTrackingService {
     await stop();
     await start();
   }
+
+  @override
+  void setVirtualStrings(bool on) {}
+
+  @override
+  bool captureCalibration() => true;
 }
 
 // Swap this back to MockHandTrackingService() if you need to develop UI
