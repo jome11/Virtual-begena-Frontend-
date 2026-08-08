@@ -15,6 +15,8 @@ import '../features/mezmur_tenat/mezmur_tenat_screen.dart';
 import '../features/progress/progress_screen.dart';
 import '../features/training_plan/training_plan_screen.dart';
 import '../features/real_play/real_play_screen.dart';
+import '../features/shop/shop_screen.dart';
+import '../features/shop/cart_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -92,6 +94,14 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/real-play',
       builder: (context, state) => const RealPlayScreen(),
+    ),
+    GoRoute(
+      path: '/shop',
+      builder: (context, state) => const ShopScreen(),
+    ),
+    GoRoute(
+      path: '/cart',
+      builder: (context, state) => const CartScreen(),
     ),
   ],
 );

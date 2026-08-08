@@ -34,6 +34,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
               if (MediaQuery.of(context).size.width > 700) ...[
                 _NavLink(label: AppStrings.get('home'), onTap: () => context.go('/home')),
                 _NavLink(label: AppStrings.get('lessons'), onTap: () => context.go('/lessons')),
+                _NavLink(label: AppStrings.get('shop'), onTap: () => context.go('/shop')),
                 _NavLink(label: AppStrings.get('about'), onTap: () => context.go('/about')),
                 _NavLink(label: AppStrings.get('contact'), onTap: () => context.go('/contact')),
                 const SizedBox(width: 8),
