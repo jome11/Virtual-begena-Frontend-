@@ -22,24 +22,60 @@ class ExerciseScreen extends StatefulWidget {
 class _ExerciseScreenState extends State<ExerciseScreen> {
   Qenet _qenet = Qenet.selamta;
   bool _showStrings = false;
-  final int _session = 1;
-  final int _correct = 0;
-  final int _wrong = 0;
-  final int _fingerIndex = 0;
-  final int _fingerSessions = 0;
+  int _session = 1;
+  int _correct = 0;
+  int _wrong = 0;
+  int _fingerIndex = 0;
+  int _fingerSessions = 0;
   final Set<String> _mastered = {};
+
+  final List<int> _exercise = [1, 1, 1, 4, 2];
+  int _currentIndex = 0;
+  int? _lastHandledTimestamp;
 
   double get _accuracy => (_correct + _wrong) == 0 ? 0 : _correct / (_correct + _wrong) * 100;
 
   @override
   void initState() {
     super.initState();
+    handTrackingService.addListener(_onTrackingUpdate);
     handTrackingService.start();
     handTrackingService.setVirtualStrings(_showStrings);
+    handTrackingService.setQenet(_qenet.name);
+    handTrackingService.setTargetFinger(_exercise[_currentIndex]);
+  }
+
+  void _onTrackingUpdate() {
+    final pluck = handTrackingService.lastPluck;
+    if (pluck == null) return;
+    final ts = pluck['timestamp'] as int;
+    if (ts == _lastHandledTimestamp) return;
+    _lastHandledTimestamp = ts;
+
+    final finger = pluck['finger'] as int;
+    final onString = pluck['onString'] as bool;
+    if (!onString) return;
+
+    final target = _exercise[_currentIndex];
+    setState(() {
+      if (finger == target) {
+        _correct++;
+        _fingerSessions++;
+        _currentIndex++;
+        if (_currentIndex >= _exercise.length) {
+          _currentIndex = 0;
+          _session++;
+        }
+      } else {
+        _wrong++;
+      }
+      handTrackingService.setTargetFinger(_exercise[_currentIndex]);
+    });
   }
 
   @override
   void dispose() {
+    handTrackingService.removeListener(_onTrackingUpdate);
     handTrackingService.stop();
     super.dispose();
   }
@@ -54,7 +90,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           appBar: ModeAppBar(
             modeLabel: AppStrings.get('mode_exercise').toUpperCase(),
             modeColor: AppColors.modeExercise,
-            leading: QenetSelector(selected: _qenet, onChanged: (q) => setState(() => _qenet = q)),
+            leading: QenetSelector(
+              selected: _qenet,
+              onChanged: (q) {
+                setState(() => _qenet = q);
+                handTrackingService.setQenet(q.name);
+              },
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(20),

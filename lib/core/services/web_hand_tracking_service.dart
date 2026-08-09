@@ -5,12 +5,7 @@ import 'hand_tracking_service.dart';
 import 'js/camera_view_registrar.dart';
 import 'js/hand_tracking_interop.dart';
 
-/// Real, camera-backed implementation. Talks to the `handTracking` JS
-/// global through [HandTrackingInterop] and polls [HandTrackingInterop.getStateJson]
-/// for the latest detection.
-///
-/// NOTE: adjust the JSON key names in [_applyState] to match whatever your
-/// `handTracking.getState()` JS function actually returns.
+/// Real, camera-backed implementation.
 class WebHandTrackingService extends HandTrackingService {
   Timer? _poll;
 
@@ -18,6 +13,7 @@ class WebHandTrackingService extends HandTrackingService {
   String? _detectedFinger;
   int? _detectedString;
   bool? _lastPluckCorrect;
+  Map<String, dynamic>? _lastPluck;
 
   @override
   bool get isReady => _ready;
@@ -27,18 +23,16 @@ class WebHandTrackingService extends HandTrackingService {
   int? get detectedString => _detectedString;
   @override
   bool? get lastPluckCorrect => _lastPluckCorrect;
+  @override
+  Map<String, dynamic>? get lastPluck => _lastPluck;
 
   @override
   Future<void> start() async {
-    // Registers the <video>/<canvas> platform views. Must happen before
-    // CameraFeedView's HtmlElementViews are built.
     CameraViewRegistrar.ensureRegistered();
-
     await HandTrackingInterop.start(
       CameraViewRegistrar.videoViewId,
       CameraViewRegistrar.canvasViewId,
     );
-
     _ready = true;
     notifyListeners();
 
@@ -67,29 +61,52 @@ class WebHandTrackingService extends HandTrackingService {
   @override
   bool captureCalibration() => HandTrackingInterop.captureCalibration();
 
+  @override
+  void setQenet(String qenet) => HandTrackingInterop.setQenet(qenet);
+
+  @override
+  void setTargetFinger(int? finger) => HandTrackingInterop.setTargetFinger(finger);
+
   void _tick() {
-    late final Map<String, dynamic> state;
     try {
-      state = jsonDecode(HandTrackingInterop.getStateJson()) as Map<String, dynamic>;
+      final json = HandTrackingInterop.getStateJson();
+      if (json.isEmpty) return;
+      final Map<String, dynamic> state = jsonDecode(json) as Map<String, dynamic>;
+      _applyState(state);
     } catch (_) {
-      return; // JS side not ready yet on this tick
+      // JS side not ready yet
     }
-    _applyState(state);
   }
 
   void _applyState(Map<String, dynamic> state) {
     final finger = state['finger'] as String?;
     final string = state['string'] as int?;
     final correct = state['correct'] as bool?;
+    final lastPluck = state['lastPluck'] as Map<String, dynamic>?;
 
-    if (finger == _detectedFinger && string == _detectedString && correct == _lastPluckCorrect) {
-      return; // nothing changed, skip the rebuild
+    bool changed = false;
+    if (finger != _detectedFinger) {
+      _detectedFinger = finger;
+      changed = true;
+    }
+    if (string != _detectedString) {
+      _detectedString = string;
+      changed = true;
+    }
+    if (correct != _lastPluckCorrect) {
+      _lastPluckCorrect = correct;
+      changed = true;
+    }
+    
+    // Check if timestamp changed for last pluck
+    if (lastPluck != null && (lastPluck['timestamp'] != _lastPluck?['timestamp'])) {
+      _lastPluck = lastPluck;
+      changed = true;
     }
 
-    _detectedFinger = finger;
-    _detectedString = string;
-    _lastPluckCorrect = correct;
-    notifyListeners();
+    if (changed) {
+      notifyListeners();
+    }
   }
 
   @override

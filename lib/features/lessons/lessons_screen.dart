@@ -79,12 +79,6 @@ class LessonsScreen extends StatelessWidget {
                             description: AppStrings.get('mode_free_play_full_desc'),
                             color: AppColors.warning,
                           ),
-                          const SizedBox(height: 12),
-                          _ModeCard(
-                            title: AppStrings.get('mode_real_play_full_title'),
-                            description: AppStrings.get('mode_real_play_full_desc'),
-                            color: AppColors.success,
-                          ),
                           const SizedBox(height: 32),
                           Text(
                             AppStrings.get('tips_heading'),

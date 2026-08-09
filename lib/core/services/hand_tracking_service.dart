@@ -16,6 +16,9 @@ abstract class HandTrackingService extends ChangeNotifier {
   Future<void> recalibrate();
   void setVirtualStrings(bool on);
   bool captureCalibration();
+  void setQenet(String qenet);
+  void setTargetFinger(int? finger);
+  Map<String, dynamic>? get lastPluck;
 }
 
 class MockHandTrackingService extends HandTrackingService {
@@ -28,6 +31,8 @@ class MockHandTrackingService extends HandTrackingService {
   int? get detectedString => null;
   @override
   bool? get lastPluckCorrect => null;
+  @override
+  Map<String, dynamic>? get lastPluck => null;
 
   @override
   Future<void> start() async {
@@ -53,6 +58,12 @@ class MockHandTrackingService extends HandTrackingService {
 
   @override
   bool captureCalibration() => true;
+
+  @override
+  void setQenet(String qenet) {}
+
+  @override
+  void setTargetFinger(int? finger) {}
 }
 
 // Swap this back to MockHandTrackingService() if you need to develop UI

@@ -25,7 +25,6 @@ class DashboardScreen extends StatelessWidget {
               (AppStrings.get('mode_mezmur_tenat'), AppStrings.get('mode_mezmur_tenat_sub'), Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat'),
               (AppStrings.get('mode_progress'), AppStrings.get('mode_progress_sub'), Icons.bar_chart_rounded, AppColors.modeProgress, '/progress'),
               (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan'),
-              (AppStrings.get('mode_real_play'), AppStrings.get('mode_real_play_sub'), Icons.graphic_eq_rounded, AppColors.modeRealPlay, '/real-play'),
             ];
 
             return Scaffold(
