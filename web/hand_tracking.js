@@ -168,7 +168,7 @@ window.handTracking = (() => {
       if (virtualStrings) {
         const fingerTipX = hand[strongest].x * w;
         const expectedX = getStringX(expectedString, w);
-        const onString = Math.abs(fingerTipX - expectedX) < 40;
+        const onString = Math.abs(fingerTipX - expectedX) < 60;
         if (!onString) {
           vibrateString(expectedString, false);
           triggerWrongStringFeedback();
@@ -224,11 +224,11 @@ window.handTracking = (() => {
       const isTarget = stringNum === targetString;
       const s = stringStates[stringNum];
       let color, width, opacity;
-      if (s.color === 'green') { color = '#00ff88'; width = 3; opacity = 1; }
-      else if (s.color === 'red') { color = '#ff1744'; width = 3; opacity = 1; }
-      else if (isTarget && isActive) { color = '#00ff88'; width = 2.5; opacity = 0.9; }
-      else if (isActive) { color = '#c8a855'; width = 1.5; opacity = 0.7; }
-      else { color = '#4a3a20'; width = 1; opacity = 0.3; }
+      if (s.color === 'green') { color = '#00ff88'; width = 5; opacity = 1; }
+      else if (s.color === 'red') { color = '#ff1744'; width = 5; opacity = 1; }
+      else if (isTarget && isActive) { color = '#00ff88'; width = 4; opacity = 0.9; }
+      else if (isActive) { color = '#c8a855'; width = 3; opacity = 0.7; }
+      else { color = '#4a3a20'; width = 1.5; opacity = 0.3; }
 
       ctx.beginPath();
       ctx.strokeStyle = color;

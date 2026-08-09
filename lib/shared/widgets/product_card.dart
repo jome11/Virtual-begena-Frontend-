@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_color_scheme.dart';
+import '../../core/constants/app_strings.dart';
 import '../../core/models/product.dart';
 import '../../core/services/cart_service.dart';
 import 'panel_card.dart';
@@ -30,7 +31,7 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            product.name,
+            AppStrings.get(product.nameKey),
             style: TextStyle(
               color: context.colors.textPrimary,
               fontSize: 16,
@@ -39,7 +40,7 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            product.description,
+            AppStrings.get(product.descriptionKey),
             style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -61,7 +62,7 @@ class ProductCard extends StatelessWidget {
                   cartService.add(product);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${product.name} added to cart'),
+                      content: Text('${AppStrings.get(product.nameKey)} ${languageNotifier.value == Language.en ? 'added to cart' : 'ወደ ጋሪ ተጨምሯል'}'),
                       duration: const Duration(seconds: 1),
                     ),
                   );
@@ -70,7 +71,7 @@ class ProductCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   minimumSize: const Size(0, 36),
                 ),
-                child: const Text('Add to Cart'),
+                child: Text(AppStrings.get('add_to_cart')),
               ),
             ],
           ),

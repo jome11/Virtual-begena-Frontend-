@@ -25,13 +25,13 @@ class _ShopScreenState extends State<ShopScreen> {
   String _label(String cat) {
     switch (cat) {
       case 'begena':
-        return 'Begena';
-      case 'kende':
-        return 'Kende';
+        return AppStrings.get('cat_begena');
+      case 'horn':
+        return AppStrings.get('cat_kende');
       case 'strings':
-        return 'Strings';
+        return AppStrings.get('cat_strings');
       default:
-        return 'All';
+        return AppStrings.get('cat_all');
     }
   }
 
@@ -50,7 +50,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 : FloatingActionButton.extended(
                     onPressed: () => context.go('/cart'),
                     icon: const Icon(Icons.shopping_cart),
-                    label: Text('${AppStrings.get('shop')} (${cartService.itemCount})'),
+                    label: Text('${AppStrings.get('your_cart')} (${cartService.itemCount})'),
                   ),
           ),
           body: SingleChildScrollView(

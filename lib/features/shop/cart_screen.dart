@@ -33,8 +33,8 @@ class _CartScreenState extends State<CartScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Order placed!'),
-        content: const Text('We\'ll contact you shortly to confirm your order.'),
+        title: Text(AppStrings.get('order_placed')),
+        content: Text(AppStrings.get('order_placed_body')),
         actions: [
           TextButton(
             onPressed: () {
@@ -51,11 +51,11 @@ class _CartScreenState extends State<CartScreen> {
   String _methodLabel(PaymentMethod m) {
     switch (m) {
       case PaymentMethod.cashOnDelivery:
-        return 'Cash on Delivery';
+        return AppStrings.get('pay_cod');
       case PaymentMethod.telebirr:
-        return 'Telebirr';
+        return AppStrings.get('pay_telebirr');
       case PaymentMethod.bankTransfer:
-        return 'Bank Transfer';
+        return AppStrings.get('pay_bank');
     }
   }
 
@@ -80,13 +80,13 @@ class _CartScreenState extends State<CartScreen> {
                         Icon(Icons.shopping_cart_outlined,
                             size: 48, color: context.colors.textSecondary),
                         const SizedBox(height: 16),
-                        Text('Your cart is empty',
+                        Text(AppStrings.get('cart_empty'),
                             style: TextStyle(
                                 color: context.colors.textSecondary, fontSize: 16)),
                         const SizedBox(height: 16),
                         ElevatedButton(
                             onPressed: () => context.go('/shop'),
-                            child: const Text('Browse Shop')),
+                            child: Text(AppStrings.get('browse_shop'))),
                       ],
                     ),
                   ),
@@ -101,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text('Your Cart',
+                          Text(AppStrings.get('your_cart'),
                               style: TextStyle(
                                   color: context.colors.textPrimary,
                                   fontSize: 26,
@@ -133,7 +133,7 @@ class _CartScreenState extends State<CartScreen> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(item.product.name,
+                                            Text(AppStrings.get(item.product.nameKey),
                                                 style: TextStyle(
                                                     color: context.colors.textPrimary,
                                                     fontWeight: FontWeight.bold)),
@@ -162,14 +162,14 @@ class _CartScreenState extends State<CartScreen> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                                'Total: ${cartService.total.toStringAsFixed(0)} ETB',
+                                '${AppStrings.get('total')}: ${cartService.total.toStringAsFixed(0)} ETB',
                                 style: TextStyle(
                                     color: context.colors.accent,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(height: 28),
-                          Text('Payment Method',
+                          Text(AppStrings.get('payment_method'),
                               style: TextStyle(
                                   color: context.colors.textPrimary,
                                   fontSize: 18,
@@ -206,8 +206,8 @@ class _CartScreenState extends State<CartScreen> {
                                     height: 20,
                                     child: CircularProgressIndicator(
                                         strokeWidth: 2, color: Colors.white))
-                                : const Text('Place Order',
-                                    style: TextStyle(fontWeight: FontWeight.bold)),
+                                : Text(AppStrings.get('place_order'),
+                                    style: const TextStyle(fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(height: 40),
                         ],
