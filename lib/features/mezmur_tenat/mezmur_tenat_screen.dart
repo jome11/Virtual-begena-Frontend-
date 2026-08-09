@@ -5,6 +5,7 @@ import '../../core/constants/qenet.dart';
 import '../../core/constants/mezmur_data.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
+import '../../core/services/progress_service.dart';
 import '../../shared/widgets/camera_panel.dart';
 import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/panel_card.dart';
@@ -22,6 +23,7 @@ enum _Step { qenet, song, practice }
 class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
   _Step _step = _Step.qenet;
   Qenet? _qenet;
+  MezmurSong? _song;
   List<FlatNote> _notes = [];
   int _currentIndex = 0;
   int? _lastHandledTimestamp;
@@ -45,6 +47,18 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
       if (finger == target) {
         _correct++;
         _currentIndex++;
+        if (_currentIndex >= _notes.length) {
+          final total = _correct + _wrong;
+          ProgressService.saveSession(
+            mode: 'mezmur',
+            qenet: (_qenet ?? Qenet.selamta).name,
+            correct: _correct,
+            wrong: _wrong,
+            accuracy: total == 0 ? 0 : ((_correct / total) * 100).round(),
+            sessionNum: 1,
+            mezmurName: _song?.title,
+          );
+        }
       } else {
         _wrong++;
       }
@@ -168,6 +182,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () => setState(() {
+                      _song = s;
                       _notes = flattenMezmur(s);
                       _currentIndex = 0;
                       _correct = 0;

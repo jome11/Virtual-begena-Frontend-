@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/hand_tracking_service.dart';
+import '../../core/services/progress_service.dart';
 import '../../shared/widgets/camera_panel.dart';
 import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/stat_tile.dart';
@@ -65,6 +66,15 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         if (_currentIndex >= _exercise.length) {
           _currentIndex = 0;
           _session++;
+          final total = _correct + _wrong;
+          ProgressService.saveSession(
+            mode: 'exercise',
+            qenet: _qenet.name,
+            correct: _correct,
+            wrong: _wrong,
+            accuracy: total == 0 ? 0 : ((_correct / total) * 100).round(),
+            sessionNum: _session,
+          );
         }
       } else {
         _wrong++;

@@ -6,8 +6,21 @@ import '../../core/services/progress_service.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/mode_app_bar.dart';
 
-class TrainingPlanScreen extends StatelessWidget {
+class TrainingPlanScreen extends StatefulWidget {
   const TrainingPlanScreen({super.key});
+
+  @override
+  State<TrainingPlanScreen> createState() => _TrainingPlanScreenState();
+}
+
+class _TrainingPlanScreenState extends State<TrainingPlanScreen> {
+  Future<Map<String, dynamic>>? _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = ProgressService.getRecommendations();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +43,8 @@ class TrainingPlanScreen extends StatelessWidget {
                     PanelCard(
                       child: Column(children: [
                         const SizedBox(height: 8),
-                        const Icon(Icons.music_note, color: AppColors.modeTuning, size: 32),
+                        const Icon(Icons.music_note,
+                            color: AppColors.modeTuning, size: 32),
                         const SizedBox(height: 10),
                         Text(
                           AppStrings.get('mode_training_plan'),
@@ -43,14 +57,16 @@ class TrainingPlanScreen extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           AppStrings.get('dashboard_subtitle'),
-                          style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.8)),
+                          style: TextStyle(
+                              color:
+                                  context.colors.textSecondary.withValues(alpha: 0.8)),
                         ),
                         const SizedBox(height: 8),
                       ]),
                     ),
                     const SizedBox(height: 16),
                     FutureBuilder<Map<String, dynamic>>(
-                      future: ProgressService.getRecommendations(),
+                      future: _future,
                       builder: (context, snapshot) {
                         final data = snapshot.data;
                         final String message;
@@ -59,7 +75,8 @@ class TrainingPlanScreen extends StatelessWidget {
                         } else if (snapshot.hasError || data == null) {
                           message = AppStrings.get('coming_soon');
                         } else {
-                          message = data['recommendations']?.toString() ?? AppStrings.get('coming_soon');
+                          message = data['recommendations']?.toString() ??
+                              AppStrings.get('coming_soon');
                         }
 
                         return PanelCard(
@@ -69,7 +86,8 @@ class TrainingPlanScreen extends StatelessWidget {
                               Row(children: [
                                 const Text('📋 ', style: TextStyle(fontSize: 14)),
                                 Text(
-                                  AppStrings.get('mode_training_plan_sub').toUpperCase(),
+                                  AppStrings.get('mode_training_plan_sub')
+                                      .toUpperCase(),
                                   style: const TextStyle(
                                     color: AppColors.success,
                                     fontWeight: FontWeight.bold,
@@ -80,7 +98,9 @@ class TrainingPlanScreen extends StatelessWidget {
                               const SizedBox(height: 10),
                               Text(
                                 message,
-                                style: TextStyle(color: context.colors.textSecondary.withValues(alpha: 0.9)),
+                                style: TextStyle(
+                                    color: context.colors.textSecondary
+                                        .withValues(alpha: 0.9)),
                               ),
                             ],
                           ),
@@ -89,7 +109,8 @@ class TrainingPlanScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => setState(
+                          () => _future = ProgressService.getRecommendations()),
                       icon: const Icon(Icons.refresh, size: 16),
                       label: Text(AppStrings.get('restart')),
                     ),
