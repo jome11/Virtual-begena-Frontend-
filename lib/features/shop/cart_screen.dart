@@ -178,7 +178,7 @@ class _CartScreenState extends State<CartScreen> {
                           ...PaymentMethod.values.map((m) => Padding(
                                 padding: const EdgeInsets.only(bottom: 8),
                                 child: PanelCard(
-                                  child: RadioListTile<PaymentMethod>(
+                                  child: RadioListTile<PaymentMethod>.adaptive(
                                     value: m,
                                     groupValue: _selectedMethod,
                                     onChanged: (v) =>

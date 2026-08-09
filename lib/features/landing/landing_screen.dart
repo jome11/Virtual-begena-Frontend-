@@ -116,9 +116,10 @@ class _EnterButtonState extends State<_EnterButton> {
             AppStrings.get('enter'),
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 28,
               fontWeight: FontWeight.w600,
-              fontFamily: languageNotifier.value == Language.am ? 'BelaBereka' : null,
+              fontFamily:
+                  languageNotifier.value == Language.am ? 'BelaBereka' : null,
               letterSpacing: 1.4,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/content/begena_about_content.dart';
 import '../../shared/widgets/nav_bar.dart';
 import '../../shared/widgets/site_footer.dart';
 import '../../shared/widgets/panel_card.dart';
@@ -43,10 +44,7 @@ class LessonsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            AppStrings.get('lessons_intro'),
-                            style: TextStyle(color: context.colors.textSecondary, fontSize: 16, height: 1.6),
-                          ),
+                          _AboutBegenaSection(lang: lang),
                           const SizedBox(height: 24),
                           _QenetCard(
                             title: AppStrings.get('qenet_selamta_title'),
@@ -99,6 +97,59 @@ class LessonsScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _AboutBegenaSection extends StatelessWidget {
+  final Language lang;
+  const _AboutBegenaSection({required this.lang});
+
+  @override
+  Widget build(BuildContext context) {
+    final blocks = lang == Language.am ? begenaAboutAm : begenaAboutEn;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final block in blocks) ...[
+          if (block.heading != null) ...[
+            Text(
+              block.heading!,
+              style: TextStyle(
+                  color: context.colors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+          ],
+          if (block.paragraph != null) ...[
+            Text(
+              block.paragraph!,
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 15, height: 1.7),
+            ),
+            const SizedBox(height: 12),
+          ],
+          if (block.bullets != null) ...[
+            for (final b in block.bullets!)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6, left: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.circle, size: 5, color: context.colors.accent),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: Text(b,
+                            style: TextStyle(
+                                color: context.colors.textSecondary,
+                                fontSize: 14.5,
+                                height: 1.6))),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 8),
+          ],
+          const SizedBox(height: 12),
+        ],
+      ],
     );
   }
 }

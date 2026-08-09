@@ -10,10 +10,11 @@ class AppTheme {
   static ThemeData get darkTheme => _build(AppColorsExt.dark, Brightness.dark);
 
   static ThemeData _build(AppColorsExt colors, Brightness brightness) {
-    final base = brightness == Brightness.light ? ThemeData.light() : ThemeData.dark();
-    
+    final base = brightness == Brightness.light
+        ? ThemeData.light()
+        : ThemeData.dark();
+
     return base.copyWith(
-      useMaterial3: true,
       scaffoldBackgroundColor: colors.background,
       extensions: [
         colors,
