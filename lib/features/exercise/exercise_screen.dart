@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
@@ -12,6 +13,7 @@ import '../../shared/widgets/stat_tile.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/qenet_selector.dart';
 import '../../shared/widgets/mode_app_bar.dart';
+import '../../shared/widgets/camera_controls_panel.dart';
 
 class ExerciseScreen extends StatefulWidget {
   const ExerciseScreen({super.key});
@@ -63,6 +65,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final target = _exercise[_currentIndex];
     setState(() {
       if (finger == target) {
+        HapticFeedback.mediumImpact();
         _correct++;
         _fingerSuccesses[target] = (_fingerSuccesses[target] ?? 0) + 1;
         if (_currentIndex + 1 < _exercise.length) {
@@ -89,7 +92,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             _weakFingerSessionCount = 0;
           }
           _exercise =
-              _currentWeakFinger != null ? generateExercise(_currentWeakFinger) : [];
+          _currentWeakFinger != null ? generateExercise(_currentWeakFinger) : [];
         }
       } else {
         _wrong++;
@@ -153,118 +156,92 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 
   Widget _sidebar() => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          PanelCard(
-            child: Column(children: [
-              Text(AppStrings.get('session'),
-                  style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
-              const SizedBox(height: 4),
-              Text(
-                '#$_session',
-                style: TextStyle(
-                  color: context.colors.accent,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ]),
-          ),
-          const SizedBox(height: 12),
-          Row(children: [
-            Expanded(
-                child: StatTile(
-                    label: AppStrings.get('correct'),
-                    value: '$_correct',
-                    valueColor: AppColors.success)),
-            const SizedBox(width: 12),
-            Expanded(
-                child: StatTile(
-                    label: AppStrings.get('wrong'),
-                    value: '$_wrong',
-                    valueColor: AppColors.danger)),
-          ]),
-          const SizedBox(height: 12),
-          StatTile(
-              label: AppStrings.get('accuracy'),
-              value: '${_accuracy.toStringAsFixed(0)}%',
-              valueColor: AppColors.modeExercise),
-          const SizedBox(height: 12),
-          PanelCard(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(AppStrings.get('mode_exercise'),
-                  style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
-              const SizedBox(height: 4),
-              Text(
-                _currentWeakFinger != null
-                    ? fingerNames[_currentWeakFinger]!
-                    : AppStrings.get('ready').toUpperCase(),
-                style: const TextStyle(
-                    color: AppColors.warning, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: _weakFingerSessionCount / sessionsToMaster,
-                  minHeight: 6,
-                  backgroundColor: context.colors.background,
-                  color: AppColors.warning,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                '$_weakFingerSessionCount/$sessionsToMaster ${AppStrings.get('session').toLowerCase()}',
-                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
-              ),
-            ]),
-          ),
-          const SizedBox(height: 12),
-          PanelCard(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(AppStrings.get('ready'),
-                  style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
-              const SizedBox(height: 4),
-              Text(
-                _masteredFingers.isEmpty
-                    ? AppStrings.get('coming_soon')
-                    : _masteredFingers.map((f) => fingerNames[f]).join(', '),
-                style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
-              ),
-            ]),
-          ),
-          const SizedBox(height: 12),
-          PanelCard(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Show Strings',
-                    style:
-                        TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.w600)),
-                Switch(
-                  value: _showStrings,
-                  onChanged: (v) {
-                    setState(() => _showStrings = v);
-                    handTrackingService.setVirtualStrings(v);
-                  },
-                  activeThumbColor: AppColors.modeExercise,
-                ),
-              ],
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      PanelCard(
+        child: Column(children: [
+          Text(AppStrings.get('session'),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          const SizedBox(height: 4),
+          Text(
+            '#$_session',
+            style: TextStyle(
+              color: context.colors.accent,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: () {
-              final ok = handTrackingService.captureCalibration();
-              if (!ok && context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Show your hand to the camera before calibrating')),
-                );
-              }
-            },
-            icon: const Icon(Icons.settings, size: 16),
-            label: const Text('Calibrate'),
+        ]),
+      ),
+      const SizedBox(height: 12),
+      Row(children: [
+        Expanded(
+            child: StatTile(
+                label: AppStrings.get('correct'),
+                value: '$_correct',
+                valueColor: AppColors.success)),
+        const SizedBox(width: 12),
+        Expanded(
+            child: StatTile(
+                label: AppStrings.get('wrong'),
+                value: '$_wrong',
+                valueColor: AppColors.danger)),
+      ]),
+      const SizedBox(height: 12),
+      StatTile(
+          label: AppStrings.get('accuracy'),
+          value: '${_accuracy.toStringAsFixed(0)}%',
+          valueColor: AppColors.modeExercise),
+      const SizedBox(height: 12),
+      PanelCard(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(AppStrings.get('mode_exercise'),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          const SizedBox(height: 4),
+          Text(
+            _currentWeakFinger != null
+                ? fingerNames[_currentWeakFinger]!
+                : AppStrings.get('ready').toUpperCase(),
+            style: const TextStyle(
+                color: AppColors.warning, fontSize: 18, fontWeight: FontWeight.bold),
           ),
-        ],
-      );
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: _weakFingerSessionCount / sessionsToMaster,
+              minHeight: 6,
+              backgroundColor: context.colors.background,
+              color: AppColors.warning,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '$_weakFingerSessionCount/$sessionsToMaster ${AppStrings.get('session').toLowerCase()}',
+            style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+          ),
+        ]),
+      ),
+      const SizedBox(height: 12),
+      PanelCard(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(AppStrings.get('ready'),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
+          const SizedBox(height: 4),
+          Text(
+            _masteredFingers.isEmpty
+                ? AppStrings.get('coming_soon')
+                : _masteredFingers.map((f) => fingerNames[f]).join(', '),
+            style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
+          ),
+        ]),
+      ),
+      const SizedBox(height: 12),
+      CameraControlsPanel(
+        showStrings: _showStrings,
+        onShowStringsChanged: (v) => setState(() => _showStrings = v),
+        modeColor: AppColors.modeExercise,
+      ),
+    ],
+  );
 }

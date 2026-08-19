@@ -10,6 +10,7 @@ import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/qenet_selector.dart';
 import '../../shared/widgets/mode_app_bar.dart';
+import '../../shared/widgets/camera_controls_panel.dart';
 
 class FreePlayScreen extends StatefulWidget {
   const FreePlayScreen({super.key});
@@ -19,11 +20,13 @@ class FreePlayScreen extends StatefulWidget {
 
 class _FreePlayScreenState extends State<FreePlayScreen> {
   Qenet _qenet = Qenet.selamta;
+  bool _showStrings = false;
 
   @override
   void initState() {
     super.initState();
     handTrackingService.start();
+    handTrackingService.setVirtualStrings(_showStrings);
   }
 
   @override
@@ -80,6 +83,12 @@ class _FreePlayScreenState extends State<FreePlayScreen> {
                           style: TextStyle(color: context.colors.textSecondary),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    CameraControlsPanel(
+                      showStrings: _showStrings,
+                      onShowStringsChanged: (v) => setState(() => _showStrings = v),
+                      modeColor: AppColors.modeFreePlay,
                     ),
                     const SizedBox(height: 16),
                     OutlinedButton.icon(

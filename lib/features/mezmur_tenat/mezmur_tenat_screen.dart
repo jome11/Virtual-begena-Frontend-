@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/qenet.dart';
@@ -11,6 +12,7 @@ import '../../shared/widgets/camera_feed_view.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/stat_tile.dart';
 import '../../shared/widgets/mode_app_bar.dart';
+import '../../shared/widgets/camera_controls_panel.dart';
 
 class MezmurTenatScreen extends StatefulWidget {
   const MezmurTenatScreen({super.key});
@@ -30,6 +32,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
 
   int _correct = 0;
   int _wrong = 0;
+  bool _showStrings = false;
   int get _progress => _currentIndex;
   int get _total => _notes.length;
 
@@ -45,6 +48,7 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
     final target = _notes[_currentIndex].note;
     setState(() {
       if (finger == target) {
+        HapticFeedback.mediumImpact();
         _correct++;
         _currentIndex++;
         if (_currentIndex >= _notes.length) {
@@ -74,18 +78,18 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
           backgroundColor: context.colors.background,
           appBar: _step == _Step.practice
               ? ModeAppBar(
-                  modeLabel: (_qenet ?? Qenet.selamta).label,
-                  modeColor: (_qenet ?? Qenet.selamta).color,
-                  onBack: () {
-                    handTrackingService.removeListener(_onTrackingUpdate);
-                    handTrackingService.stop();
-                    setState(() => _step = _Step.song);
-                  },
-                )
+            modeLabel: (_qenet ?? Qenet.selamta).label,
+            modeColor: (_qenet ?? Qenet.selamta).color,
+            onBack: () {
+              handTrackingService.removeListener(_onTrackingUpdate);
+              handTrackingService.stop();
+              setState(() => _step = _Step.song);
+            },
+          )
               : ModeAppBar(
-                  modeLabel: AppStrings.get('mode_mezmur_tenat').toUpperCase(),
-                  modeColor: AppColors.modeMezmurTenat,
-                ),
+            modeLabel: AppStrings.get('mode_mezmur_tenat').toUpperCase(),
+            modeColor: AppColors.modeMezmurTenat,
+          ),
           body: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 24),
@@ -109,45 +113,45 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
   }
 
   Widget _qenetCard() => ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420),
-        child: PanelCard(
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              Text(
-                AppStrings.get('mode_mezmur_tenat'),
-                style: const TextStyle(
-                  color: AppColors.modeMezmurTenat,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(AppStrings.get('feature_1_title'),
-                  style: TextStyle(color: context.colors.textSecondary)),
-              const SizedBox(height: 16),
-              Divider(color: context.colors.border),
-              const SizedBox(height: 16),
-              ...Qenet.values.map((q) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: OutlinedButton(
-                      onPressed: () => setState(() {
-                        _qenet = q;
-                        _step = _Step.song;
-                      }),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: q.color,
-                        side: BorderSide(color: q.color),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        minimumSize: const Size.fromHeight(50),
-                      ),
-                      child: Text(q.label, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                  )),
-            ],
+    constraints: const BoxConstraints(maxWidth: 420),
+    child: PanelCard(
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          Text(
+            AppStrings.get('mode_mezmur_tenat'),
+            style: const TextStyle(
+              color: AppColors.modeMezmurTenat,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-      );
+          const SizedBox(height: 6),
+          Text(AppStrings.get('feature_1_title'),
+              style: TextStyle(color: context.colors.textSecondary)),
+          const SizedBox(height: 16),
+          Divider(color: context.colors.border),
+          const SizedBox(height: 16),
+          ...Qenet.values.map((q) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: OutlinedButton(
+              onPressed: () => setState(() {
+                _qenet = q;
+                _step = _Step.song;
+              }),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: q.color,
+                side: BorderSide(color: q.color),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: Text(q.label, style: const TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          )),
+        ],
+      ),
+    ),
+  );
 
   Widget _songCard() {
     final songs = mezmurLibrary[_qenet ?? Qenet.selamta] ?? [];
@@ -178,48 +182,49 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
             Divider(color: context.colors.border),
             const SizedBox(height: 12),
             ...songs.map((s) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: InkWell(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => setState(() {
+                  _song = s;
+                  _notes = flattenMezmur(s);
+                  _currentIndex = 0;
+                  _correct = 0;
+                  _wrong = 0;
+                  _step = _Step.practice;
+                  handTrackingService.addListener(_onTrackingUpdate);
+                  handTrackingService.start();
+                  handTrackingService.setQenet((_qenet ?? Qenet.selamta).name);
+                  handTrackingService.setVirtualStrings(_showStrings);
+                }),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: context.colors.textSecondary.withValues(alpha: 0.25)),
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () => setState(() {
-                      _song = s;
-                      _notes = flattenMezmur(s);
-                      _currentIndex = 0;
-                      _correct = 0;
-                      _wrong = 0;
-                      _step = _Step.practice;
-                      handTrackingService.addListener(_onTrackingUpdate);
-                      handTrackingService.start();
-                      handTrackingService.setQenet((_qenet ?? Qenet.selamta).name);
-                    }),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: context.colors.textSecondary.withValues(alpha: 0.25)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            s.title,
-                            style: TextStyle(
-                              color: context.colors.textPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            s.amharic,
-                            style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                )),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        s.title,
+                        style: TextStyle(
+                          color: context.colors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        s.amharic,
+                        style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
             const SizedBox(height: 4),
             TextButton(
               onPressed: () => setState(() => _step = _Step.qenet),
@@ -344,12 +349,18 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
               valueColor: AppColors.modeMezmurTenat,
             ),
             const SizedBox(height: 12),
+            CameraControlsPanel(
+              showStrings: _showStrings,
+              onShowStringsChanged: (v) => setState(() => _showStrings = v),
+              modeColor: AppColors.modeMezmurTenat,
+            ),
+            const SizedBox(height: 12),
             OutlinedButton.icon(
                 onPressed: () => setState(() {
-                      _currentIndex = 0;
-                      _correct = 0;
-                      _wrong = 0;
-                    }),
+                  _currentIndex = 0;
+                  _correct = 0;
+                  _wrong = 0;
+                }),
                 icon: const Icon(Icons.refresh, size: 16),
                 label: Text(AppStrings.get('restart'))),
             const SizedBox(height: 10),

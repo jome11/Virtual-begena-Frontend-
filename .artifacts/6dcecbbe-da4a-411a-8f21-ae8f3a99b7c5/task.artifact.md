@@ -1,0 +1,7 @@
+- [x] Update `pubspec.yaml` to include 3D model assets
+- [x] Update `web/index.html` with Three.js importmap and module script
+- [x] Refactor `web/js/tuning_viewer.js` into an ES module with `tuningViewer` API
+- [x] Create `lib/core/services/js/tuning_view_registrar.dart`
+- [x] Create `lib/core/services/js/tuning_viewer_interop.dart`
+- [x] Create `lib/shared/widgets/tuning_viewer.dart`
+- [x] Verify 3D rendering and interop (manual check)
