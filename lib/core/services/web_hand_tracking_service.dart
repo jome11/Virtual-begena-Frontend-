@@ -1,11 +1,10 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
 import 'hand_tracking_service.dart';
 import 'js/camera_view_registrar.dart';
 import 'js/hand_tracking_interop.dart';
 
-/// Real, camera-backed implementation.
 class WebHandTrackingService extends HandTrackingService {
   Timer? _poll;
 
@@ -14,6 +13,8 @@ class WebHandTrackingService extends HandTrackingService {
   int? _detectedString;
   bool? _lastPluckCorrect;
   Map<String, dynamic>? _lastPluck;
+  bool _pinching = false;
+  Map<String, dynamic>? _lastTuningTick;
 
   @override
   bool get isReady => _ready;
@@ -25,6 +26,10 @@ class WebHandTrackingService extends HandTrackingService {
   bool? get lastPluckCorrect => _lastPluckCorrect;
   @override
   Map<String, dynamic>? get lastPluck => _lastPluck;
+  @override
+  bool get pinching => _pinching;
+  @override
+  Map<String, dynamic>? get lastTuningTick => _lastTuningTick;
 
   @override
   Future<void> start() async {
@@ -67,15 +72,19 @@ class WebHandTrackingService extends HandTrackingService {
   @override
   void setTargetFinger(int? finger) => HandTrackingInterop.setTargetFinger(finger);
 
+  @override
+  void setMode(String mode) => HandTrackingInterop.setMode(mode);
+
+  @override
+  void setSelectedString(int stringNum) => HandTrackingInterop.setSelectedString(stringNum);
+
   void _tick() {
     try {
       final json = HandTrackingInterop.getStateJson();
       if (json.isEmpty) return;
       final Map<String, dynamic> state = jsonDecode(json) as Map<String, dynamic>;
       _applyState(state);
-    } catch (_) {
-      // JS side not ready yet
-    }
+    } catch (_) {}
   }
 
   void _applyState(Map<String, dynamic> state) {
@@ -83,6 +92,7 @@ class WebHandTrackingService extends HandTrackingService {
     final string = state['string'] as int?;
     final correct = state['correct'] as bool?;
     final lastPluck = state['lastPluck'] as Map<String, dynamic>?;
+    final tuning = state['tuning'] as Map<String, dynamic>?;
 
     bool changed = false;
     if (finger != _detectedFinger) {
@@ -97,11 +107,23 @@ class WebHandTrackingService extends HandTrackingService {
       _lastPluckCorrect = correct;
       changed = true;
     }
-    
-    // Check if timestamp changed for last pluck
+
     if (lastPluck != null && (lastPluck['timestamp'] != _lastPluck?['timestamp'])) {
       _lastPluck = lastPluck;
       changed = true;
+    }
+
+    if (tuning != null) {
+      final p = tuning['pinching'] as bool? ?? false;
+      if (p != _pinching) {
+        _pinching = p;
+        changed = true;
+      }
+      final tick = tuning['lastTick'] as Map<String, dynamic>?;
+      if (tick != null && tick['timestamp'] != _lastTuningTick?['timestamp']) {
+        _lastTuningTick = tick;
+        changed = true;
+      }
     }
 
     if (changed) {

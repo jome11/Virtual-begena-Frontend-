@@ -1,12 +1,16 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/constants/tuning_data.dart';
 import '../../core/services/js/audio_interop.dart';
+import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/mode_app_bar.dart';
+import '../../shared/widgets/begena_3d_canvas.dart';
+import '../../shared/widgets/camera_feed_view.dart';
+import '../../shared/widgets/camera_panel.dart';
 
 class TuningScreen extends StatefulWidget {
   const TuningScreen({super.key});
@@ -22,9 +26,28 @@ class _TuningScreenState extends State<TuningScreen> {
     for (final s in activeStrings) s: stringNotes[s]!.first
   };
   Map<int, bool>? _results;
+  int? _lastTickTimestamp;
 
   Map<int, String> get _targets => qenetTuning[_qenet]![_key]!;
   static const _labels = {1: '1', 4: '2', 6: '3', 8: '4', 10: '5'};
+
+  @override
+  void initState() {
+    super.initState();
+    handTrackingService.addListener(_onTuningGesture);
+    handTrackingService.start();
+    handTrackingService.setMode('tuning');
+    handTrackingService.setSelectedString(_selected);
+  }
+
+  void _onTuningGesture() {
+    final tick = handTrackingService.lastTuningTick;
+    if (tick == null) return;
+    final ts = tick['timestamp'] as int;
+    if (ts == _lastTickTimestamp) return;
+    _lastTickTimestamp = ts;
+    _cycle(tick['direction'] as int);
+  }
 
   void _reset() {
     setState(() {
@@ -56,6 +79,13 @@ class _TuningScreenState extends State<TuningScreen> {
       for (final s in activeStrings) s: _current[s] == _targets[s]
     };
     setState(() => _results = results);
+  }
+
+  @override
+  void dispose() {
+    handTrackingService.removeListener(_onTuningGesture);
+    handTrackingService.stop();
+    super.dispose();
   }
 
   @override
@@ -105,7 +135,6 @@ class _TuningScreenState extends State<TuningScreen> {
     return PanelCard(
       child: Column(
         children: [
-          // Qenet + key selectors
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 8,
@@ -140,7 +169,6 @@ class _TuningScreenState extends State<TuningScreen> {
             ],
           ),
           const SizedBox(height: 24),
-          // String selector row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: activeStrings.map((s) {
@@ -154,6 +182,7 @@ class _TuningScreenState extends State<TuningScreen> {
                 onTap: () => setState(() {
                   _selected = s;
                   _results = null;
+                  handTrackingService.setSelectedString(s);
                 }),
                 child: Container(
                   width: 44,
@@ -177,28 +206,64 @@ class _TuningScreenState extends State<TuningScreen> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 30),
-          // Rotating peg dial
-          GestureDetector(
-            onVerticalDragUpdate: (d) => _cycle(d.delta.dy < 0 ? 1 : -1),
-            child: AnimatedRotation(
-              turns: idx / (noteCount * 3), // subtle rotation per note step
-              duration: const Duration(milliseconds: 250),
-              child: Container(
-                width: 130,
-                height: 130,
+          const SizedBox(height: 20),
+          // Hidden camera mount — hand tracking still runs, we just don't
+          // show the video feed on this screen.
+          // Small camera feed + large 3D begena, side by side.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 140,
+                height: 105,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CameraPanel(
+                    service: handTrackingService,
+                    readyChild: const CameraFeedView(),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Expanded(child: Begena3DCanvas(height: 320)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          AnimatedBuilder(
+            animation: handTrackingService,
+            builder: (context, _) {
+              final isPinching = handTrackingService.pinching;
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: inTune
-                      ? AppColors.success.withValues(alpha: 0.12)
-                      : AppColors.modeTuning.withValues(alpha: 0.12),
-                  border:
-                      Border.all(color: inTune ? AppColors.success : AppColors.modeTuning, width: 4),
+                  color: (isPinching ? AppColors.success : context.colors.textSecondary)
+                      .withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Center(
-                  child: Icon(Icons.tune,
-                      size: 48, color: inTune ? AppColors.success : AppColors.modeTuning),
+                child: Text(
+                  isPinching ? 'PINCH DETECTED — TWIST TO TUNE' : 'PINCH THUMB + INDEX',
+                  style: TextStyle(
+                    color: isPinching ? AppColors.success : context.colors.textSecondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
                 ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: (inTune ? AppColors.success : AppColors.modeTuning).withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              inTune ? 'IN TUNE' : 'ADJUST',
+              style: TextStyle(
+                color: inTune ? AppColors.success : AppColors.modeTuning,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
             ),
           ),
@@ -226,7 +291,7 @@ class _TuningScreenState extends State<TuningScreen> {
             ],
           ),
           const SizedBox(height: 4),
-          Text('drag dial or tap +/− to change pitch',
+          Text('Pinch thumb + index, then twist to tune — or tap +/−',
               style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
           const SizedBox(height: 16),
           OutlinedButton.icon(
@@ -288,7 +353,7 @@ class _TuningScreenState extends State<TuningScreen> {
                     return Chip(
                       label: Text(_labels[s]!),
                       backgroundColor:
-                          ok ? AppColors.success.withValues(alpha: 0.15) : AppColors.danger.withValues(alpha: 0.15),
+                      ok ? AppColors.success.withValues(alpha: 0.15) : AppColors.danger.withValues(alpha: 0.15),
                       labelStyle: TextStyle(
                           color: ok ? AppColors.success : AppColors.danger,
                           fontWeight: FontWeight.bold),
@@ -319,3 +384,5 @@ class _TuningScreenState extends State<TuningScreen> {
     );
   }
 }
+
+

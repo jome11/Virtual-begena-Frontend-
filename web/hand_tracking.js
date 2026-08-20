@@ -1,4 +1,4 @@
-// web/hand_tracking.js
+﻿// web/hand_tracking.js
 window.handTracking = (() => {
   const FINGER_TIPS = [4, 8, 12, 16, 20];
   const FINGER_MAP = { 4: 1, 8: 2, 12: 3, 16: 4, 20: 5 };
@@ -9,6 +9,8 @@ window.handTracking = (() => {
   const STRING_DISPLAY_NAMES = { 1: '1', 4: '2', 6: '3', 8: '4', 10: '5' };
   const CALIBRATION_KEY = 'begena_string_positions';
   const MOVEMENT_THRESHOLD = 15;
+  const PINCH_DISTANCE_PX = 45;
+  const TICK_STEP_DEG = 20;
 
   const SOUND_PATHS = {
     selamta: { 1: '/sounds/string1.wav', 2: '/sounds/string2.wav', 3: '/sounds/string3.wav', 4: '/sounds/string4.wav', 5: '/sounds/string5.wav' },
@@ -31,7 +33,8 @@ window.handTracking = (() => {
 
   let qenet = 'selamta';
   let virtualStrings = false;
-  let targetFinger = null; // 1-5, used for onString check + highlight
+  let targetFinger = null;
+  let mode = 'default';
 
   let prevX = {};
   let prevY = {};
@@ -43,13 +46,59 @@ window.handTracking = (() => {
   let shakeUntil = 0;
   let glowUntil = {};
 
+  let pinchActive = false;
+  let pinchRefAngle = null;
+  let pinchAccumAngle = 0;
+  let selectedString = null;
+
   const state = {
     ready: false,
     cameraReady: false,
     handTrackerReady: false,
     handVisible: false,
-    lastPluck: null, // { finger, string, onString, timestamp }
+    lastPluck: null,
+    tuning: {
+      pinching: false,
+      lastTick: null,
+    },
   };
+
+  function angleDeltaDeg(a, b) {
+    let d = (b - a) % 360;
+    if (d > 180) d -= 360;
+    if (d < -180) d += 360;
+    return d;
+  }
+
+  function updateTuningGesture(hand, w, h) {
+    const thumb = hand[4];
+    const index = hand[8];
+    const tx = thumb.x * w, ty = thumb.y * h;
+    const ix = index.x * w, iy = index.y * h;
+    const dist = Math.hypot(tx - ix, ty - iy);
+    const isPinching = dist < PINCH_DISTANCE_PX;
+
+    if (isPinching) {
+      const angleDeg = Math.atan2(iy - ty, ix - tx) * 180 / Math.PI;
+      if (pinchActive && pinchRefAngle !== null) {
+        const delta = angleDeltaDeg(pinchRefAngle, angleDeg);
+        pinchAccumAngle += delta;
+
+        if (Math.abs(pinchAccumAngle) >= TICK_STEP_DEG) {
+          const direction = pinchAccumAngle > 0 ? 1 : -1;
+          state.tuning.lastTick = { direction, timestamp: Date.now() };
+          pinchAccumAngle = 0;
+        }
+      }
+      pinchRefAngle = angleDeg;
+      pinchActive = true;
+    } else {
+      pinchActive = false;
+      pinchRefAngle = null;
+      pinchAccumAngle = 0;
+    }
+    state.tuning.pinching = isPinching;
+  }
 
   async function init() {
     const { HandLandmarker, FilesetResolver } = window.__mpHandLandmarker;
@@ -84,9 +133,6 @@ window.handTracking = (() => {
   }
 
   async function start(videoElementId, canvasElementId) {
-    // Flutter mounts the platform-view <video>/<canvas> elements a frame
-    // after build(), so they may not exist in the DOM the instant start()
-    // is called (e.g. from initState()). Wait for them instead of assuming.
     videoEl = await waitForElement(videoElementId);
     canvasEl = await waitForElement(canvasElementId);
     ctx = canvasEl.getContext('2d');
@@ -278,10 +324,18 @@ window.handTracking = (() => {
         currentHand = results.landmarks[0];
         state.handVisible = true;
         drawHand(currentHand, canvasEl.width, canvasEl.height);
-        processMovement(currentHand, canvasEl.width, canvasEl.height);
+        if (mode === 'tuning') {
+          updateTuningGesture(currentHand, canvasEl.width, canvasEl.height);
+        } else {
+          processMovement(currentHand, canvasEl.width, canvasEl.height);
+        }
       } else {
         currentHand = null;
         state.handVisible = false;
+        pinchActive = false;
+        pinchRefAngle = null;
+        pinchAccumAngle = 0;
+        state.tuning.pinching = false;
       }
 
       if (isShaking) {
@@ -297,6 +351,8 @@ window.handTracking = (() => {
   function setQenet(q) { qenet = q; }
   function setVirtualStrings(v) { virtualStrings = v; }
   function setTargetFinger(f) { targetFinger = f; }
+  function setMode(m) { mode = m; }
+  function setSelectedString(s) { selectedString = s; }
 
   function captureCalibration() {
     if (!currentHand || !canvasEl) return false;
@@ -334,9 +390,14 @@ window.handTracking = (() => {
     state.ready = false;
     state.cameraReady = false;
     state.handVisible = false;
+    pinchActive = false;
+    pinchRefAngle = null;
+    pinchAccumAngle = 0;
+    state.tuning.pinching = false;
   }
 
   function getState() { return JSON.stringify(state); }
 
-  return { start, stop, setQenet, setVirtualStrings, setTargetFinger, captureCalibration, clearCalibration, getState };
+  return { start, stop, setQenet, setVirtualStrings, setTargetFinger, setMode, setSelectedString, captureCalibration, clearCalibration, getState };
 })();
+

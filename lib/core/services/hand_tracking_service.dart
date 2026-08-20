@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'web_hand_tracking_service.dart';
 
-/// Every camera-driven screen talks to this interface only.
-/// Swap `handTrackingService` at the bottom for your real model —
-/// no screen needs to change.
 abstract class HandTrackingService extends ChangeNotifier {
   bool get isReady;
-  String? get detectedFinger;   // e.g. 'THUMB'
-  int? get detectedString;      // 1-based string index
+  String? get detectedFinger;
+  int? get detectedString;
   bool? get lastPluckCorrect;
+  Map<String, dynamic>? get lastPluck;
+  bool get pinching;
+  Map<String, dynamic>? get lastTuningTick;
 
   Future<void> start();
   Future<void> stop();
@@ -18,7 +18,8 @@ abstract class HandTrackingService extends ChangeNotifier {
   bool captureCalibration();
   void setQenet(String qenet);
   void setTargetFinger(int? finger);
-  Map<String, dynamic>? get lastPluck;
+  void setMode(String mode);
+  void setSelectedString(int stringNum);
 }
 
 class MockHandTrackingService extends HandTrackingService {
@@ -33,6 +34,10 @@ class MockHandTrackingService extends HandTrackingService {
   bool? get lastPluckCorrect => null;
   @override
   Map<String, dynamic>? get lastPluck => null;
+  @override
+  bool get pinching => false;
+  @override
+  Map<String, dynamic>? get lastTuningTick => null;
 
   @override
   Future<void> start() async {
@@ -64,8 +69,12 @@ class MockHandTrackingService extends HandTrackingService {
 
   @override
   void setTargetFinger(int? finger) {}
+
+  @override
+  void setMode(String mode) {}
+
+  @override
+  void setSelectedString(int stringNum) {}
 }
 
-// Swap this back to MockHandTrackingService() if you need to develop UI
-// without a working JS hand-tracking model wired up yet.
 final HandTrackingService handTrackingService = WebHandTrackingService();
