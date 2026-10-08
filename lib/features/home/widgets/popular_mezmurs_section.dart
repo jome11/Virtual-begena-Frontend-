@@ -14,7 +14,7 @@ class PopularMezmursSection extends StatelessWidget {
       builder: (context, lang, _) {
         return Container(
           width: double.infinity,
-          color: brand.background,
+          color: Colors.transparent,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 70),
           child: Column(
             children: [

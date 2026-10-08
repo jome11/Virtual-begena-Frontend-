@@ -6,6 +6,7 @@ import '../../core/services/progress_service.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/stat_tile.dart';
 import '../../shared/widgets/mode_app_bar.dart';
+import 'session_breakdown_sheet.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
@@ -123,29 +124,39 @@ class _SessionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                (data['mode'] as String? ?? '').toUpperCase(),
-                style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
-              ),
-              Text(
-                data['qenet'] as String? ?? '',
-                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
-              ),
-            ],
-          ),
-          Text(
-            '${data['accuracy']}%',
-            style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
-          ),
-        ],
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: () => showSessionBreakdown(context, data),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (data['mode'] as String? ?? '').toUpperCase(),
+                  style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                Text(
+                  data['qenet'] as String? ?? '',
+                  style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  '${data['accuracy']}%',
+                  style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 6),
+                Icon(Icons.chevron_right_rounded, color: context.colors.textSecondary, size: 18),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

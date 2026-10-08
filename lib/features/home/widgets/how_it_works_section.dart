@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/brand_palette.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../shared/widgets/motion.dart';
 
 class HowItWorksSection extends StatelessWidget {
   const HowItWorksSection({super.key});
@@ -20,7 +21,7 @@ class HowItWorksSection extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          color: brand.surface,
+          color: Colors.transparent,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 80),
           child: Column(
             children: [
@@ -37,13 +38,17 @@ class HowItWorksSection extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, c) {
                   final narrow = c.maxWidth < 800;
-                  final tiles = steps
-                      .map((s) => _StepCard(
-                            title: s.$1,
-                            desc: s.$2,
-                            bg: s.$3,
-                          ))
-                      .toList();
+                  final tiles = <Widget>[
+                    for (var i = 0; i < steps.length; i++)
+                      Reveal(
+                        delay: Duration(milliseconds: 150 * i),
+                        child: _StepCard(
+                          title: steps[i].$1,
+                          desc: steps[i].$2,
+                          bg: steps[i].$3,
+                        ),
+                      ),
+                  ];
                   return ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 960),
                     child: narrow

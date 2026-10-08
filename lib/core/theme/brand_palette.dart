@@ -21,24 +21,23 @@ class BrandPalette extends ThemeExtension<BrandPalette> {
   });
 
   static const light = BrandPalette(
-    amber: Color(0xFFB06401),
-    rose: Color(0xFFD49E8D),
-    beige: Color(0xFFDED1BD),
-    background: Color(0xFFFAF6F2),
+    amber: Color(0xFF2563EB),
+    rose: Color(0xFF60A5FA),
+    beige: Color(0xFFDBEAFE),
+    background: Color(0xFFF4F8FF),
     surface: Colors.white,
-    ink: Color(0xFF3A2E22),
-    inkMuted: Color(0x993A2E22),
+    ink: Color(0xFF0B1F4B),
+    inkMuted: Color(0x990B1F4B),
   );
 
-  // "Candlelit manuscript" dark mode — warm near-black, not cold slate.
   static const dark = BrandPalette(
-    amber: Color(0xFFE0A24C),
-    rose: Color(0xFFC98A78),
-    beige: Color(0xFF473C2F),
-    background: Color(0xFF181209),
-    surface: Color(0xFF241C13),
-    ink: Color(0xFFF2E8D9),
-    inkMuted: Color(0x99F2E8D9),
+    amber: Color(0xFF60A5FA),
+    rose: Color(0xFF93C5FD),
+    beige: Color(0xFF1E3A8A),
+    background: Color(0xFF060E24),
+    surface: Color(0xFF0D1B3E),
+    ink: Color(0xFFE8F0FF),
+    inkMuted: Color(0x99E8F0FF),
   );
 
   @override

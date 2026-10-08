@@ -130,6 +130,27 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(height: 12),
+                            Row(children: [
+                              Expanded(child: Divider(color: context.colors.border)),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                child: Text('or', style: TextStyle(color: context.colors.textSecondary)),
+                              ),
+                              Expanded(child: Divider(color: context.colors.border)),
+                            ]),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton.icon(
+                                onPressed: () => context.go('/try'),
+                                icon: const Icon(Icons.play_circle_outline_rounded),
+                                label: Text(AppStrings.get('try_free')),
+                                style: OutlinedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
                             TextButton(
                               onPressed: () => context.go('/signup'),
                               child: Text(

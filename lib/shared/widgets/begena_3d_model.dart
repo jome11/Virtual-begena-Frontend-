@@ -18,6 +18,10 @@ class Begena3DModel extends StatelessWidget {
       el.setAttribute('exposure', '1.1');
       el.setAttribute('shadow-intensity', '1');
       el.setAttribute('interaction-prompt', 'none');
+      el.setAttribute('auto-rotate', '');
+      el.setAttribute('rotation-per-second', '18deg');
+      el.setAttribute('disable-zoom', '');
+      el.setAttribute('touch-action', 'pan-y');
       el.style.width = '100%';
       el.style.height = '100%';
       el.style.backgroundColor = 'transparent';

@@ -1,10 +1,12 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/constants/tuning_data.dart';
 import '../../core/services/js/audio_interop.dart';
+import '../../core/services/js/begena_3d_interop.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../shared/widgets/panel_card.dart';
 import '../../shared/widgets/mode_app_bar.dart';
@@ -72,6 +74,7 @@ class _TuningScreenState extends State<TuningScreen> {
   void _play(int string, String note) {
     final file = stringSoundFiles[string]?[note];
     if (file != null) playAudio('sounds/$file');
+    if (Begena3DInterop.isReady()) Begena3DInterop.pluck(string);
   }
 
   void _check() {
@@ -178,31 +181,16 @@ class _TuningScreenState extends State<TuningScreen> {
                   ? AppColors.modeTuning
                   : context.colors.textSecondary.withValues(alpha: 0.4);
               if (result != null) ringColor = result ? AppColors.success : AppColors.danger;
-              return GestureDetector(
+              return _StringDot(
+                label: _labels[s]!,
+                active: active,
+                correct: result,
+                ringColor: ringColor,
                 onTap: () => setState(() {
                   _selected = s;
                   _results = null;
                   handTrackingService.setSelectedString(s);
                 }),
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: active
-                        ? AppColors.modeTuning.withValues(alpha: 0.15)
-                        : Colors.transparent,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: ringColor, width: active ? 3 : 2),
-                  ),
-                  child: Center(
-                    child: Text(
-                      _labels[s]!,
-                      style: TextStyle(
-                          color: active ? AppColors.modeTuning : context.colors.textSecondary,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
               );
             }).toList(),
           ),
@@ -381,6 +369,89 @@ class _TuningScreenState extends State<TuningScreen> {
           label: Text(AppStrings.get('restart')),
         ),
       ],
+    );
+  }
+}
+
+class _StringDot extends StatefulWidget {
+  final String label;
+  final bool active;
+  final bool? correct;
+  final Color ringColor;
+  final VoidCallback onTap;
+
+  const _StringDot({
+    required this.label,
+    required this.active,
+    required this.correct,
+    required this.ringColor,
+    required this.onTap,
+  });
+
+  @override
+  State<_StringDot> createState() => _StringDotState();
+}
+
+class _StringDotState extends State<_StringDot> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _scale = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.35), weight: 30),
+      TweenSequenceItem(tween: Tween(begin: 1.35, end: 0.9), weight: 30),
+      TweenSequenceItem(tween: Tween(begin: 0.9, end: 1.0), weight: 40),
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+  }
+
+  @override
+  void didUpdateWidget(covariant _StringDot old) {
+    super.didUpdateWidget(old);
+    if (widget.correct == true && old.correct != true) {
+      HapticFeedback.mediumImpact();
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: ScaleTransition(
+        scale: _scale,
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: widget.active
+                ? AppColors.modeTuning.withValues(alpha: 0.15)
+                : Colors.transparent,
+            shape: BoxShape.circle,
+            border: Border.all(color: widget.ringColor, width: widget.active ? 3 : 2),
+          ),
+          child: Center(
+            child: Text(
+              widget.label,
+              style: TextStyle(
+                color: widget.active ? AppColors.modeTuning : context.colors.textSecondary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

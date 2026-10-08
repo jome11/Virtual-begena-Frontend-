@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'api_client.dart';
+import 'daily_goal_service.dart';
 
 const fingerNumberByName = {'THUMB': 1, 'INDEX': 2, 'MIDDLE': 3, 'RING': 4, 'PINKY': 5};
 
@@ -26,6 +27,7 @@ class ProgressService {
       'finger_mistakes': fingerMistakes.map((k, v) => MapEntry('$k', v)),
       'finger_successes': fingerSuccesses.map((k, v) => MapEntry('$k', v)),
     });
+    await DailyGoalService.recordSession();
   }
 
   static Future<List<Map<String, dynamic>>> getHistory() async {
@@ -44,6 +46,11 @@ class ProgressService {
 
   static Future<Map<String, dynamic>> getRecommendations() async {
     return await ApiClient.get('/progress/recommendations');
+  }
+
+  static Future<List<Map<String, dynamic>>> getLeaderboard({bool weekly = false}) async {
+    final data = await ApiClient.get('/progress/leaderboard${weekly ? '?range=week' : ''}');
+    return (data['leaderboard'] as List).cast<Map<String, dynamic>>();
   }
 
   static Future<String> getSessionNarrative({

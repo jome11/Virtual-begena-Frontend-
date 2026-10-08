@@ -1,43 +1,28 @@
-# Walkthrough - 3D Tuning Viewer Frontend Integration
+# Walkthrough - Practical Exams & Chapter Redesign
 
-I have integrated the 3D tuning viewer into the Flutter application, enabling a rich 3D interface for tuning strings using hand gestures.
+Successfully implemented interactive practical hand-tracking exams for chapters 5 and 6, integrated exam accuracy thresholds into course progress tracking, created `PracticalExamScreen`, updated routing, and redesigned chapter headers and typography.
 
-## Changes Made
+## Changes
 
-### Asset Management
-#### [pubspec.yaml](file:///C:/Users/PAVILION/Desktop/virtual_begena/pubspec.yaml)
-- Added `assets/models/` to the assets list to support loading 3D models like `Gebena.glb`.
+### 1. Course Data & Progress Service
+#### [curriculum.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/data/curriculum.dart)
+- Added `examPassAccuracy` (70%) and `examsFor` map.
+- Added `TaskKind.exam`, task constructor, label, route mapping, and updated days 13, 17, and 20 in `dailyPlan`.
+#### [course_progress_service.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/course_progress_service.dart)
+- Updated `CourseSnapshot` with `exams` map, `examsPassed` validation, and updated `chapterDone` logic requiring both quiz, assignment, and practical exams.
+- Added `saveExam` persistence method.
 
-### Web & 3D Infrastructure
-#### [index.html](file:///C:/Users/PAVILION/Desktop/virtual_begena/web/index.html)
-- Configured an `importmap` for Three.js and its addons (GLTFLoader).
-- Loaded `tuning_viewer.js` as a module.
+### 2. Practical Exam Screen
+#### [practical_exam_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/exam/practical_exam_screen.dart)
+- Created interactive hand-tracking test screen prompting users to pluck 10 notes with specified target fingers, tracking accuracy and mistakes ($\le 4$), and saving passing scores ($\ge 70\%$).
 
-#### [tuning_viewer.js](file:///C:/Users/PAVILION/Desktop/virtual_begena/web/js/tuning_viewer.js)
-- Refactored into a module that exposes a global `tuningViewer` API.
-- Implemented `start()` to initialize the scene, lighting, and load the 3D model.
-- Integrated the pinch-to-rotate logic directly into the Three.js animation loop.
-- Added `rotatePeg()` and `getStateJson()` for programmatic control and state inspection.
+### 3. Router & Chapter Screen
+#### [app_router.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/routes/app_router.dart)
+- Added `/exam` route mapping to `PracticalExamScreen`.
+#### [chapter_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/course/chapter_screen.dart)
+- Redesigned chapter header with a gradient card, chapter number watermark, icon, and dynamic read-time estimate.
+- Updated `_learn` reading typography with formatted paragraph rendering (`_para`) featuring verse reference styling.
+- Added `_ExamCard` to chapter quiz/exam tabs for chapters 5 and 6.
 
-### Flutter-JS Integration
-#### [tuning_view_registrar.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/js/tuning_view_registrar.dart)
-- Registered `begena-tuning-viewer` as a platform view factory.
-
-#### [tuning_viewer_interop.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/js/tuning_viewer_interop.dart)
-- Defined the interop layer using `dart:js_interop` to call the Three.js functions from Dart.
-
-#### [tuning_viewer.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/shared/widgets/tuning_viewer.dart)
-- Created a `TuningViewer` widget that renders the 3D container and initializes the viewer upon mounting.
-
-## Verification Results
-
-### Manual Verification
-- Verified that the Three.js scene initializes within the `HtmlElementView`.
-- Confirmed that the `GLTFLoader` correctly identifies meshes with "peg" in their name for interaction.
-- The `updateFromHand` loop is active and polling the `handTracking` state.
-
-> [!IMPORTANT]
-> The viewer expects a 3D model at `assets/models/Gebena.glb`. If the model filename or internal node names differ, the peg mapping in `tuning_viewer.js` may need adjustment.
-
-> [!TIP]
-> You can now use the `TuningViewer` widget anywhere in your Flutter UI to show the interactive 3D model.
+> [!NOTE]
+> Static analysis (`flutter analyze`) verified successfully with zero errors.

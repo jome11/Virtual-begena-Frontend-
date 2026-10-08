@@ -1,7 +1,6 @@
-- [x] Update `pubspec.yaml` to include 3D model assets
-- [x] Update `web/index.html` with Three.js importmap and module script
-- [x] Refactor `web/js/tuning_viewer.js` into an ES module with `tuningViewer` API
-- [x] Create `lib/core/services/js/tuning_view_registrar.dart`
-- [x] Create `lib/core/services/js/tuning_viewer_interop.dart`
-- [x] Create `lib/shared/widgets/tuning_viewer.dart`
-- [x] Verify 3D rendering and interop (manual check)
+- [x] Update `lib/core/data/curriculum.dart` with exam constants, TaskKind.exam, and daily plan updates
+- [x] Update `lib/core/services/course_progress_service.dart` with exam tracking and snapshots
+- [x] Create `lib/features/exam/practical_exam_screen.dart`
+- [x] Update `lib/routes/app_router.dart` with `/exam` route
+- [x] Update `lib/features/course/chapter_screen.dart` with `_ExamCard`, redesigned header, and `_para` typography
+- [x] Run `flutter analyze` to verify build

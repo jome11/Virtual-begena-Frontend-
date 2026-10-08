@@ -4,8 +4,12 @@ import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/auth_service.dart';
+import '../../shared/widgets/motion.dart';
+import '../daily/today_plan_card.dart';
 import 'widgets/feature_card.dart';
 import 'widgets/streak_banner.dart';
+import 'widgets/insights_panel.dart';
+import 'widgets/daily_goal_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -25,6 +29,9 @@ class DashboardScreen extends StatelessWidget {
               (AppStrings.get('mode_mezmur_tenat'), AppStrings.get('mode_mezmur_tenat_sub'), Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat'),
               (AppStrings.get('mode_progress'), AppStrings.get('mode_progress_sub'), Icons.bar_chart_rounded, AppColors.modeProgress, '/progress'),
               (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan'),
+              ('Leaderboard', 'See how you rank', Icons.leaderboard_rounded, AppColors.modeFreePlay, '/leaderboard'),
+              ('Course', 'Chapters, quizzes and assignments', Icons.menu_book_rounded, AppColors.modeProgress, '/course'),
+              ('28-day plan', 'Your daily tasks', Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan'),
             ];
 
             return Scaffold(
@@ -64,6 +71,12 @@ class DashboardScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 32),
+                        const TodayPlanCard(),
+                        const SizedBox(height: 18),
+                        const DailyGoalCard(),
+                        const SizedBox(height: 18),
+                        const InsightsPanel(),
+                        const SizedBox(height: 32),
                         LayoutBuilder(
                           builder: (context, c) {
                             int cols;
@@ -84,12 +97,14 @@ class DashboardScreen extends StatelessWidget {
                               crossAxisSpacing: 18,
                               childAspectRatio: cols == 1 ? 2.6 : 1.35,
                               children: items
-                                  .map((i) => FeatureCard(
-                                        label: i.$1,
-                                        subtitle: i.$2,
-                                        icon: i.$3,
-                                        color: i.$4,
-                                        onTap: () => context.go(i.$5),
+                                  .map((i) => HoverLift(
+                                        child: FeatureCard(
+                                          label: i.$1,
+                                          subtitle: i.$2,
+                                          icon: i.$3,
+                                          color: i.$4,
+                                          onTap: () => context.go(i.$5),
+                                        ),
                                       ))
                                   .toList(),
                             );

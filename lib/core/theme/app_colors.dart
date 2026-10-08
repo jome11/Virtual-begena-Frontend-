@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF2C3E50); // Brand primary (deep charcoal)
+  static const Color primary = Color(0xFF0B1F4B); // Brand primary (royal navy)
   static const Color secondary = Color(0xFFD4AF37); // Brand gold accent
-  static const Color accent = Color(0xFF3498DB); // Sky Blue
+  static const Color accent = Color(0xFF2563EB); // Royal Blue
 
   // Mode accent colors — used as icon-badge tints on the cards.
   static const Color modeExercise = Color(0xFF0EA5E9); // cyan

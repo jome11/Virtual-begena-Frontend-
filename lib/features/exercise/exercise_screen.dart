@@ -16,13 +16,14 @@ import '../../shared/widgets/mode_app_bar.dart';
 import '../../shared/widgets/camera_controls_panel.dart';
 
 class ExerciseScreen extends StatefulWidget {
-  const ExerciseScreen({super.key});
+  final Qenet? initialQenet;
+  const ExerciseScreen({super.key, this.initialQenet});
   @override
   State<ExerciseScreen> createState() => _ExerciseScreenState();
 }
 
 class _ExerciseScreenState extends State<ExerciseScreen> {
-  Qenet _qenet = Qenet.selamta;
+  late Qenet _qenet = widget.initialQenet ?? Qenet.selamta;
   bool _showStrings = false;
   int _session = 1;
   int _correct = 0;
@@ -46,6 +47,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     super.initState();
     handTrackingService.addListener(_onTrackingUpdate);
     handTrackingService.start();
+    handTrackingService.setMode('practice');
     handTrackingService.setVirtualStrings(_showStrings);
     handTrackingService.setQenet(_qenet.name);
     handTrackingService.setTargetFinger(_exercise[_currentIndex]);

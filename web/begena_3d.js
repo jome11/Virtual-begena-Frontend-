@@ -6,6 +6,40 @@ window.begena3D = (() => {
   let canvasEl = null;
   let ready = false;
 
+  const strings = {};
+  let animating = false;
+
+  function tick() {
+    let active = false;
+    const now = performance.now();
+    for (const k in strings) {
+      const s = strings[k];
+      if (s.glow > 0.02) {
+        s.glow *= 0.94;
+        s.mats.forEach((m) => { m.emissiveIntensity = s.glow * 2.2; });
+        s.mesh.position.x = s.base.x + Math.sin(now / 18) * 0.012 * s.glow;
+        active = true;
+      } else if (s.glow !== 0) {
+        s.glow = 0;
+        s.mats.forEach((m) => { m.emissiveIntensity = 0; });
+        s.mesh.position.copy(s.base);
+      }
+    }
+    renderer.render(scene, camera);
+    if (active) requestAnimationFrame(tick);
+    else animating = false;
+  }
+
+  function pluck(n) {
+    const s = strings[n];
+    if (!s) return;
+    s.glow = 1;
+    if (!animating) {
+      animating = true;
+      requestAnimationFrame(tick);
+    }
+  }
+
   function waitForElement(id, timeoutMs = 8000) {
     return new Promise((resolve, reject) => {
       const existing = document.getElementById(id);
@@ -58,6 +92,19 @@ window.begena3D = (() => {
           gltfScene.scale.setScalar(scale);
           gltfScene.position.sub(center.multiplyScalar(scale));
           scene.add(gltfScene);
+
+          gltfScene.traverse((o) => {
+            if (!o.isMesh || !/^(0[1-9]|10)$/.test(o.name)) return;
+            const mats = (Array.isArray(o.material) ? o.material : [o.material]).map((m) => {
+              const c = m.clone();
+              c.emissive = new THREE.Color(0x60a5fa);
+              c.emissiveIntensity = 0;
+              return c;
+            });
+            o.material = Array.isArray(o.material) ? mats : mats[0];
+            strings[parseInt(o.name, 10)] = { mesh: o, mats, glow: 0, base: o.position.clone() };
+          });
+
           resolve();
         },
         undefined,
@@ -73,5 +120,5 @@ window.begena3D = (() => {
     return ready;
   }
 
-  return { mount, isReady };
+  return { mount, isReady, pluck };
 })();

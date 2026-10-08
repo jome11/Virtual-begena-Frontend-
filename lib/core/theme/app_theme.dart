@@ -16,6 +16,9 @@ class AppTheme {
 
     return base.copyWith(
       scaffoldBackgroundColor: colors.background,
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: {for (final p in TargetPlatform.values) p: const _FadeTransitions()},
+      ),
       extensions: [
         colors,
         brightness == Brightness.light ? BrandPalette.light : BrandPalette.dark,
@@ -39,4 +42,21 @@ class AppTheme {
       dividerColor: colors.border,
     );
   }
+}
+
+class _FadeTransitions extends PageTransitionsBuilder {
+  const _FadeTransitions();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) =>
+      FadeTransition(
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+        child: child,
+      );
 }

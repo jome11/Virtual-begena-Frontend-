@@ -31,9 +31,12 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               const Spacer(),
-              if (MediaQuery.of(context).size.width > 700) ...[
+              if (MediaQuery.of(context).size.width > 900) ...[
                 _NavLink(label: AppStrings.get('home'), onTap: () => context.go('/home')),
-                _NavLink(label: AppStrings.get('lessons'), onTap: () => context.go('/lessons')),
+                _NavLink(
+                  label: lang == Language.en ? 'How to use' : 'እንዴት መጠቀም',
+                  onTap: () => context.go('/how-to-use'),
+                ),
                 _NavLink(label: AppStrings.get('shop'), onTap: () => context.go('/shop')),
                 _NavLink(label: AppStrings.get('about'), onTap: () => context.go('/about')),
                 _NavLink(label: AppStrings.get('contact'), onTap: () => context.go('/contact')),

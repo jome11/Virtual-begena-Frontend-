@@ -22,7 +22,6 @@ class HeroNav extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: [
               _NavText(AppStrings.get('home'), onTap: () => context.go('/home')),
-              _NavText(AppStrings.get('lessons'), onTap: () => context.go('/lessons')),
               _NavText(AppStrings.get('about'), onTap: () => context.go('/about')),
               _NavText(AppStrings.get('contact'), onTap: () => context.go('/contact')),
             ],

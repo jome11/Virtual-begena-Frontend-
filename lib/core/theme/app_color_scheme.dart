@@ -19,21 +19,21 @@ class AppColorsExt extends ThemeExtension<AppColorsExt> {
   });
 
   static const light = AppColorsExt(
-    background: Color(0xFFF8F9FA),
+    background: Color(0xFFF4F8FF),
     surface: Colors.white,
-    textPrimary: Color(0xFF2C3E50),
-    textSecondary: Color(0xFF7F8C8D),
-    border: Color(0xFFE4E1D8),
-    accent: Color(0xFFD4AF37),
+    textPrimary: Color(0xFF0B1F4B),
+    textSecondary: Color(0xFF5B6B8C),
+    border: Color(0xFFD6E2F7),
+    accent: Color(0xFF2563EB),
   );
 
   static const dark = AppColorsExt(
-    background: Color(0xFF13110E),
-    surface: Color(0xFF1D1A16),
-    textPrimary: Color(0xFFF1EDE4),
-    textSecondary: Color(0xFFA79E8E),
-    border: Color(0xFF322D26),
-    accent: Color(0xFFD4AF37),
+    background: Color(0xFF060E24),
+    surface: Color(0xFF0D1B3E),
+    textPrimary: Color(0xFFE8F0FF),
+    textSecondary: Color(0xFF8FA3C8),
+    border: Color(0xFF1B2D5C),
+    accent: Color(0xFF60A5FA),
   );
 
   @override
