@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/qenet.dart';
 import '../../core/data/curriculum.dart';
+import '../../core/data/exercise_plan.dart';
 import '../../core/services/course_progress_service.dart';
 import '../../core/services/hand_tracking_service.dart';
 import '../../core/theme/app_color_scheme.dart';
@@ -27,7 +28,8 @@ class PracticalExamScreen extends StatefulWidget {
 }
 
 class _PracticalExamScreenState extends State<PracticalExamScreen> {
-  static const _notes = 10;
+  static const _partA = 5; // string -> finger (PDF 5.2)
+  static const _notes = 10; // 5 + the 5 notes of the scale (PDF 6.4)
   static const _maxWrong = 4; // 10 correct out of 14 plucks is 71%
 
   _Phase _phase = _Phase.ready;
@@ -42,12 +44,13 @@ class _PracticalExamScreenState extends State<PracticalExamScreen> {
       ? 0
       : (_correct / (_correct + _wrong) * 100).round();
 
+  /// Part 1: the five fingers in random order (asked as string numbers).
+  /// Part 2: the qenet's scale upward from C.
   List<int> _newTargets() {
-    final r = Random();
-    final a = [1, 2, 3, 4, 5]..shuffle(r);
-    final b = [1, 2, 3, 4, 5]..shuffle(r);
-    if (a.last == b.first) b.add(b.removeAt(0));
-    return [...a, ...b];
+    final a = [1, 2, 3, 4, 5]..shuffle(Random());
+    final up = scaleFingersUp;
+    if (a.last == up.first) a.add(a.removeAt(0));
+    return [...a, ...up];
   }
 
   @override
@@ -184,7 +187,17 @@ class _PracticalExamScreenState extends State<PracticalExamScreen> {
 
   Widget _sidebar() {
     final running = _phase == _Phase.running;
-    final f = fingerTable[_targets[_index] - 1];
+    final finger = _targets[_index];
+    final inScale = _index >= _partA;
+    final f = fingerTable[finger - 1];
+    final big = inScale
+        ? noteFor(widget.qenet, finger)
+        : tr('አውታር ${f.$4}', 'String ${f.$4}');
+    final part = inScale
+        ? tr('ክፍል 2 ከ2 · ቅኝቱን ወደ ላይ', 'Part 2 of 2 · the scale, upward')
+        : tr('ክፍል 1 ከ2 · አውታርና ጣት', 'Part 1 of 2 · string & finger');
+    final scale = scales.firstWhere((s) => s.qenet == widget.qenet);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -194,9 +207,17 @@ class _PracticalExamScreenState extends State<PracticalExamScreen> {
             children: [
               if (!running) ...[
                 Text(
-                  tr('10 ማስታወሻዎችን በሚታየው ጣት ይንኩ። ከ4 ስህተት በላይ ከሆነ ፈተናው ያበቃል።',
-                      'Pluck 10 notes with the finger shown. More than 4 mistakes ends the test.'),
+                  tr('ክፍል 1፦ የሚታየውን አውታር በትክክለኛው ጣት ይንኩ (5)። ክፍል 2፦ የ${widget.qenet.label} ቅኝት አምስት ድምጾችን ከC ጀምሮ በቅደም ተከተል ይንኩ (5)። ከ4 ስህተት በላይ ከሆነ ፈተናው ያበቃል።',
+                      'Part 1: pluck the string shown with the right finger (5). Part 2: play the five notes of ${widget.qenet.label} in order from C (5). More than 4 mistakes ends the test.'),
                   style: TextStyle(color: context.colors.textSecondary, height: 1.5),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '${tr('የቅኝቱ ድምጾች', 'Scale notes')}: ${scale.notes}',
+                  style: TextStyle(
+                    color: widget.qenet.color,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 14),
                 FilledButton.icon(
@@ -205,13 +226,13 @@ class _PracticalExamScreenState extends State<PracticalExamScreen> {
                   label: Text(tr('ፈተናውን ጀምር', 'Start the test')),
                 ),
               ] else ...[
-                Text(tr('አሁን የሚነኩት ጣት', 'Pluck with'),
+                Text(part,
                     style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
-                const SizedBox(height: 4),
-                Text('${f.$1} · ${tr(f.$2, f.$3)}',
+                const SizedBox(height: 6),
+                Text(big,
                     style: const TextStyle(
                         color: AppColors.warning,
-                        fontSize: 20,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 ClipRRect(

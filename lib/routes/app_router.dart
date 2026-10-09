@@ -4,8 +4,6 @@ import '../core/services/auth_service.dart';
 import '../core/constants/qenet.dart';
 import '../features/landing/landing_screen.dart';
 import '../features/home/home_screen.dart';
-import '../features/about/about_screen.dart';
-import '../features/contact/contact_screen.dart';
 import '../features/course/course_screen.dart';
 import '../features/course/chapter_screen.dart';
 import '../features/daily/daily_plan_screen.dart';
@@ -22,7 +20,6 @@ import '../features/training_plan/training_plan_screen.dart';
 import '../features/shop/shop_screen.dart';
 import '../features/shop/cart_screen.dart';
 import '../features/leaderboard/leaderboard_screen.dart';
-import '../features/how_to/how_to_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -53,7 +50,7 @@ final GoRouter router = GoRouter(
       path: '/home',
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
-        child: const HomeScreen(),
+        child: HomeScreen(section: state.uri.queryParameters['section']),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -63,10 +60,6 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/try',
       builder: (context, state) => const FreePlayScreen(guest: true),
-    ),
-    GoRoute(
-      path: '/how-to-use',
-      builder: (context, state) => const HowToScreen(),
     ),
     GoRoute(
       path: '/course',
@@ -105,14 +98,9 @@ final GoRouter router = GoRouter(
         initialQenet: _qenetFrom(state.uri.queryParameters['qenet']),
       ),
     ),
-    GoRoute(
-      path: '/about',
-      builder: (context, state) => const AboutScreen(),
-    ),
-    GoRoute(
-      path: '/contact',
-      builder: (context, state) => const ContactScreen(),
-    ),
+    GoRoute(path: '/how-to-use', redirect: (context, state) => '/home?section=howTo'),
+    GoRoute(path: '/about', redirect: (context, state) => '/home?section=about'),
+    GoRoute(path: '/contact', redirect: (context, state) => '/home?section=contact'),
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),

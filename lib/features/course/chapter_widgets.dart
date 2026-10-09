@@ -84,6 +84,81 @@ class PartsExplorer extends StatelessWidget {
   }
 }
 
+const _geez = ['፩', '፪', '፫', '፬', '፭', '፮', '፯', '፰', '፱', '፲'];
+const _mainFinger = {1: 1, 4: 2, 6: 3, 8: 4, 10: 5};
+
+class StringDiagram extends StatelessWidget {
+  const StringDiagram({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final brand = context.brand;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 14),
+      decoration: panelDecoration(context),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var s = 1; s <= 10; s++)
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        _geez[s - 1],
+                        style: TextStyle(
+                          color: _mainFinger.containsKey(s) ? brand.amber : brand.inkMuted,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text('$s', style: TextStyle(color: brand.inkMuted, fontSize: 10)),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: _mainFinger.containsKey(s) ? 4 : 2,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          color: _mainFinger.containsKey(s)
+                              ? brand.amber
+                              : brand.inkMuted.withValues(alpha: 0.45),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      if (_mainFinger.containsKey(s))
+                        CircleAvatar(
+                          radius: 11,
+                          backgroundColor: brand.amber,
+                          child: Text(
+                            '${_mainFinger[s]}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        )
+                      else
+                        const SizedBox(height: 22),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            tr('ወፍራሞቹ ዋና አውታሮች ናቸው፤ ከታች ያለው ቁጥር የሚደረድረው ጣት ነው።',
+                'The thick strings are the five main strings; the number below is the finger that plays it.'),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: brand.inkMuted, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class FingerChart extends StatelessWidget {
   const FingerChart({super.key});
 
@@ -97,6 +172,8 @@ class FingerChart extends StatelessWidget {
         Text(tr('የጣት ስያሜና አቀማመጥ', 'Finger names and strings'),
             style: TextStyle(color: brand.ink, fontSize: 18, fontWeight: FontWeight.w800)),
         const SizedBox(height: 12),
+        const StringDiagram(),
+        const SizedBox(height: 16),
         for (final f in fingerTable)
           Container(
             margin: const EdgeInsets.only(bottom: 8),

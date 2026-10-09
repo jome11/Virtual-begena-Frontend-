@@ -3,10 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/theme/brand_palette.dart';
-import '../../shared/widgets/blue_fade_background.dart';
 import '../../shared/widgets/motion.dart';
-import '../../shared/widgets/nav_bar.dart';
-import '../../shared/widgets/site_footer.dart';
 
 class _Step {
   final IconData icon;
@@ -86,147 +83,137 @@ const _am = _Content(
   ],
 );
 
-class HowToScreen extends StatelessWidget {
-  const HowToScreen({super.key});
+class HowToSection extends StatelessWidget {
+  const HowToSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     final brand = context.brand;
-    return Scaffold(
-      body: BlueFadeBackground(
-        child: ValueListenableBuilder<Language>(
-          valueListenable: languageNotifier,
-          builder: (context, lang, _) {
-            final t = lang == Language.am ? _am : _en;
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  const NavBar(),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 48, 24, 32),
-                    child: Reveal(
-                      child: Column(
-                        children: [
-                          Text(
-                            t.title,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.playfairDisplay(
-                              color: brand.ink,
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(t.subtitle,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: brand.inkMuted, fontSize: 16)),
-                        ],
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        final t = lang == Language.am ? _am : _en;
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 72, 24, 32),
+              child: Reveal(
+                child: Column(
+                  children: [
+                    Text(
+                      t.title,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.playfairDisplay(
+                        color: brand.ink,
+                        fontSize: 40,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ),
-                  Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 760),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
+                    const SizedBox(height: 12),
+                    Text(t.subtitle,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: brand.inkMuted, fontSize: 16)),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < t.steps.length; i++)
+                        Reveal(
+                          child: _StepTile(
+                            index: i + 1,
+                            step: t.steps[i],
+                            last: i == t.steps.length - 1,
+                          ),
+                        ),
+                      const SizedBox(height: 40),
+                      Reveal(
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 14,
+                          runSpacing: 12,
                           children: [
-                            for (var i = 0; i < t.steps.length; i++)
-                              Reveal(
-                                child: _StepTile(
-                                  index: i + 1,
-                                  step: t.steps[i],
-                                  last: i == t.steps.length - 1,
-                                ),
-                              ),
-                            const SizedBox(height: 40),
-                            Reveal(
-                              child: Wrap(
-                                alignment: WrapAlignment.center,
-                                spacing: 14,
-                                runSpacing: 12,
-                                children: [
-                                  FilledButton.icon(
-                                    onPressed: () => context.go('/try'),
-                                    icon: const Icon(Icons.play_circle_outline_rounded),
-                                    label: Text(AppStrings.get('try_free')),
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor: brand.amber,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 26, vertical: 18),
-                                    ),
-                                  ),
-                                  OutlinedButton(
-                                    onPressed: () => context.go('/signup'),
-                                    style: OutlinedButton.styleFrom(
-                                      foregroundColor: brand.ink,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 26, vertical: 18),
-                                    ),
-                                    child: Text(AppStrings.get('get_started')),
-                                  ),
-                                ],
+                            FilledButton.icon(
+                              onPressed: () => context.go('/try'),
+                              icon: const Icon(Icons.play_circle_outline_rounded),
+                              label: Text(AppStrings.get('try_free')),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: brand.amber,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 26, vertical: 18),
                               ),
                             ),
-                            const SizedBox(height: 56),
-                            Reveal(
-                              child: _TipsCard(),
-                            ),
-                            const SizedBox(height: 40),
-                            Reveal(
-                              child: Text(
-                                t.faqTitle,
-                                style: GoogleFonts.playfairDisplay(
-                                  color: brand.ink,
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            OutlinedButton(
+                              onPressed: () => context.go('/signup'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: brand.ink,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 26, vertical: 18),
                               ),
+                              child: Text(AppStrings.get('get_started')),
                             ),
-                            const SizedBox(height: 16),
-                            for (final f in t.faqs)
-                              Reveal(
-                                child: Container(
-                                  margin: const EdgeInsets.only(bottom: 10),
-                                  decoration: BoxDecoration(
-                                    color: brand.surface,
-                                    borderRadius: BorderRadius.circular(14),
-                                    border: Border.all(color: brand.beige),
-                                  ),
-                                  child: Theme(
-                                    data: Theme.of(context)
-                                        .copyWith(dividerColor: Colors.transparent),
-                                    child: ExpansionTile(
-                                      title: Text(f.$1,
-                                          style: TextStyle(
-                                              color: brand.ink,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 14)),
-                                      childrenPadding:
-                                          const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                                      expandedAlignment: Alignment.centerLeft,
-                                      children: [
-                                        Text(f.$2,
-                                            style: TextStyle(
-                                                color: brand.inkMuted, height: 1.6)),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            const SizedBox(height: 56),
                           ],
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 56),
+                      Reveal(child: _TipsCard()),
+                      const SizedBox(height: 40),
+                      Reveal(
+                        child: Text(
+                          t.faqTitle,
+                          style: GoogleFonts.playfairDisplay(
+                            color: brand.ink,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      for (final f in t.faqs)
+                        Reveal(
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: brand.surface,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(color: brand.beige),
+                            ),
+                            child: Theme(
+                              data: Theme.of(context)
+                                  .copyWith(dividerColor: Colors.transparent),
+                              child: ExpansionTile(
+                                title: Text(f.$1,
+                                    style: TextStyle(
+                                        color: brand.ink,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14)),
+                                childrenPadding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                expandedAlignment: Alignment.centerLeft,
+                                children: [
+                                  Text(f.$2,
+                                      style: TextStyle(
+                                          color: brand.inkMuted, height: 1.6)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 56),
+                    ],
                   ),
-                  const SiteFooter(),
-                ],
+                ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -240,69 +227,56 @@ class _StepTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brand = context.brand;
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
-                  ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: last ? 0 : 20),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: brand.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: brand.beige),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
                 ),
-                child: Text('$index',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 18)),
               ),
-              if (!last) Expanded(child: Container(width: 2, color: brand.beige)),
-            ],
-          ),
-          const SizedBox(width: 18),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: last ? 0 : 20),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: brand.surface,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: brand.beige),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(step.icon, color: brand.amber, size: 28),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(step.title,
-                              style: TextStyle(
-                                  color: brand.ink,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16)),
-                          const SizedBox(height: 6),
-                          Text(step.body,
-                              style: TextStyle(
-                                  color: brand.inkMuted, height: 1.6, fontSize: 14)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              child: Text('$index',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16)),
+            ),
+            const SizedBox(width: 16),
+            Icon(step.icon, color: brand.amber, size: 26),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(step.title,
+                      style: TextStyle(
+                          color: brand.ink,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16)),
+                  const SizedBox(height: 6),
+                  Text(step.body,
+                      style: TextStyle(
+                          color: brand.inkMuted, height: 1.6, fontSize: 14)),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,28 +1,27 @@
-# Walkthrough - Practical Exams & Chapter Redesign
+# Walkthrough - One-Page Smooth-Scrolling Public Website
 
-Successfully implemented interactive practical hand-tracking exams for chapters 5 and 6, integrated exam accuracy thresholds into course progress tracking, created `PracticalExamScreen`, updated routing, and redesigned chapter headers and typography.
+Successfully converted the public site into a single-page smooth-scrolling experience with sticky navigation, active section tracking, and URL query parameter redirection.
 
 ## Changes
 
-### 1. Course Data & Progress Service
-#### [curriculum.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/data/curriculum.dart)
-- Added `examPassAccuracy` (70%) and `examsFor` map.
-- Added `TaskKind.exam`, task constructor, label, route mapping, and updated days 13, 17, and 20 in `dailyPlan`.
-#### [course_progress_service.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/course_progress_service.dart)
-- Updated `CourseSnapshot` with `exams` map, `examsPassed` validation, and updated `chapterDone` logic requiring both quiz, assignment, and practical exams.
-- Added `saveExam` persistence method.
+### 1. Section Navigation Service
+#### [section_nav.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/section_nav.dart)
+- Created `SectionNav` manager and `SiteSection` enum (`home`, `howTo`, `about`, `contact`) to coordinate smooth scrolling and active indicator tracking between `HomeScreen` and `NavBar`.
 
-### 2. Practical Exam Screen
-#### [practical_exam_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/exam/practical_exam_screen.dart)
-- Created interactive hand-tracking test screen prompting users to pluck 10 notes with specified target fingers, tracking accuracy and mistakes ($\le 4$), and saving passing scores ($\ge 70\%$).
+### 2. Home Screen & Sticky Navbar
+#### [home_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/home/home_screen.dart)
+- Integrated scroll controllers, active section detection on scroll, query parameter initial scrolling (`?section=...`), and keyed subsections (`HowToSection`, `AboutSection`, `ContactSection`).
+#### [nav_bar.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/shared/widgets/nav_bar.dart)
+- Updated navbar links to trigger smooth scrolling via `SectionNav.scrollTo` when on home, or redirect (`/home?section=...`) from other pages. Added active underline highlighting.
 
-### 3. Router & Chapter Screen
+### 3. Public Section Widgets
+#### [how_to_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/how_to/how_to_screen.dart), [about_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/about/about_screen.dart), [contact_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/contact/contact_screen.dart)
+- Converted standalone screens into modular sections (`HowToSection`, `AboutSection`, `ContactSection`) styled consistently with the home page theme.
+
+### 4. Router
 #### [app_router.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/routes/app_router.dart)
-- Added `/exam` route mapping to `PracticalExamScreen`.
-#### [chapter_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/course/chapter_screen.dart)
-- Redesigned chapter header with a gradient card, chapter number watermark, icon, and dynamic read-time estimate.
-- Updated `_learn` reading typography with formatted paragraph rendering (`_para`) featuring verse reference styling.
-- Added `_ExamCard` to chapter quiz/exam tabs for chapters 5 and 6.
+- Updated `/home` to parse `section` query parameter.
+- Replaced `/how-to-use`, `/about`, and `/contact` routes with redirects to `/home?section=...`.
 
 > [!NOTE]
 > Static analysis (`flutter analyze`) verified successfully with zero errors.

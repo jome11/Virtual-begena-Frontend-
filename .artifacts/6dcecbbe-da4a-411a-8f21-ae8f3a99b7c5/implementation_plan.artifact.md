@@ -1,41 +1,43 @@
-# Implementation Plan - Practical Exams & Chapter Redesign
+# Implementation Plan - One-Page Smooth-Scrolling Public Website
 
-Add practical hand-tracking exams for chapters 5 and 6 (Selamta, Tezeta, Anchihoye), update course progress tracking with exam accuracy thresholds, create the `PracticalExamScreen`, update the router, and redesign chapter headers and reading typography in `ChapterScreen`.
+Refactor the public portion of the application into a single-page smooth-scrolling layout with sticky navigation (`NavBar`), active section tracking (`SectionNav`), and URL query parameter redirection (`?section=...`).
 
 ## User Review Required
 
 > [!IMPORTANT]
-> Practical tests require hand-tracking and accuracy thresholds ($\ge 70\%$) before chapters 5 and 6 are marked as fully completed.
+> The public pages (Home, How to use, About, Contact) will now reside as scrollable sections on a single home page (`/home`), with smooth scrolling and active indicator highlights in the navigation bar.
 
 ## Proposed Changes
 
-### 1. Course Data & Progress Service
-#### [MODIFY] [curriculum.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/data/curriculum.dart)
-- Add `examPassAccuracy` and `examsFor` constants.
-- Add `TaskKind.exam` enum value, `Task.exam` constructor, label, and route mapping.
-- Update `dailyPlan` for days 13, 17, and 20 to include practical exams.
-#### [MODIFY] [course_progress_service.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/course_progress_service.dart)
-- Update `CourseSnapshot` with `exams` map, `examsPassed` check, and updated `chapterDone` logic.
-- Add `saveExam` method.
+### 1. Section Navigation Service
+#### [NEW] [section_nav.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/section_nav.dart)
+- Define `SiteSection` enum (`home`, `howTo`, `about`, `contact`) and `SectionNav` manager for active section tracking and smooth scrolling.
 
-### 2. Practical Exam Screen
-#### [NEW] [practical_exam_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/exam/practical_exam_screen.dart)
-- Implement interactive hand-tracking pluck-to-match test with target fingers, error tracking, accuracy calculation, and result dialogs.
+### 2. Home Screen & Navbar
+#### [MODIFY] [home_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/home/home_screen.dart)
+- Integrate `SectionNav` attachment, scroll listener for active section detection, query parameter initial scrolling (`?section=...`), and keyed subsections (`HowToSection`, `AboutSection`, `ContactSection`).
+#### [MODIFY] [nav_bar.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/shared/widgets/nav_bar.dart)
+- Update navbar links to trigger smooth scrolling via `SectionNav.scrollTo` when on home, or redirect (`/home?section=...`) from other pages. Add active section underlines.
 
-### 3. Router
+### 3. Public Section Widgets
+#### [MODIFY] [how_to_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/how_to/how_to_screen.dart)
+- Convert `HowToScreen` into `HowToSection`.
+#### [MODIFY] [about_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/about/about_screen.dart)
+- Convert `AboutScreen` into `AboutSection`.
+#### [MODIFY] [contact_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/contact/contact_screen.dart)
+- Convert `ContactScreen` into `ContactSection`.
+
+### 4. Router
 #### [MODIFY] [app_router.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/routes/app_router.dart)
-- Import `PracticalExamScreen` and add the `/exam` route parsing `qenet`.
-
-### 4. Chapter Screen & Redesign
-#### [MODIFY] [chapter_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/course/chapter_screen.dart)
-- Add `_ExamCard` widget for practical tests in chapter quiz/exam tabs.
-- Redesign chapter header with a styled gradient card, badge, and read-time estimate.
-- Update `_learn` with formatted paragraph styling (`_para`) supporting verse reference styling.
+- Remove old screen imports for about/contact/how_to.
+- Update `/home` route to pass `section` query parameter.
+- Replace `/how-to-use`, `/about`, and `/contact` routes with redirects to `/home?section=...`.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `flutter analyze` to verify static typing and imports.
+- Run `flutter analyze` to verify static typing and compilation.
 
 ### Manual Verification
-- Test navigation to `/exam?qenet=selamta`, complete the pluck test, and verify accuracy tracking and chapter completion.
+- Test smooth scrolling when clicking navbar links on the home page.
+- Test deep linking (`/home?section=about`, `/about`) to ensure smooth scrolling to the requested section.

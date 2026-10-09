@@ -1,8 +1,11 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_strings.dart' show Language, languageNotifier;
 import '../../../core/constants/qenet.dart';
+import '../../../core/data/curriculum.dart' show tr, examPassAccuracy;
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/certificate_service.dart';
+import '../../../core/services/course_progress_service.dart';
 import '../../../core/services/progress_service.dart';
 import '../../../core/theme/app_color_scheme.dart';
 
@@ -16,6 +19,7 @@ class InsightsPanel extends StatefulWidget {
 class _InsightsPanelState extends State<InsightsPanel> {
   late final Future<List<Map<String, dynamic>>> _future =
       ProgressService.getHistory();
+  late final Future<CourseSnapshot> _course = CourseProgress.load();
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +27,29 @@ class _InsightsPanelState extends State<InsightsPanel> {
       future: _future,
       builder: (context, snap) {
         final stats = _Stats.from(snap.data ?? const []);
-        return LayoutBuilder(
-          builder: (context, c) {
-            final level = _LevelCard(stats: stats);
+        return FutureBuilder<CourseSnapshot>(
+          future: _course,
+          builder: (context, courseSnap) {
+            final progress = _CourseCard(stats: stats, course: courseSnap.data);
             final path = _PathCard(stats: stats);
-            if (c.maxWidth > 900) {
-              return IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(width: 320, child: level),
-                    const SizedBox(width: 18),
-                    Expanded(child: path),
-                  ],
-                ),
-              );
-            }
-            return Column(children: [level, const SizedBox(height: 18), path]);
+            return LayoutBuilder(
+              builder: (context, c) {
+                if (c.maxWidth > 900) {
+                  return IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(width: 320, child: progress),
+                        const SizedBox(width: 18),
+                        Expanded(child: path),
+                      ],
+                    ),
+                  );
+                }
+                return Column(
+                    children: [progress, const SizedBox(height: 18), path]);
+              },
+            );
           },
         );
       },
@@ -90,78 +100,115 @@ class _Stats {
       qenetCount: counts,
     );
   }
-
-  int get level => totalCorrect ~/ 100 + 1;
-  double get levelProgress => (totalCorrect % 100) / 100;
 }
 
-class _LevelCard extends StatelessWidget {
+class _CourseCard extends StatelessWidget {
   final _Stats stats;
-  const _LevelCard({required this.stats});
+  final CourseSnapshot? course;
+  const _CourseCard({required this.stats, required this.course});
+
+  static const _totalChapters = 6;
+  static const _totalExams = 3;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0B1F4B), Color(0xFF2563EB)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF2563EB).withValues(alpha: 0.3),
-            blurRadius: 30,
-            offset: const Offset(0, 14),
+    final done = course?.chaptersDone ?? 0;
+    final examsPassed = course == null
+        ? 0
+        : course!.exams.values.where((v) => v >= examPassAccuracy).length;
+    final value = done / _totalChapters;
+    final percent = (value * 100).round();
+
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF0B1F4B), Color(0xFF2563EB)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: stats.levelProgress),
-            duration: const Duration(milliseconds: 1200),
-            curve: Curves.easeOutCubic,
-            builder: (context, v, _) => SizedBox(
-              width: 160,
-              height: 160,
-              child: CustomPaint(
-                painter: _RingPainter(v),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('LEVEL',
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF2563EB).withValues(alpha: 0.3),
+              blurRadius: 30,
+              offset: const Offset(0, 14),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: value),
+              duration: const Duration(milliseconds: 1200),
+              curve: Curves.easeOutCubic,
+              builder: (context, v, _) => SizedBox(
+                width: 160,
+                height: 160,
+                child: CustomPaint(
+                  painter: _RingPainter(v),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          tr('ምዕራፎች', 'CHAPTERS'),
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
-                              fontSize: 12,
-                              letterSpacing: 2)),
-                      Text('${stats.level}',
+                            color: Colors.white.withValues(alpha: 0.7),
+                            fontSize: 12,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                        Text(
+                          '$done/$_totalChapters',
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 48,
-                              fontWeight: FontWeight.w800)),
-                    ],
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text('${stats.totalCorrect % 100} / 100 XP',
+            const SizedBox(height: 16),
+            Text(
+              tr('ከኮርሱ $percent% ተጠናቋል', '$percent% of the course complete'),
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 6),
-          Text(
-            '${stats.sessions} sessions · ${stats.avgAccuracy.round()}% avg accuracy',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.75), fontSize: 13),
-          ),
-        ],
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              tr('የተግባር ፈተናዎች፦ $examsPassed/$_totalExams',
+                  'Practical tests: $examsPassed/$_totalExams'),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.85),
+                fontSize: 13,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              tr(
+                '${stats.sessions} ልምምዶች · አማካይ ትክክለኛነት ${stats.avgAccuracy.round()}%',
+                '${stats.sessions} sessions · ${stats.avgAccuracy.round()}% avg accuracy',
+              ),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.75),
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

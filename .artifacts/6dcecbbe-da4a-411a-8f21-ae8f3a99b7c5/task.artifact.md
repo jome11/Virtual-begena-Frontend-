@@ -1,6 +1,8 @@
-- [x] Update `lib/core/data/curriculum.dart` with exam constants, TaskKind.exam, and daily plan updates
-- [x] Update `lib/core/services/course_progress_service.dart` with exam tracking and snapshots
-- [x] Create `lib/features/exam/practical_exam_screen.dart`
-- [x] Update `lib/routes/app_router.dart` with `/exam` route
-- [x] Update `lib/features/course/chapter_screen.dart` with `_ExamCard`, redesigned header, and `_para` typography
+- [x] Create `lib/core/services/section_nav.dart`
+- [x] Replace `lib/features/home/home_screen.dart`
+- [x] Replace `lib/shared/widgets/nav_bar.dart`
+- [x] Replace `lib/features/how_to/how_to_screen.dart` with `HowToSection`
+- [x] Replace `lib/features/about/about_screen.dart` with `AboutSection`
+- [x] Replace `lib/features/contact/contact_screen.dart` with `ContactSection`
+- [x] Update `lib/routes/app_router.dart` with section query parameter and redirects
 - [x] Run `flutter analyze` to verify build

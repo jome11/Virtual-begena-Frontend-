@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/data/course_content.dart';
 import '../../core/data/curriculum.dart';
 import '../../core/services/course_progress_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -22,6 +23,14 @@ class ChapterScreen extends StatefulWidget {
 class _ChapterScreenState extends State<ChapterScreen> {
   late int _tab = widget.initialTab;
   CourseSnapshot _snap = const CourseSnapshot({}, {});
+  List<ContentSection>? _sections;
+  bool _contentLoaded = false;
+
+  int get _mins {
+    final words = _sections?.fold<int>(0, (a, s) => a + s.words) ??
+        _ch.points.join(' ').split(' ').length;
+    return (words / 120).ceil().clamp(1, 99);
+  }
 
   Chapter get _ch =>
       chapters[(widget.number - 1).clamp(0, chapters.length - 1)];
@@ -30,6 +39,14 @@ class _ChapterScreenState extends State<ChapterScreen> {
   void initState() {
     super.initState();
     _reload();
+    CourseContent.chapter(widget.number).then((s) {
+      if (mounted) {
+        setState(() {
+          _sections = s;
+          _contentLoaded = true;
+        });
+      }
+    });
   }
 
   Future<void> _reload() async {
@@ -143,11 +160,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                                           borderRadius: BorderRadius.circular(20),
                                         ),
                                         child: Text(
-                                          () {
-                                            final words = ch.points.join(' ').split(' ').length;
-                                            final m = (words / 120).ceil().clamp(1, 99);
-                                            return tr('~$m ደቂቃ ንባብ', '~$m min read');
-                                          }(),
+                                          tr('~$_mins ደቂቃ ንባብ', '~$_mins min read'),
                                           style: const TextStyle(color: Colors.white, fontSize: 12),
                                         ),
                                       ),
@@ -237,9 +250,30 @@ class _ChapterScreenState extends State<ChapterScreen> {
     );
   }
 
+  List<InlineSpan> _spans(String s, TextStyle base) {
+    final parts = s.split('**');
+    return [
+      for (var i = 0; i < parts.length; i++)
+        if (parts[i].isNotEmpty)
+          TextSpan(
+            text: parts[i],
+            style: i.isOdd
+                ? base.copyWith(fontWeight: FontWeight.w800, color: context.brand.ink)
+                : base,
+          ),
+    ];
+  }
+
   Widget _para(String p, {bool lead = false}) {
     final brand = context.brand;
     final isVerse = RegExp(r'^\S+\s\d+፥\d+').hasMatch(p);
+    final base = TextStyle(
+      color: lead ? brand.ink : brand.ink.withValues(alpha: 0.88),
+      fontSize: isVerse ? 17 : (lead ? 19 : 16.5),
+      height: lead ? 1.9 : 1.95,
+      fontWeight: lead ? FontWeight.w600 : FontWeight.w400,
+      fontStyle: isVerse ? FontStyle.italic : FontStyle.normal,
+    );
     if (isVerse) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -248,27 +282,139 @@ class _ChapterScreenState extends State<ChapterScreen> {
           decoration: BoxDecoration(
             border: Border(left: BorderSide(color: brand.amber, width: 3)),
           ),
-          child: Text(
-            p,
-            style: TextStyle(
-              color: brand.ink,
-              fontSize: 17,
-              height: 1.9,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+          child: Text.rich(TextSpan(children: _spans(p, base))),
         ),
       );
     }
     return Padding(
       padding: EdgeInsets.only(bottom: lead ? 22 : 16),
-      child: Text(
-        p,
-        style: TextStyle(
-          color: lead ? brand.ink : brand.ink.withValues(alpha: 0.88),
-          fontSize: lead ? 19 : 16.5,
-          height: lead ? 1.9 : 1.95,
-          fontWeight: lead ? FontWeight.w600 : FontWeight.w400,
+      child: Text.rich(TextSpan(children: _spans(p, base))),
+    );
+  }
+
+  Widget _heading(String h) {
+    final brand = context.brand;
+    final clean = h.replaceFirst(RegExp(r'^\d+\.\d+\s+'), '');
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 14),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 24,
+            decoration: BoxDecoration(
+              color: brand.amber,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              clean,
+              style: TextStyle(
+                color: brand.ink,
+                fontSize: 21,
+                fontWeight: FontWeight.w800,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _extraDivider() {
+    final brand = context.brand;
+    return Padding(
+      padding: const EdgeInsets.only(top: 28, bottom: 8),
+      child: Row(
+        children: [
+          Expanded(child: Divider(color: brand.beige)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              tr('ተጨማሪ ማብራሪያ', 'EXTRA NOTES'),
+              style: TextStyle(
+                color: brand.amber,
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.5,
+              ),
+            ),
+          ),
+          Expanded(child: Divider(color: brand.beige)),
+        ],
+      ),
+    );
+  }
+
+  Widget _bullet(ContentBlock b) {
+    final brand = context.brand;
+    final base = TextStyle(
+      color: brand.ink.withValues(alpha: 0.88),
+      fontSize: 16.5,
+      height: 1.9,
+    );
+    return Padding(
+      padding: EdgeInsets.only(left: 4.0 + 22 * b.level, bottom: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 13, right: 14),
+            child: Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(color: brand.amber, shape: BoxShape.circle),
+            ),
+          ),
+          Expanded(child: Text.rich(TextSpan(children: _spans(b.text, base)))),
+        ],
+      ),
+    );
+  }
+
+  Widget _table(List<List<String>> rows) {
+    final brand = context.brand;
+    final cols = rows.fold<int>(0, (a, r) => r.length > a ? r.length : a);
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 20),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Table(
+          defaultColumnWidth: const IntrinsicColumnWidth(),
+          border: TableBorder(
+            top: BorderSide(color: brand.beige),
+            bottom: BorderSide(color: brand.beige),
+            horizontalInside: BorderSide(color: brand.beige),
+          ),
+          children: [
+            for (var r = 0; r < rows.length; r++)
+              TableRow(
+                decoration: r == 0
+                    ? BoxDecoration(color: brand.amber.withValues(alpha: 0.08))
+                    : null,
+                children: [
+                  for (var c = 0; c < cols; c++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 240),
+                        child: Text(
+                          c < rows[r].length ? rows[r][c] : '',
+                          style: TextStyle(
+                            color: brand.ink,
+                            fontSize: 14,
+                            height: 1.5,
+                            fontWeight: r == 0 ? FontWeight.w800 : FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+          ],
         ),
       ),
     );
@@ -276,18 +422,53 @@ class _ChapterScreenState extends State<ChapterScreen> {
 
   Widget _learn(Chapter ch) {
     final brand = context.brand;
+    final sections = _sections;
+    final leadBlock = (sections != null &&
+            sections.isNotEmpty &&
+            sections.first.blocks.isNotEmpty)
+        ? sections.first.blocks.first
+        : null;
+
+    Widget body;
+    if (!_contentLoaded) {
+      body = const Padding(
+        padding: EdgeInsets.all(32),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    } else if (sections == null) {
+      // Asset missing: fall back to the short key points
+      body = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var i = 0; i < ch.points.length; i++) _para(ch.points[i], lead: i == 0),
+        ],
+      );
+    } else {
+      body = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var i = 0; i < sections.length; i++) ...[
+            if (sections[i].extra && (i == 0 || !sections[i - 1].extra))
+              _extraDivider(),
+            if (sections[i].heading != null) _heading(sections[i].heading!),
+            for (final b in sections[i].blocks)
+              if (b.type == 'table')
+                (ch.tool == 'fingers' ? const SizedBox.shrink() : _table(b.rows))
+              else if (b.type == 'li')
+                _bullet(b)
+              else
+                _para(b.text, lead: identical(b, leadBlock)),
+          ],
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 680),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var i = 0; i < ch.points.length; i++)
-                _para(ch.points[i], lead: i == 0),
-            ],
-          ),
+          child: body,
         ),
         if (ch.tool != null) ...[
           const SizedBox(height: 20),
