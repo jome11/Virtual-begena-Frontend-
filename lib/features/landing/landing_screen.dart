@@ -205,7 +205,7 @@ class _GlassChip extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.55),
             borderRadius: BorderRadius.circular(30),
@@ -214,14 +214,14 @@ class _GlassChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 18, color: const Color(0xFF1D4ED8)),
+              Icon(icon, size: 20, color: const Color(0xFF1D4ED8)),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: TextStyle(
                   color: const Color(0xFF0B1F4B),
                   fontWeight: FontWeight.w600,
-                  fontSize: 13,
+                  fontSize: 15,
                   fontFamily:
                       languageNotifier.value == Language.am ? 'BelaBereka' : null,
                 ),
@@ -300,7 +300,7 @@ class _EnterButtonState extends State<_EnterButton> {
           duration: const Duration(milliseconds: 180),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            padding: const EdgeInsets.symmetric(horizontal: 52, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 22),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF1D4ED8), Color(0xFF3B82F6)],
@@ -322,15 +322,15 @@ class _EnterButtonState extends State<_EnterButton> {
                   AppStrings.get('enter'),
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 24,
+                    fontSize: 28,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.3,
                     fontFamily:
                         languageNotifier.value == Language.am ? 'BelaBereka' : null,
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                const SizedBox(width: 14),
+                const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 28),
               ],
             ),
           ),
@@ -355,7 +355,7 @@ class _TryButton extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+              padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 15),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.8)),
@@ -364,14 +364,14 @@ class _TryButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(Icons.play_circle_outline_rounded,
-                      size: 20, color: Color(0xFF1D4ED8)),
-                  const SizedBox(width: 8),
+                      size: 22, color: Color(0xFF1D4ED8)),
+                  const SizedBox(width: 10),
                   Text(
                     AppStrings.get('try_free'),
                     style: TextStyle(
                       color: const Color(0xFF0B1F4B),
                       fontWeight: FontWeight.w700,
-                      fontSize: 14,
+                      fontSize: 16,
                       fontFamily:
                           languageNotifier.value == Language.am ? 'BelaBereka' : null,
                     ),

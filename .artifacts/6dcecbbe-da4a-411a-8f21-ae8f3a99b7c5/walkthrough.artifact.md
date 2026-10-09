@@ -1,27 +1,20 @@
-# Walkthrough - One-Page Smooth-Scrolling Public Website
+# Walkthrough - Orthodox Heritage Home Sections & Social Login Refactoring
 
-Successfully converted the public site into a single-page smooth-scrolling experience with sticky navigation, active section tracking, and URL query parameter redirection.
+Successfully updated social login to Google only and integrated three new Ethiopian Orthodox heritage sections (`ScriptureSection`, `SymbolismSection`, `TraditionSection`) onto the home screen.
 
 ## Changes
 
-### 1. Section Navigation Service
-#### [section_nav.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/core/services/section_nav.dart)
-- Created `SectionNav` manager and `SiteSection` enum (`home`, `howTo`, `about`, `contact`) to coordinate smooth scrolling and active indicator tracking between `HomeScreen` and `NavBar`.
+### 1. Social Login
+#### [social_buttons.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/auth/widgets/social_buttons.dart)
+- Configured Google as the single OAuth provider and made the constructor `const`.
 
-### 2. Home Screen & Sticky Navbar
+### 2. Orthodox Heritage Sections & Home Page
+#### [orthodox_sections.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/home/widgets/orthodox_sections.dart)
+- Implemented `ScriptureSection` featuring scripture cards for Psalm 92:3, 1 Samuel 16:23, and Revelation 5:8.
+- Implemented `SymbolismSection` featuring cards explaining the spiritual symbolism of the ten strings, sound box, cross, posts, plectrum, and yoke.
+- Implemented `TraditionSection` featuring occasion cards, the player's rule, and St. Yared's 3 modes.
 #### [home_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/home/home_screen.dart)
-- Integrated scroll controllers, active section detection on scroll, query parameter initial scrolling (`?section=...`), and keyed subsections (`HowToSection`, `AboutSection`, `ContactSection`).
-#### [nav_bar.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/shared/widgets/nav_bar.dart)
-- Updated navbar links to trigger smooth scrolling via `SectionNav.scrollTo` when on home, or redirect (`/home?section=...`) from other pages. Added active underline highlighting.
-
-### 3. Public Section Widgets
-#### [how_to_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/how_to/how_to_screen.dart), [about_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/about/about_screen.dart), [contact_screen.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/features/contact/contact_screen.dart)
-- Converted standalone screens into modular sections (`HowToSection`, `AboutSection`, `ContactSection`) styled consistently with the home page theme.
-
-### 4. Router
-#### [app_router.dart](file:///C:/Users/PAVILION/Desktop/virtual_begena/lib/routes/app_router.dart)
-- Updated `/home` to parse `section` query parameter.
-- Replaced `/how-to-use`, `/about`, and `/contact` routes with redirects to `/home?section=...`.
+- Embedded `ScriptureSection()`, `SymbolismSection()`, and `TraditionSection()` within the main home page scroll view.
 
 > [!NOTE]
 > Static analysis (`flutter analyze`) verified successfully with zero errors.

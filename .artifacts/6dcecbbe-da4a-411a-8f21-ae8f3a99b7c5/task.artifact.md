@@ -1,8 +1,4 @@
-- [x] Create `lib/core/services/section_nav.dart`
-- [x] Replace `lib/features/home/home_screen.dart`
-- [x] Replace `lib/shared/widgets/nav_bar.dart`
-- [x] Replace `lib/features/how_to/how_to_screen.dart` with `HowToSection`
-- [x] Replace `lib/features/about/about_screen.dart` with `AboutSection`
-- [x] Replace `lib/features/contact/contact_screen.dart` with `ContactSection`
-- [x] Update `lib/routes/app_router.dart` with section query parameter and redirects
+- [x] Update `lib/features/auth/widgets/social_buttons.dart` to keep Google provider only
+- [x] Create `lib/features/home/widgets/orthodox_sections.dart`
+- [x] Update `lib/features/home/home_screen.dart` to include scripture, symbolism, and tradition sections
 - [x] Run `flutter analyze` to verify build

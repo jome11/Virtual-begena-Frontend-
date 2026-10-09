@@ -11,6 +11,7 @@ import '../how_to/how_to_screen.dart';
 import 'widgets/explore_instrument_section.dart';
 import 'widgets/hero_section.dart';
 import 'widgets/how_it_works_section.dart';
+import 'widgets/orthodox_sections.dart';
 import 'widgets/popular_mezmurs_section.dart';
 import 'widgets/stats_strip.dart';
 
@@ -141,8 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Reveal(child: HeroSection()),
                               Reveal(child: StatsStrip()),
+                              ScriptureSection(),
                               Reveal(child: ExploreInstrumentSection()),
+                              SymbolismSection(),
                               HowItWorksSection(),
+                              TraditionSection(),
                               Reveal(child: PopularMezmursSection()),
                             ],
                           ),

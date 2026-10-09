@@ -179,28 +179,32 @@ class HowToSection extends StatelessWidget {
                         Reveal(
                           child: Container(
                             margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
+                            child: Material(
                               color: brand.surface,
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: brand.beige),
-                            ),
-                            child: Theme(
-                              data: Theme.of(context)
-                                  .copyWith(dividerColor: Colors.transparent),
-                              child: ExpansionTile(
-                                title: Text(f.$1,
-                                    style: TextStyle(
-                                        color: brand.ink,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14)),
-                                childrenPadding:
-                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                                expandedAlignment: Alignment.centerLeft,
-                                children: [
-                                  Text(f.$2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                                side: BorderSide(color: brand.beige),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: Theme(
+                                data: Theme.of(context)
+                                    .copyWith(dividerColor: Colors.transparent),
+                                child: ExpansionTile(
+                                  title: Text(f.$1,
                                       style: TextStyle(
-                                          color: brand.inkMuted, height: 1.6)),
-                                ],
+                                          color: brand.ink,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14)),
+                                  childrenPadding:
+                                      const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                  expandedAlignment: Alignment.centerLeft,
+                                  children: [
+                                    Text(f.$2,
+                                        style: TextStyle(
+                                            color: brand.inkMuted, height: 1.6)),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

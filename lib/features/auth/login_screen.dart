@@ -4,6 +4,7 @@ import '../../core/constants/app_strings.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/services/auth_service.dart';
 import '../../shared/widgets/gradient_background.dart';
+import 'widgets/social_buttons.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -139,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Expanded(child: Divider(color: context.colors.border)),
                             ]),
                             const SizedBox(height: 12),
+                            const SocialButtons(),
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(

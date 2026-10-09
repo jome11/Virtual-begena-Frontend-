@@ -63,19 +63,27 @@ class PartsExplorer extends StatelessWidget {
         for (final p in bodyParts)
           Container(
             margin: const EdgeInsets.only(bottom: 8),
-            decoration: panelDecoration(context),
-            child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                title: Text(p.$1,
-                    style: TextStyle(color: brand.ink, fontWeight: FontWeight.w700)),
-                subtitle: Text(p.$2,
-                    style: TextStyle(color: brand.inkMuted, fontSize: 12)),
-                childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                expandedAlignment: Alignment.centerLeft,
-                children: [
-                  Text(p.$3, style: TextStyle(color: brand.ink, height: 1.6)),
-                ],
+            child: Material(
+              color: brand.surface,
+              borderRadius: BorderRadius.circular(16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(color: brand.beige),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  title: Text(p.$1,
+                      style: TextStyle(color: brand.ink, fontWeight: FontWeight.w700)),
+                  subtitle: Text(p.$2,
+                      style: TextStyle(color: brand.inkMuted, fontSize: 12)),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  expandedAlignment: Alignment.centerLeft,
+                  children: [
+                    Text(p.$3, style: TextStyle(color: brand.ink, height: 1.6)),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:web/web.dart' as web;
+import '../config/api_config.dart';
 import 'api_client.dart';
 import 'token_storage.dart';
 
@@ -8,6 +10,8 @@ abstract class AuthService extends ChangeNotifier {
 
   Future<String?> signIn({required String username, required String password});
   Future<String?> signUp({required String name, required String email, required String password});
+  void startOAuth(String provider);
+  Future<String?> signInWithCode(String code);
   Future<void> signOut();
   Future<void> restoreSession();
 }
@@ -37,6 +41,29 @@ class ApiAuthService extends AuthService {
   Future<String?> signUp({required String name, required String email, required String password}) async {
     try {
       final data = await ApiClient.post('/auth/signup', {'name': name, 'email': email, 'password': password}, auth: false);
+      await TokenStorage.save(data['token']);
+      _currentUsername = data['user']['name'];
+      notifyListeners();
+      return null;
+    } on ApiException catch (e) {
+      return e.message;
+    } catch (_) {
+      return 'Could not reach the server';
+    }
+  }
+
+  /// Sends the browser to the backend, which redirects to the provider
+  /// (google, github, facebook...).
+  @override
+  void startOAuth(String provider) {
+    web.window.location.href = '${ApiConfig.baseUrl}/auth/$provider';
+  }
+
+  /// Swaps the one-time code from the redirect for a real session token.
+  @override
+  Future<String?> signInWithCode(String code) async {
+    try {
+      final data = await ApiClient.post('/auth/exchange', {'code': code}, auth: false);
       await TokenStorage.save(data['token']);
       _currentUsername = data['user']['name'];
       notifyListeners();

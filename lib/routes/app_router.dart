@@ -8,6 +8,7 @@ import '../features/course/course_screen.dart';
 import '../features/course/chapter_screen.dart';
 import '../features/daily/daily_plan_screen.dart';
 import '../features/exam/practical_exam_screen.dart';
+import '../features/auth/oauth_callback_screen.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/signup_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
@@ -27,7 +28,7 @@ final GoRouter router = GoRouter(
   redirect: (context, state) {
     const open = {
       '/', '/home', '/about', '/contact', '/how-to-use',
-      '/login', '/signup', '/try', '/shop', '/cart',
+      '/login', '/signup', '/try', '/shop', '/cart', '/auth/callback',
     };
     if (open.contains(state.uri.path) || authService.isSignedIn) return null;
     return '/login';
@@ -90,6 +91,13 @@ final GoRouter router = GoRouter(
       builder: (context, state) => PracticalExamScreen(
         key: ValueKey(state.uri.toString()),
         qenet: _qenetFrom(state.uri.queryParameters['qenet']) ?? Qenet.selamta,
+      ),
+    ),
+    GoRoute(
+      path: '/auth/callback',
+      builder: (context, state) => OAuthCallbackScreen(
+        code: state.uri.queryParameters['code'],
+        error: state.uri.queryParameters['error'],
       ),
     ),
     GoRoute(

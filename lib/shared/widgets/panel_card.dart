@@ -8,9 +8,7 @@ class PanelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     width: double.infinity,
-    padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: context.colors.surface,
       borderRadius: BorderRadius.circular(14),
       boxShadow: [
         BoxShadow(
@@ -21,8 +19,13 @@ class PanelCard extends StatelessWidget {
       ],
     ),
     child: Material(
-      color: Colors.transparent,
-      child: child,
+      color: context.colors.surface,
+      borderRadius: BorderRadius.circular(14),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: child,
+      ),
     ),
   );
 }
