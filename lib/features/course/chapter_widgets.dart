@@ -65,7 +65,6 @@ class PartsExplorer extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8),
             child: Material(
               color: brand.surface,
-              borderRadius: BorderRadius.circular(16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side: BorderSide(color: brand.beige),

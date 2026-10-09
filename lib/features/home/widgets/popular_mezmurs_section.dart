@@ -23,7 +23,7 @@ class PopularMezmursSection extends StatelessWidget {
                 text: TextSpan(
                   style: TextStyle(
                     color: brand.ink.withValues(alpha: 0.85),
-                    fontSize: 20,
+                    fontSize: 24,
                     height: 1.4,
                     fontFamily: 'Poppins', // Ensure consistency with app font
                   ),

@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
+import '../../shared/widgets/hareg_header.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -91,6 +92,17 @@ class _LandingScreenState extends State<LandingScreen>
                   ],
                 ),
               ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: FadeTransition(
+            opacity: _fade,
+            child: const SafeArea(
+              child: HaregHeader(height: 24, strokeWidth: 5, opacity: 0.85),
             ),
           ),
         ),
@@ -205,7 +217,7 @@ class _GlassChip extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.55),
             borderRadius: BorderRadius.circular(30),
@@ -214,14 +226,14 @@ class _GlassChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 20, color: const Color(0xFF1D4ED8)),
+              Icon(icon, size: 18, color: const Color(0xFF1D4ED8)),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: TextStyle(
                   color: const Color(0xFF0B1F4B),
                   fontWeight: FontWeight.w600,
-                  fontSize: 15,
+                  fontSize: 13.5,
                   fontFamily:
                       languageNotifier.value == Language.am ? 'BelaBereka' : null,
                 ),
@@ -300,7 +312,7 @@ class _EnterButtonState extends State<_EnterButton> {
           duration: const Duration(milliseconds: 180),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 22),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 18),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF1D4ED8), Color(0xFF3B82F6)],
@@ -322,15 +334,15 @@ class _EnterButtonState extends State<_EnterButton> {
                   AppStrings.get('enter'),
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 24,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.3,
                     fontFamily:
                         languageNotifier.value == Language.am ? 'BelaBereka' : null,
                   ),
                 ),
-                const SizedBox(width: 14),
-                const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 28),
+                const SizedBox(width: 12),
+                const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 22),
               ],
             ),
           ),
@@ -355,7 +367,7 @@ class _TryButton extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.8)),
@@ -364,14 +376,14 @@ class _TryButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(Icons.play_circle_outline_rounded,
-                      size: 22, color: Color(0xFF1D4ED8)),
-                  const SizedBox(width: 10),
+                      size: 20, color: Color(0xFF1D4ED8)),
+                  const SizedBox(width: 8),
                   Text(
                     AppStrings.get('try_free'),
                     style: TextStyle(
                       color: const Color(0xFF0B1F4B),
                       fontWeight: FontWeight.w700,
-                      fontSize: 16,
+                      fontSize: 14,
                       fontFamily:
                           languageNotifier.value == Language.am ? 'BelaBereka' : null,
                     ),

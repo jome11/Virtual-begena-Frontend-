@@ -16,9 +16,9 @@ class ExploreInstrumentSection extends StatelessWidget {
         final am = lang == Language.am;
         return Center(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 960),
+            constraints: const BoxConstraints(maxWidth: 1040),
             margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-            padding: const EdgeInsets.fromLTRB(24, 32, 24, 16),
+            padding: const EdgeInsets.fromLTRB(24, 32, 24, 20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -47,9 +47,9 @@ class ExploreInstrumentSection extends StatelessWidget {
                   am
                       ? 'በመጎተት ያሽከርክሩት።'
                       : 'Drag to rotate the begena, a ten-stringed lyre.',
-                  style: TextStyle(color: brand.inkMuted, fontSize: 14),
+                  style: TextStyle(color: brand.inkMuted, fontSize: 14.5),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 const Begena3DModel(height: 420),
               ],
             ),

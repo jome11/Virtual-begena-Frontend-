@@ -181,7 +181,6 @@ class HowToSection extends StatelessWidget {
                             margin: const EdgeInsets.only(bottom: 10),
                             child: Material(
                               color: brand.surface,
-                              borderRadius: BorderRadius.circular(14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                                 side: BorderSide(color: brand.beige),

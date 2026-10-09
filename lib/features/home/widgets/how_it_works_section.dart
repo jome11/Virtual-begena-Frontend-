@@ -50,7 +50,7 @@ class HowItWorksSection extends StatelessWidget {
                       ),
                   ];
                   return ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 960),
+                    constraints: const BoxConstraints(maxWidth: 1040),
                     child: narrow
                         ? Column(
                             children: [
@@ -99,7 +99,7 @@ class _StepCard extends StatelessWidget {
             title,
             style: TextStyle(
               color: brand.ink,
-              fontSize: 16,
+              fontSize: 17,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -108,7 +108,7 @@ class _StepCard extends StatelessWidget {
             desc,
             style: TextStyle(
               color: brand.ink.withValues(alpha: 0.6),
-              fontSize: 13,
+              fontSize: 14,
               height: 1.6,
             ),
           ),

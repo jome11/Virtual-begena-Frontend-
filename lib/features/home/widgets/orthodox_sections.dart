@@ -4,6 +4,7 @@ import '../../../core/constants/app_strings.dart' show Language, languageNotifie
 import '../../../core/theme/brand_palette.dart';
 import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/stylized_cross.dart';
+import '../../../shared/widgets/hareg_header.dart';
 
 // ---------------------------------------------------------------------------
 // Shared pieces
@@ -24,10 +25,10 @@ class _SectionShell extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Colors.transparent,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 70),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 64),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
+          constraints: const BoxConstraints(maxWidth: 1120),
           child: child,
         ),
       ),
@@ -47,6 +48,7 @@ class _Header extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        const HaregHeader(height: 20, strokeWidth: 4, opacity: 0.75, margin: EdgeInsets.only(bottom: 12)),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -63,7 +65,7 @@ class _Header extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: brand.amber,
-            fontSize: 11.5,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
             letterSpacing: 2.2,
           ),
@@ -74,18 +76,18 @@ class _Header extends StatelessWidget {
           textAlign: TextAlign.center,
           style: GoogleFonts.playfairDisplay(
             color: brand.ink,
-            fontSize: 30,
+            fontSize: 32,
             fontWeight: FontWeight.w700,
           ),
         ),
         if (subtitle != null) ...[
           const SizedBox(height: 10),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
+            constraints: const BoxConstraints(maxWidth: 640),
             child: Text(
               subtitle!,
               textAlign: TextAlign.center,
-              style: TextStyle(color: brand.inkMuted, fontSize: 14.5, height: 1.6),
+              style: TextStyle(color: brand.inkMuted, fontSize: 15, height: 1.6),
             ),
           ),
         ],
@@ -259,7 +261,7 @@ class _VerseCard extends StatelessWidget {
             '“',
             style: GoogleFonts.playfairDisplay(
               color: brand.amber,
-              fontSize: 48,
+              fontSize: 44,
               height: 0.8,
               fontWeight: FontWeight.w700,
             ),
@@ -270,7 +272,7 @@ class _VerseCard extends StatelessWidget {
             style: serifItalic
                 ? GoogleFonts.playfairDisplay(
                     color: brand.ink,
-                    fontSize: 16.5,
+                    fontSize: 16,
                     height: 1.6,
                     fontStyle: FontStyle.italic,
                   )
@@ -408,7 +410,7 @@ class _SymbolCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               body,
-              style: TextStyle(color: brand.inkMuted, fontSize: 13.5, height: 1.6),
+              style: TextStyle(color: brand.inkMuted, fontSize: 14, height: 1.6),
             ),
           ],
         ),
@@ -578,7 +580,7 @@ class _OccasionCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             body,
-            style: TextStyle(color: brand.inkMuted, fontSize: 13, height: 1.55),
+            style: TextStyle(color: brand.inkMuted, fontSize: 13.5, height: 1.55),
           ),
         ],
       ),
