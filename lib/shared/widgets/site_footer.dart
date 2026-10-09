@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/brand_palette.dart';
 import '../../core/constants/app_strings.dart';
 import 'interlace_border.dart';
-import 'hareg_header.dart';
 
 class SiteFooter extends StatelessWidget {
   const SiteFooter({super.key});
@@ -19,8 +18,6 @@ class SiteFooter extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 44),
           child: Column(
             children: [
-              const HaregHeader(height: 24, strokeWidth: 5, opacity: 0.8),
-              const SizedBox(height: 12),
               InterlaceBorder(color: brand.amber.withValues(alpha: 0.3)),
               const SizedBox(height: 8),
               Divider(color: brand.beige),

@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_strings.dart';
-import '../../shared/widgets/hareg_header.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -92,17 +91,6 @@ class _LandingScreenState extends State<LandingScreen>
                   ],
                 ),
               ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: FadeTransition(
-            opacity: _fade,
-            child: const SafeArea(
-              child: HaregHeader(height: 24, strokeWidth: 5, opacity: 0.85),
             ),
           ),
         ),

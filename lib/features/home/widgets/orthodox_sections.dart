@@ -4,7 +4,6 @@ import '../../../core/constants/app_strings.dart' show Language, languageNotifie
 import '../../../core/theme/brand_palette.dart';
 import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/stylized_cross.dart';
-import '../../../shared/widgets/hareg_header.dart';
 
 // ---------------------------------------------------------------------------
 // Shared pieces
@@ -48,7 +47,6 @@ class _Header extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const HaregHeader(height: 20, strokeWidth: 4, opacity: 0.75, margin: EdgeInsets.only(bottom: 12)),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
