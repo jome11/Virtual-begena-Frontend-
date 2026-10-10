@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/brand_palette.dart';
 import '../../core/constants/app_strings.dart';
 import 'interlace_border.dart';
@@ -22,12 +23,14 @@ class SiteFooter extends StatelessWidget {
               const SizedBox(height: 8),
               Divider(color: brand.beige),
               const SizedBox(height: 24),
-              Text(
-                AppStrings.get('app_title'),
-                style: TextStyle(
-                  color: brand.ink,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
+              InkWell(
+                onTap: () => context.go('/home'),
+                child: Image.asset(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/images/logodarkmode.jpg'
+                      : 'assets/images/logolighmode.jpg',
+                  height: 72,
+                  fit: BoxFit.contain,
                 ),
               ),
               const SizedBox(height: 8),

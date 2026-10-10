@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_color_scheme.dart';
 import 'theme_toggle_button.dart';
+import 'language_toggle.dart';
 
 class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String modeLabel;
@@ -18,7 +19,7 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(64);
+  Size get preferredSize => const Size.fromHeight(100);
 
   @override
   Widget build(BuildContext context) => AppBar(
@@ -28,14 +29,15 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
     title: Row(
       children: [
         Flexible(
-          child: Text(
-            'Virtual Begena',
-            style: TextStyle(
-              color: context.colors.accent,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+          child: InkWell(
+            onTap: () => context.go('/dashboard'),
+            child: Image.asset(
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'assets/images/logodarkmode.jpg'
+                  : 'assets/images/logolighmode.jpg',
+              height: 64,
+              fit: BoxFit.contain,
             ),
-            overflow: TextOverflow.ellipsis,
           ),
         ),
         if (leading != null) ...[const SizedBox(width: 12), Flexible(flex: 2, child: leading!)],
@@ -51,6 +53,7 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
+      const LanguageToggle(),
       const ThemeToggleButton(),
       TextButton.icon(
         onPressed: onBack ?? () => context.go('/dashboard'),

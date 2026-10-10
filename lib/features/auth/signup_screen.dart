@@ -4,6 +4,8 @@ import '../../core/theme/app_color_scheme.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/auth_service.dart';
 import '../../shared/widgets/gradient_background.dart';
+import '../../shared/widgets/language_toggle.dart';
+import '../../shared/widgets/theme_toggle_button.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -48,115 +50,139 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GradientBackground(
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: Column(
+        child: Stack(
+          children: [
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Create Account',
+                          style: TextStyle(
+                            color: context.colors.textPrimary,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: context.colors.surface,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              )
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              _SignupField(controller: _nameController, label: 'Full Name'),
+                              const SizedBox(height: 16),
+                              _SignupField(controller: _emailController, label: 'Email'),
+                              const SizedBox(height: 16),
+                              _SignupField(
+                                controller: _passwordController,
+                                label: AppStrings.get('password'),
+                                obscure: true,
+                              ),
+                              if (_error != null) ...[
+                                const SizedBox(height: 12),
+                                Text(
+                                  _error!,
+                                  style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13),
+                                ),
+                              ],
+                              const SizedBox(height: 20),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: _loading ? null : _submit,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: context.colors.accent,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  ),
+                                  child: _loading
+                                      ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Text('Create Account', style: TextStyle(fontWeight: FontWeight.bold)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(children: [
+                          Expanded(child: Divider(color: context.colors.border)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text('or', style: TextStyle(color: context.colors.textSecondary)),
+                          ),
+                          Expanded(child: Divider(color: context.colors.border)),
+                        ]),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: () => context.go('/try'),
+                            icon: const Icon(Icons.play_circle_outline_rounded),
+                            label: Text(AppStrings.get('try_free')),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: () => context.go('/login'),
+                          child: Text(
+                            'Already have an account? Sign in',
+                            style: TextStyle(color: context.colors.textSecondary),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 16,
+              right: 16,
+              child: SafeArea(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Create Account',
-                      style: TextStyle(
-                        color: context.colors.textPrimary,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 28),
+                    const LanguageToggle(),
+                    const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: context.colors.surface,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          )
-                        ],
+                        border: Border.all(color: context.colors.border),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Column(
-                        children: [
-                          _SignupField(controller: _nameController, label: 'Full Name'),
-                          const SizedBox(height: 16),
-                          _SignupField(controller: _emailController, label: 'Email'),
-                          const SizedBox(height: 16),
-                          _SignupField(
-                            controller: _passwordController,
-                            label: AppStrings.get('password'),
-                            obscure: true,
-                          ),
-                          if (_error != null) ...[
-                            const SizedBox(height: 12),
-                            Text(
-                              _error!,
-                              style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13),
-                            ),
-                          ],
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _loading ? null : _submit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: context.colors.accent,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                              child: _loading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text('Create Account', style: TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(children: [
-                      Expanded(child: Divider(color: context.colors.border)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text('or', style: TextStyle(color: context.colors.textSecondary)),
-                      ),
-                      Expanded(child: Divider(color: context.colors.border)),
-                    ]),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => context.go('/try'),
-                        icon: const Icon(Icons.play_circle_outline_rounded),
-                        label: Text(AppStrings.get('try_free')),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextButton(
-                      onPressed: () => context.go('/login'),
-                      child: Text(
-                        'Already have an account? Sign in',
-                        style: TextStyle(color: context.colors.textSecondary),
-                      ),
+                      child: const ThemeToggleButton(),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

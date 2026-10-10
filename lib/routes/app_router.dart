@@ -131,7 +131,9 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/mezmur-tenat',
-      builder: (context, state) => const MezmurTenatScreen(),
+      builder: (context, state) => MezmurTenatScreen(
+        initialQenet: _qenetFrom(state.uri.queryParameters['qenet']),
+      ),
     ),
     GoRoute(
       path: '/progress',

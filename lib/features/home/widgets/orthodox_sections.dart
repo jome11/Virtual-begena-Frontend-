@@ -463,40 +463,6 @@ class TraditionSection extends StatelessWidget {
           ),
         ];
 
-        // The player's rule.
-        final rule = <(String, String)>[
-          (
-            am ? 'በጸሎት ይጀምሩ' : 'Begin in prayer',
-            am
-                ? 'ደርዳሪ ከመጀመሩ በፊት በጸሎት እንዲጀምር ይመከራል።'
-                : 'A player is advised to begin with prayer before touching the strings.',
-          ),
-          (
-            am ? 'የመዝሙሩን ትምህርት ይወቁ' : 'Know the faith behind the song',
-            am
-                ? 'መዝሙሩ የሚያስተምረውን ትምህርት ማወቅ።'
-                : 'Understand the teaching that the mezmur carries.',
-          ),
-          (
-            am ? 'መልካም ምግባር' : 'Live with good conduct',
-            am
-                ? 'ከቅዱስ ዳዊት ታሪክ የተማረ ደርዳሪ ክርስቲያናዊ ሕይወት ሊኖረው ይገባል።'
-                : 'Learning from the story of Saint David, a player should live a Christian life.',
-          ),
-          (
-            am ? 'በክብር ይልበሱ' : 'Dress with reverence',
-            am
-                ? 'በአገልግሎት ወቅት ክብርንና የቤተ ክርስቲያንን ሥርዓት የሚጠብቅ ልብስ መልበስ።'
-                : 'In service, wear clothing that honours the order of the Church.',
-          ),
-          (
-            am ? 'መልካም አርአያ ይሁኑ' : 'Be a good example',
-            am
-                ? 'በሰዎች ፊት መልካም አርአያ መሆን (ማቴ. 5)።'
-                : 'Be a good example before others (Matthew 5).',
-          ),
-        ];
-
         return _SectionShell(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -517,29 +483,8 @@ class TraditionSection extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 28),
-              LayoutBuilder(
-                builder: (context, c) {
-                  final narrow = c.maxWidth < 800;
-                  final ruleCard = Reveal(child: _RuleCard(am: am, rule: rule));
-                  final yaredCard = Reveal(
-                    delay: const Duration(milliseconds: 150),
-                    child: _YaredBanner(am: am),
-                  );
-                  if (narrow) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [ruleCard, const SizedBox(height: 16), yaredCard],
-                    );
-                  }
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(flex: 3, child: ruleCard),
-                      const SizedBox(width: 16),
-                      Expanded(flex: 2, child: yaredCard),
-                    ],
-                  );
-                },
+              Reveal(
+                child: _YaredBanner(am: am),
               ),
             ],
           ),
@@ -586,84 +531,7 @@ class _OccasionCard extends StatelessWidget {
   }
 }
 
-class _RuleCard extends StatelessWidget {
-  final bool am;
-  final List<(String, String)> rule;
-  const _RuleCard({required this.am, required this.rule});
 
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return Container(
-      padding: const EdgeInsets.all(26),
-      decoration: _cardDecoration(brand),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            am ? 'የደርዳሪ ሥርዓት' : 'The player’s rule',
-            style: GoogleFonts.playfairDisplay(
-              color: brand.ink,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 18),
-          for (var i = 0; i < rule.length; i++)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: brand.amber,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${i + 1}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          rule[i].$1,
-                          style: TextStyle(
-                            color: brand.ink,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14.5,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          rule[i].$2,
-                          style: TextStyle(color: brand.inkMuted, fontSize: 13, height: 1.5),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
 
 class _YaredBanner extends StatelessWidget {
   final bool am;

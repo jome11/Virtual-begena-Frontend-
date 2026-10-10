@@ -14,7 +14,7 @@ class CourseSnapshot {
   bool chapterDone(int n) =>
       (quiz[n] ?? 0) >= 2 && assignments.contains(n) && examsPassed(n);
 
-  int get chaptersDone => [for (var n = 1; n <= 6; n++) if (chapterDone(n)) n].length;
+  int get chaptersDone => [for (var n = 1; n <= chapters.length; n++) if (chapterDone(n)) n].length;
 }
 
 class CourseProgress {
@@ -23,8 +23,8 @@ class CourseProgress {
   static Future<CourseSnapshot> load() async {
     final p = await SharedPreferences.getInstance();
     return CourseSnapshot(
-      {for (var n = 1; n <= 6; n++) n: p.getInt(_k('quiz$n')) ?? 0},
-      {for (var n = 1; n <= 6; n++) if (p.getBool(_k('assign_done$n')) ?? false) n},
+      {for (var n = 1; n <= chapters.length; n++) n: p.getInt(_k('quiz$n')) ?? 0},
+      {for (var n = 1; n <= chapters.length; n++) if (p.getBool(_k('assign_done$n')) ?? false) n},
       {
         for (final q in const ['selamta', 'tezeta', 'anchihoye'])
           q: p.getInt(_k('exam_$q')) ?? 0,
@@ -53,7 +53,7 @@ class CourseProgress {
     }
   }
 
-  // ---- 28-day plan ----
+  // ---- Plan ----
   static Future<DateTime?> planStart() async {
     final s = (await SharedPreferences.getInstance()).getString(_k('plan_start'));
     return s == null ? null : DateTime.tryParse(s);
@@ -81,6 +81,6 @@ class CourseProgress {
   static int dayNumber(DateTime start) {
     final a = DateTime(start.year, start.month, start.day);
     final n = DateTime.now();
-    return (DateTime(n.year, n.month, n.day).difference(a).inDays + 1).clamp(1, 28);
+    return (DateTime(n.year, n.month, n.day).difference(a).inDays + 1).clamp(1, dailyPlan.length);
   }
 }

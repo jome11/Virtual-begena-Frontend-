@@ -31,13 +31,13 @@ class _TodayPlanCardState extends State<TodayPlanCard> {
     String title, subtitle;
     double? progress;
     if (_start == null) {
-      title = tr('የ28 ቀን እቅድ', '28-day plan');
+      title = tr('የ${dailyPlan.length} ቀን እቅድ', '${dailyPlan.length}-day plan');
       subtitle = tr('ከታሪክ እስከ ሦስቱ ቅኝቶች — ዛሬ ይጀምሩ።', 'From the story to your first three qenet. Start today.');
     } else {
       final day = CourseProgress.dayNumber(_start!);
       final tasks = dailyPlan[day - 1];
       final doneCount = [for (var i = 0; i < tasks.length; i++) if (_done.contains('d$day-t$i')) i].length;
-      title = '${tr('ቀን', 'Day')} $day / 28';
+      title = '${tr('ቀን', 'Day')} $day / ${dailyPlan.length}';
       final next = [for (var i = 0; i < tasks.length; i++) if (!_done.contains('d$day-t$i')) tasks[i]];
       subtitle = next.isEmpty
           ? tr('የዛሬ ተግባራት ተጠናቀዋል። ጥሩ ሥራ!', "Today's tasks are done. Great work!")

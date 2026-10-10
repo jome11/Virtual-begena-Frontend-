@@ -1,70 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/theme/brand_palette.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../shared/widgets/youtube_embed.dart';
 
-const _cta = Color(0xFF2563EB);
-
-/// Sample value shown in the card's progress bar. Change it freely.
-const _sampleProgress = 0.68;
+// Sacred, dark palette for the hero band only — independent of the light
+// brand theme used by the rest of the page, so it reads as its own moment.
+const _ink = Color(0xFF0C0B08);       // near-black background
+const _inkDeep = Color(0xFF060504);   // darkest edge of the scrim
+const _gold = Color(0xFFC9A24B);      // headline accent / CTA
+const _goldSoft = Color(0xFFE8D5A3);  // subheading
+const _cream = Color(0xFFF4EFE4);     // body text on dark
+const _creamMuted = Color(0xB3F4EFE4);
 
 class _Copy {
-  final String badge;
-  final String titleLead;
-  final String titleAccent;
-  final List<String> checks;
-  final String start;
-  final String featured;
-  final String progress;
-  final String certTitle;
-  final String certSub;
+  final String kicker;
+  final String titleLine1;
+  final String titleLine2;
+  final String subhead;
+  final String body;
+  final String primaryCta;
+  final String secondaryCta;
   const _Copy({
-    required this.badge,
-    required this.titleLead,
-    required this.titleAccent,
-    required this.checks,
-    required this.start,
-    required this.featured,
-    required this.progress,
-    required this.certTitle,
-    required this.certSub,
+    required this.kicker,
+    required this.titleLine1,
+    required this.titleLine2,
+    required this.subhead,
+    required this.body,
+    required this.primaryCta,
+    required this.secondaryCta,
   });
 }
 
 const _en = _Copy(
-  badge: 'Trusted by learners worldwide',
-  titleLead: 'Master the Begena',
-  titleAccent: 'Step by Step',
-  checks: [
-    'Learn at your own pace',
-    'Interactive hand tracking',
-    'Earn certificates',
-    'Free play mode',
-  ],
-  start: 'Start Learning',
-  featured: 'Featured Lesson',
-  progress: 'Course Progress',
-  certTitle: 'Certificate',
-  certSub: 'Earn on completion',
+  kicker: 'BEGENA TRAINER',
+  titleLine1: 'Learn the Begena:',
+  titleLine2: 'The Sacred Instrument of David',
+  subhead: 'Ancient, Spiritual, Orthodox Tradition.',
+  body:
+      'Guided lessons and real-time hand tracking help you learn the '
+      'begena the way it has always been taught — string by string, '
+      'hymn by hymn.',
+  primaryCta: 'Start Learning Now',
+  secondaryCta: 'Explore the Instrument',
 );
 
 const _am = _Copy(
-  badge: 'በመላው ዓለም በተማሪዎች የታመነ',
-  titleLead: 'በገናን ይልመዱ',
-  titleAccent: 'ደረጃ በደረጃ',
-  checks: [
-    'በራስዎ ፍጥነት ይማሩ',
-    'በእጅ መከታተያ የሚሰራ ልምምድ',
-    'ሰርተፊኬት ያግኙ',
-    'ነጻ የመጫወቻ ሞድ',
-  ],
-  start: 'መማር ይጀምሩ',
-  featured: 'ተለይቶ የቀረበ ትምህርት',
-  progress: 'የኮርስ ሂደት',
-  certTitle: 'ሰርተፊኬት',
-  certSub: 'ሲጨርሱ ያገኛሉ',
+  kicker: 'ቨርቹዋል በገና',
+  titleLine1: 'በገናን ይማሩ:',
+  titleLine2: 'የዳዊት ቅዱስ መሣሪያ',
+  subhead: 'ጥንታዊ፣ መንፈሳዊ፣ የኦርቶዶክስ ትውፊት።',
+  body:
+      'በእጅ መከታተያ ቴክኖሎጂ የታገዙ ትምህርቶች በገናን ከመሠረቱ፣ ጅማት በጅማት፣ '
+      'መዝሙር በመዝሙር እንዲማሩ ይረዱዎታል።',
+  primaryCta: 'መማር ይጀምሩ',
+  secondaryCta: 'መሣሪያውን ይመልከቱ',
 );
 
 class HeroSection extends StatelessWidget {
@@ -72,38 +61,75 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hPad = MediaQuery.of(context).size.width < 700 ? 20.0 : 40.0;
     return ValueListenableBuilder<Language>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         final copy = lang == Language.am ? _am : _en;
-        return Padding(
-          padding: EdgeInsets.fromLTRB(hPad, 48, hPad, 72),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1280),
-              child: LayoutBuilder(
-                builder: (context, c) {
-                  final narrow = c.maxWidth < 950;
-                  final titleSize =
-                      narrow ? 38.0 : (c.maxWidth / 20).clamp(42.0, 60.0).toDouble();
-                  final text = _HeroText(copy: copy, narrow: narrow, titleSize: titleSize);
-                  final card = _HeroCard(copy: copy, narrow: narrow);
-                  if (narrow) {
-                    return Column(children: [text, const SizedBox(height: 56), card]);
-                  }
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(flex: 5, child: text),
-                      const SizedBox(width: 64),
-                      Expanded(flex: 5, child: card),
-                    ],
-                  );
-                },
+        return LayoutBuilder(
+          builder: (context, c) {
+            final narrow = c.maxWidth < 900;
+            return Container(
+              width: double.infinity,
+              height: narrow ? 640 : 720,
+              color: _ink,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Background photo — swap the asset path for any of your
+                  // begena images (e.g. assets/begena/b2.jpg).
+                  Positioned.fill(
+                    child: Image.asset(
+                      'assets/begena/darkmode.png',
+                      fit: BoxFit.cover,
+                      alignment:
+                          narrow ? Alignment.topCenter : Alignment.centerRight,
+                    ),
+                  ),
+                  // Dark scrim so the text stays readable over the photo.
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: narrow
+                            ? const LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [_ink, _ink, Color(0x660C0B08)],
+                                stops: [0.0, 0.55, 1.0],
+                              )
+                            : LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  _inkDeep,
+                                  _ink.withValues(alpha: 0.92),
+                                  _ink.withValues(alpha: 0.35),
+                                ],
+                                stops: const [0.0, 0.55, 1.0],
+                              ),
+                      ),
+                    ),
+                  ),
+                  // Content.
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      narrow ? 24 : 72,
+                      narrow ? 120 : 64,
+                      narrow ? 24 : 72,
+                      narrow ? 48 : 64,
+                    ),
+                    child: Align(
+                      alignment:
+                          narrow ? Alignment.bottomCenter : Alignment.centerLeft,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 620),
+                        child: _HeroText(copy: copy, narrow: narrow),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -113,74 +139,63 @@ class HeroSection extends StatelessWidget {
 class _HeroText extends StatelessWidget {
   final _Copy copy;
   final bool narrow;
-  final double titleSize;
-  const _HeroText({
-    required this.copy,
-    required this.narrow,
-    required this.titleSize,
-  });
+  const _HeroText({required this.copy, required this.narrow});
 
   @override
   Widget build(BuildContext context) {
-    final brand = context.brand;
     final align = narrow ? TextAlign.center : TextAlign.left;
     final cross = narrow ? CrossAxisAlignment.center : CrossAxisAlignment.start;
     return Column(
       crossAxisAlignment: cross,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          decoration: BoxDecoration(
-            color: brand.amber.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: brand.amber.withValues(alpha: 0.6)),
-          ),
-          child: Text(
-            copy.badge,
-            style: TextStyle(
-              color: brand.amber,
-              fontSize: 14.5,
-              fontWeight: FontWeight.w600,
-            ),
+        Text(
+          copy.kicker,
+          textAlign: align,
+          style: TextStyle(
+            color: _goldSoft,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 3,
           ),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 20),
         Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: '${copy.titleLead} '),
-              TextSpan(text: copy.titleAccent, style: TextStyle(color: brand.amber)),
+              TextSpan(text: '${copy.titleLine1}\n'),
+              TextSpan(text: copy.titleLine2, style: const TextStyle(color: _gold)),
             ],
           ),
           textAlign: align,
-          style: GoogleFonts.poppins(
-            color: brand.ink,
-            fontSize: titleSize,
-            fontWeight: FontWeight.w800,
-            height: 1.15,
+          style: GoogleFonts.playfairDisplay(
+            color: _cream,
+            fontSize: narrow ? 34 : 46,
+            fontWeight: FontWeight.w700,
+            height: 1.18,
           ),
         ),
-        const SizedBox(height: 28),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 560),
-          child: Text(
-            AppStrings.get('hero_subtitle').replaceAll('\n', ' '),
-            textAlign: align,
-            style: TextStyle(
-              color: brand.ink.withValues(alpha: 0.75),
-              fontSize: narrow ? 16 : 18,
-              height: 1.65,
-            ),
+        const SizedBox(height: 18),
+        Text(
+          copy.subhead,
+          textAlign: align,
+          style: GoogleFonts.playfairDisplay(
+            color: _goldSoft,
+            fontSize: narrow ? 17 : 20,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 32),
-        Wrap(
-          alignment: narrow ? WrapAlignment.center : WrapAlignment.start,
-          spacing: 44,
-          runSpacing: 16,
-          children: [for (final c in copy.checks) _Check(c)],
+        const SizedBox(height: 20),
+        Text(
+          copy.body,
+          textAlign: align,
+          style: TextStyle(
+            color: _creamMuted,
+            fontSize: narrow ? 14.5 : 16,
+            height: 1.6,
+          ),
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 36),
         Wrap(
           alignment: narrow ? WrapAlignment.center : WrapAlignment.start,
           spacing: 16,
@@ -189,260 +204,41 @@ class _HeroText extends StatelessWidget {
             ElevatedButton(
               onPressed: () => context.go('/signup'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _cta,
-                foregroundColor: Colors.white,
+                backgroundColor: _gold,
+                foregroundColor: _inkDeep,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    copy.start,
-                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16.5),
-                  ),
-                  const SizedBox(width: 10),
-                  const Icon(Icons.arrow_forward_rounded, size: 20),
-                ],
+              child: Text(
+                copy.primaryCta.toUpperCase(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  letterSpacing: 1.1,
+                ),
               ),
             ),
             OutlinedButton(
               onPressed: () => context.go('/try'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: brand.ink,
-                side: BorderSide(color: brand.ink.withValues(alpha: 0.3)),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                foregroundColor: _cream,
+                side: const BorderSide(color: Color(0x80F4EFE4)),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),
               child: Text(
-                AppStrings.get('try_free'),
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _Check extends StatelessWidget {
-  final String label;
-  const _Check(this.label);
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.check_circle_outline_rounded, color: brand.amber, size: 22),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: brand.ink,
-            fontSize: 15.5,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _HeroCard extends StatefulWidget {
-  final _Copy copy;
-  final bool narrow;
-  const _HeroCard({required this.copy, required this.narrow});
-
-  @override
-  State<_HeroCard> createState() => _HeroCardState();
-}
-
-class _HeroCardState extends State<_HeroCard> {
-  // Placeholder videos, replace later. id = the part after "v=" in a YouTube link.
-  static const _videos = [
-    ('nAlD9nkJzLc', 'The Story of the Begena'),
-    ('DykDffdo8yk', 'Learn to play: intro'),
-    ('SLZc4q3vp38', 'Finger exercises'),
-    ('lW645IYBLXg', 'Begena mezmur'),
-  ];
-  int _index = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    final copy = widget.copy;
-
-    final card = Container(
-      decoration: BoxDecoration(
-        color: brand.surface,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: brand.amber.withValues(alpha: 0.35)),
-        boxShadow: [
-          BoxShadow(
-            color: brand.amber.withValues(alpha: 0.18),
-            blurRadius: 50,
-            offset: const Offset(0, 24),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: YoutubeEmbed(videoId: _videos[_index].$1),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 26, 28, 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    copy.featured,
-                    style: TextStyle(
-                      color: brand.ink,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _videos[_index].$2,
-                    style: TextStyle(color: brand.inkMuted, fontSize: 15),
-                  ),
-                  const SizedBox(height: 18),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        copy.progress,
-                        style: TextStyle(color: brand.inkMuted, fontSize: 14),
-                      ),
-                      Text(
-                        '${(_sampleProgress * 100).round()}%',
-                        style: TextStyle(
-                          color: brand.ink,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: LinearProgressIndicator(
-                      value: _sampleProgress,
-                      minHeight: 9,
-                      backgroundColor: brand.beige.withValues(alpha: 0.6),
-                      color: brand.amber,
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (var i = 0; i < _videos.length; i++)
-                        ChoiceChip(
-                          label: Text(_videos[i].$2),
-                          selected: i == _index,
-                          showCheckmark: false,
-                          selectedColor: _cta,
-                          backgroundColor: brand.background,
-                          labelStyle: TextStyle(
-                            color: i == _index ? Colors.white : brand.ink,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                          onSelected: (_) => setState(() => _index = i),
-                        ),
-                    ],
-                  ),
-                  // Room so the floating certificate chip doesn't cover the chips.
-                  const SizedBox(height: 44),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        card,
-        Positioned(
-          left: widget.narrow ? 16 : -32,
-          bottom: -28,
-          child: _CertChip(copy: copy),
-        ),
-      ],
-    );
-  }
-}
-
-class _CertChip extends StatelessWidget {
-  final _Copy copy;
-  const _CertChip({required this.copy});
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: brand.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: brand.amber.withValues(alpha: 0.35)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: brand.amber.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(Icons.workspace_premium_outlined, color: brand.amber, size: 30),
-          ),
-          const SizedBox(width: 14),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                copy.certTitle,
-                style: TextStyle(
-                  color: brand.ink,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                copy.secondaryCta.toUpperCase(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  letterSpacing: 1.1,
                 ),
               ),
-              Text(
-                copy.certSub,
-                style: TextStyle(color: brand.inkMuted, fontSize: 15),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

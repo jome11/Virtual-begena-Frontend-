@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_strings.dart' show Language, languageNotifier;
 import '../../../core/constants/qenet.dart';
-import '../../../core/data/curriculum.dart' show tr, examPassAccuracy;
+import '../../../core/data/curriculum.dart' show tr, examPassAccuracy, chapters, examsFor;
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/certificate_service.dart';
 import '../../../core/services/course_progress_service.dart';
@@ -107,8 +107,8 @@ class _CourseCard extends StatelessWidget {
   final CourseSnapshot? course;
   const _CourseCard({required this.stats, required this.course});
 
-  static const _totalChapters = 6;
-  static const _totalExams = 3;
+  static int get _totalChapters => chapters.length;
+  static int get _totalExams => examsFor.values.fold(0, (a, b) => a + b.length);
 
   @override
   Widget build(BuildContext context) {

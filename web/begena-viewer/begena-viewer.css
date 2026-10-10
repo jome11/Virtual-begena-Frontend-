@@ -1,0 +1,8 @@
+/* Styles needed by begena-viewer.js. Class names are prefixed "bgv-" to avoid clashes. */
+.bgv-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; cursor:grab; }
+.bgv-canvas:active{ cursor:grabbing; }
+.bgv-canvas.bgv-over{ cursor:pointer; }
+.bgv-tip{ position:absolute; z-index:2; pointer-events:none; transform:translate(12px,-120%);
+  background:#fff; color:#1b2220; border:1px solid #e8a91f; border-radius:8px; padding:0 10px;
+  font:600 .95rem/1.7 "Noto Sans Ethiopic","Abyssinica SIL","Nyala",system-ui,sans-serif; white-space:nowrap; }
+.bgv-tip[hidden]{ display:none; }

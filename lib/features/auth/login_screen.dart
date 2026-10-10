@@ -4,6 +4,8 @@ import '../../core/constants/app_strings.dart';
 import '../../core/theme/app_color_scheme.dart';
 import '../../core/services/auth_service.dart';
 import '../../shared/widgets/gradient_background.dart';
+import '../../shared/widgets/language_toggle.dart';
+import '../../shared/widgets/theme_toggle_button.dart';
 import 'widgets/social_buttons.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -49,131 +51,155 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, lang, _) {
         return Scaffold(
           body: GradientBackground(
-            child: SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: Card(
-                      margin: const EdgeInsets.all(24),
-                      color: context.colors.surface,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(32),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              AppStrings.get('sign_in'),
-                              style: TextStyle(
-                                color: context.colors.textPrimary,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 32),
-                            TextField(
-                              controller: _emailController,
-                              style: TextStyle(color: context.colors.textPrimary),
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(color: context.colors.textSecondary),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: context.colors.textSecondary.withValues(alpha: 0.2),
+            child: Stack(
+              children: [
+                SafeArea(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 400),
+                        child: Card(
+                          margin: const EdgeInsets.all(24),
+                          color: context.colors.surface,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  AppStrings.get('sign_in'),
+                                  style: TextStyle(
+                                    color: context.colors.textPrimary,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: context.colors.accent),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              style: TextStyle(color: context.colors.textPrimary),
-                              decoration: InputDecoration(
-                                labelText: AppStrings.get('password'),
-                                labelStyle: TextStyle(color: context.colors.textSecondary),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: context.colors.textSecondary.withValues(alpha: 0.2),
+                                const SizedBox(height: 32),
+                                TextField(
+                                  controller: _emailController,
+                                  style: TextStyle(color: context.colors.textPrimary),
+                                  decoration: InputDecoration(
+                                    labelText: 'Email',
+                                    labelStyle: TextStyle(color: context.colors.textSecondary),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: context.colors.textSecondary.withValues(alpha: 0.2),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: context.colors.accent),
+                                    ),
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: context.colors.accent),
+                                const SizedBox(height: 16),
+                                TextField(
+                                  controller: _passwordController,
+                                  obscureText: true,
+                                  style: TextStyle(color: context.colors.textPrimary),
+                                  decoration: InputDecoration(
+                                    labelText: AppStrings.get('password'),
+                                    labelStyle: TextStyle(color: context.colors.textSecondary),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: context.colors.textSecondary.withValues(alpha: 0.2),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: context.colors.accent),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            if (_error != null) ...[
-                              const SizedBox(height: 16),
-                              Text(_error!, style: const TextStyle(color: Colors.redAccent)),
-                            ],
-                            const SizedBox(height: 32),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: _isLoading ? null : _handleSignIn,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: context.colors.accent,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                if (_error != null) ...[
+                                  const SizedBox(height: 16),
+                                  Text(_error!, style: const TextStyle(color: Colors.redAccent)),
+                                ],
+                                const SizedBox(height: 32),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: _isLoading ? null : _handleSignIn,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: context.colors.accent,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                    ),
+                                    child: _isLoading
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(strokeWidth: 2),
+                                          )
+                                        : Text(AppStrings.get('sign_in_cta')),
+                                  ),
                                 ),
-                                child: _isLoading
-                                    ? const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(strokeWidth: 2),
-                                      )
-                                    : Text(AppStrings.get('sign_in_cta')),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Row(children: [
-                              Expanded(child: Divider(color: context.colors.border)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text('or', style: TextStyle(color: context.colors.textSecondary)),
-                              ),
-                              Expanded(child: Divider(color: context.colors.border)),
-                            ]),
-                            const SizedBox(height: 12),
-                            const SocialButtons(),
-                            SizedBox(
-                              width: double.infinity,
-                              child: OutlinedButton.icon(
-                                onPressed: () => context.go('/try'),
-                                icon: const Icon(Icons.play_circle_outline_rounded),
-                                label: Text(AppStrings.get('try_free')),
-                                style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                const SizedBox(height: 12),
+                                Row(children: [
+                                  Expanded(child: Divider(color: context.colors.border)),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Text('or', style: TextStyle(color: context.colors.textSecondary)),
+                                  ),
+                                  Expanded(child: Divider(color: context.colors.border)),
+                                ]),
+                                const SizedBox(height: 12),
+                                const SocialButtons(),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: OutlinedButton.icon(
+                                    onPressed: () => context.go('/try'),
+                                    icon: const Icon(Icons.play_circle_outline_rounded),
+                                    label: Text(AppStrings.get('try_free')),
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 12),
+                                TextButton(
+                                  onPressed: () => context.go('/signup'),
+                                  child: Text(
+                                    "Don't have an account? Sign up",
+                                    style: TextStyle(color: context.colors.textSecondary),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => context.go('/home'),
+                                  child: Text(
+                                    AppStrings.get('home'),
+                                    style: TextStyle(color: context.colors.textSecondary),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 12),
-                            TextButton(
-                              onPressed: () => context.go('/signup'),
-                              child: Text(
-                                "Don't have an account? Sign up",
-                                style: TextStyle(color: context.colors.textSecondary),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => context.go('/home'),
-                              child: Text(
-                                AppStrings.get('home'),
-                                style: TextStyle(color: context.colors.textSecondary),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
+                Positioned(
+                  top: 16,
+                  right: 16,
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const LanguageToggle(),
+                        const SizedBox(width: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: context.colors.border),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const ThemeToggleButton(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );

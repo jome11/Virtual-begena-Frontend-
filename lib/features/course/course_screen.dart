@@ -72,8 +72,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                      tr('${s.chaptersDone} ከ${chapters.length} ምዕራፎች ተጠናቀዋል',
-                                          '${s.chaptersDone} of ${chapters.length} chapters complete'),
+                                      tr('${s.chaptersDone} ከ${chapters.length} ቀናት ተጠናቀዋል',
+                                          '${s.chaptersDone} of ${chapters.length} days complete'),
                                       style: TextStyle(color: brand.inkMuted, fontSize: 12)),
                                 ],
                               ),
@@ -172,7 +172,7 @@ class _ChapterCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${tr('ምዕራፍ', 'Chapter')} $n',
+                    Text('${tr('ቀን', 'Day')} $n',
                         style: TextStyle(color: brand.inkMuted, fontSize: 11, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 2),
                     Text(tr(chapter.title, chapter.titleEn),

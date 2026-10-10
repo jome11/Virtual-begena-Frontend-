@@ -5,6 +5,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/services/auth_service.dart';
 import '../../shared/widgets/motion.dart';
+import '../../shared/widgets/language_toggle.dart';
+import '../../shared/widgets/theme_toggle_button.dart';
 import '../daily/today_plan_card.dart';
 import 'widgets/feature_card.dart';
 import 'widgets/streak_banner.dart';
@@ -31,7 +33,7 @@ class DashboardScreen extends StatelessWidget {
               (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan'),
               ('Leaderboard', 'See how you rank', Icons.leaderboard_rounded, AppColors.modeFreePlay, '/leaderboard'),
               ('Course', 'Chapters, quizzes and assignments', Icons.menu_book_rounded, AppColors.modeProgress, '/course'),
-              ('28-day plan', 'Your daily tasks', Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan'),
+              ('7-day plan', 'Your daily tasks', Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan'),
             ];
 
             return Scaffold(
@@ -46,21 +48,41 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          AppStrings.get('dashboard_title'),
-                          style: TextStyle(
-                            color: context.colors.textPrimary,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          AppStrings.get('dashboard_subtitle'),
-                          style: TextStyle(
-                            color: context.colors.textSecondary.withValues(alpha: 0.9),
-                            fontSize: 15,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppStrings.get('dashboard_title'),
+                                    style: TextStyle(
+                                      color: context.colors.textPrimary,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    AppStrings.get('dashboard_subtitle'),
+                                    style: TextStyle(
+                                      color: context.colors.textSecondary.withValues(alpha: 0.9),
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const LanguageToggle(),
+                            const SizedBox(width: 8),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: context.colors.border),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const ThemeToggleButton(),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 24),
                         StreakBanner(

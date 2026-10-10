@@ -15,7 +15,8 @@ import '../../shared/widgets/mode_app_bar.dart';
 import '../../shared/widgets/camera_controls_panel.dart';
 
 class MezmurTenatScreen extends StatefulWidget {
-  const MezmurTenatScreen({super.key});
+  final Qenet? initialQenet;
+  const MezmurTenatScreen({super.key, this.initialQenet});
   @override
   State<MezmurTenatScreen> createState() => _MezmurTenatScreenState();
 }
@@ -29,6 +30,15 @@ class _MezmurTenatScreenState extends State<MezmurTenatScreen> {
   List<FlatNote> _notes = [];
   int _currentIndex = 0;
   int? _lastHandledTimestamp;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialQenet != null) {
+      _qenet = widget.initialQenet;
+      _step = _Step.song;
+    }
+  }
 
   int _correct = 0;
   int _wrong = 0;

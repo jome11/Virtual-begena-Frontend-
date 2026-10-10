@@ -91,9 +91,9 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
           builder: (context, lang, _) {
             final weeks = [
               tr('መሠረት — ታሪክና መሣሪያው', 'Foundations: the story and the instrument'),
-              tr('እጆችና ሰላምታ', 'Hands and Selamta'),
-              tr('ትዝታና አንቺ ሆዬ', 'Tezeta and Anchihoye'),
-              tr('መዝሙሮችና ማጠናከር', 'Songs and consolidation'),
+              tr('ሰላምታ — መዝሙር ተናት', 'Selamta: Mezmur Tenat'),
+              tr('ትዝታ — መዝሙር ተናት', 'Tezeta: Mezmur Tenat'),
+              tr('አንቺ ሆዬ — መዝሙር ተናት', 'Anchihoye: Mezmur Tenat'),
             ];
             return SingleChildScrollView(
               child: Column(
@@ -179,7 +179,7 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (var d = 1; d <= 28; d++)
+            for (var d = 1; d <= dailyPlan.length; d++)
               GestureDetector(
                 onTap: () => setState(() => _selected = d),
                 child: Container(

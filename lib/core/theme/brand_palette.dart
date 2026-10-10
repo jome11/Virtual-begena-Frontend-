@@ -21,23 +21,23 @@ class BrandPalette extends ThemeExtension<BrandPalette> {
   });
 
   static const light = BrandPalette(
-    amber: Color(0xFF2563EB),
-    rose: Color(0xFF60A5FA),
-    beige: Color(0xFFDBEAFE),
-    background: Color(0xFFF4F8FF),
+    amber: Color(0xFF9A7B2E),
+    rose: Color(0xFFC9A24B),
+    beige: Color(0xFFEDE6D6),
+    background: Color(0xFFF5F1E8),
     surface: Colors.white,
-    ink: Color(0xFF0B1F4B),
-    inkMuted: Color(0x990B1F4B),
+    ink: Color(0xFF231E12),
+    inkMuted: Color(0xB3231E12),
   );
 
   static const dark = BrandPalette(
-    amber: Color(0xFF60A5FA),
-    rose: Color(0xFF93C5FD),
-    beige: Color(0xFF1E3A8A),
-    background: Color(0xFF060E24),
-    surface: Color(0xFF0D1B3E),
-    ink: Color(0xFFE8F0FF),
-    inkMuted: Color(0x99E8F0FF),
+    amber: Color(0xFFC9A24B),
+    rose: Color(0xFFE8D5A3),
+    beige: Color(0xFF2A2518),
+    background: Color(0xFF0C0B08),
+    surface: Color(0xFF17140D),
+    ink: Color(0xFFF4EFE4),
+    inkMuted: Color(0xB3F4EFE4),
   );
 
   @override
