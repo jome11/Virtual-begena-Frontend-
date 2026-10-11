@@ -10,13 +10,28 @@ window.begenaBridge = (() => {
     hoveredId: null,
   };
 
+  function findElementDeep(id) {
+    const direct = document.getElementById(id);
+    if (direct) return direct;
+
+    // Search shadow roots recursively
+    const allElements = document.querySelectorAll('*');
+    for (const el of allElements) {
+      if (el.shadowRoot) {
+        const found = el.shadowRoot.getElementById ? el.shadowRoot.getElementById(id) : el.shadowRoot.querySelector(`#${id}`);
+        if (found) return found;
+      }
+    }
+    return document.querySelector(`#${id}`);
+  }
+
   function waitForElement(id, timeoutMs = 30000) {
     return new Promise((resolve, reject) => {
-      const existing = document.getElementById(id);
+      const existing = findElementDeep(id);
       if (existing) return resolve(existing);
       const startedAt = Date.now();
       const timer = setInterval(() => {
-        const el = document.getElementById(id);
+        const el = findElementDeep(id);
         if (el) {
           clearInterval(timer);
           resolve(el);

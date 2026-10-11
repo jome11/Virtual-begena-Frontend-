@@ -7,6 +7,7 @@ class FeatureCard extends StatefulWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
+  final String? image; // asset path, e.g. assets/modes/exercise.jpg
 
   const FeatureCard({
     super.key,
@@ -15,6 +16,7 @@ class FeatureCard extends StatefulWidget {
     required this.icon,
     required this.color,
     required this.onTap,
+    this.image,
   });
 
   @override
@@ -26,6 +28,12 @@ class _FeatureCardState extends State<FeatureCard> {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage = widget.image != null;
+    final c = context.colors;
+    final titleColor = hasImage ? Colors.white : c.textPrimary;
+    final subColor =
+        hasImage ? Colors.white70 : c.textSecondary.withValues(alpha: 0.85);
+
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
@@ -35,50 +43,87 @@ class _FeatureCardState extends State<FeatureCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOut,
-          transform: _hovering ? (Matrix4.identity()..translateByDouble(0.0, -4.0, 0.0, 1.0)) : Matrix4.identity(),
-          padding: const EdgeInsets.all(20),
+          clipBehavior: Clip.antiAlias,
+          transform: _hovering
+              ? (Matrix4.identity()..translateByDouble(0.0, -4.0, 0.0, 1.0))
+              : Matrix4.identity(),
           decoration: BoxDecoration(
-            color: context.colors.surface,
+            color: hasImage ? const Color(0xFF1A1408) : c.surface,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
-              color: _hovering ? context.colors.accent.withValues(alpha: 0.4) : Colors.transparent,
+              color: _hovering ? c.accent.withValues(alpha: 0.5) : Colors.transparent,
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: _hovering ? 0.12 : 0.06),
+                color: Colors.black.withValues(alpha: _hovering ? 0.22 : 0.08),
                 blurRadius: _hovering ? 22 : 12,
                 offset: const Offset(0, 6),
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
+            fit: StackFit.expand,
             children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: widget.color.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(16),
+              if (hasImage) ...[
+                AnimatedScale(
+                  scale: _hovering ? 1.06 : 1.0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                  child: Image.asset(
+                    widget.image!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
                 ),
-                child: Icon(widget.icon, color: widget.color, size: 26),
-              ),
-              const Spacer(),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  color: context.colors.textPrimary,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.15),
+                        Colors.black.withValues(alpha: 0.78),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                widget.subtitle,
-                style: TextStyle(
-                  color: context.colors.textSecondary.withValues(alpha: 0.85),
-                  fontSize: 12.5,
+              ],
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: hasImage
+                            ? Colors.white.withValues(alpha: 0.2)
+                            : widget.color.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(
+                        widget.icon,
+                        color: hasImage ? Colors.white : widget.color,
+                        size: 26,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      widget.label,
+                      style: TextStyle(
+                        color: titleColor,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.subtitle,
+                      style: TextStyle(color: subColor, fontSize: 12.5),
+                    ),
+                  ],
                 ),
               ),
             ],

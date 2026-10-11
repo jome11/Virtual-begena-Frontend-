@@ -321,7 +321,7 @@ class _TipsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.lightbulb_outline_rounded,
-                      color: Color(0xFF93C5FD), size: 20),
+                      color: Color(0xFFE0B84F), size: 20),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(AppStrings.get(key),

@@ -24,16 +24,16 @@ class DashboardScreen extends StatelessWidget {
         return ValueListenableBuilder<Language>(
           valueListenable: languageNotifier,
           builder: (context, lang, child) {
-            final items = [
-              (AppStrings.get('mode_exercise'), AppStrings.get('mode_exercise_sub'), Icons.bolt_rounded, AppColors.modeExercise, '/exercise'),
-              (AppStrings.get('mode_free_play'), AppStrings.get('mode_free_play_sub'), Icons.music_note_rounded, AppColors.modeFreePlay, '/free-play'),
-              (AppStrings.get('mode_tuning'), AppStrings.get('mode_tuning_sub'), Icons.tune_rounded, AppColors.modeTuning, '/tuning'),
-              (AppStrings.get('mode_mezmur_tenat'), AppStrings.get('mode_mezmur_tenat_sub'), Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat'),
-              (AppStrings.get('mode_progress'), AppStrings.get('mode_progress_sub'), Icons.bar_chart_rounded, AppColors.modeProgress, '/progress'),
-              (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan'),
-              ('Leaderboard', 'See how you rank', Icons.leaderboard_rounded, AppColors.modeFreePlay, '/leaderboard'),
-              ('Course', 'Chapters, quizzes and assignments', Icons.menu_book_rounded, AppColors.modeProgress, '/course'),
-              ('7-day plan', 'Your daily tasks', Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan'),
+            final items = <(String, String, IconData, Color, String, String)>[
+              (AppStrings.get('mode_exercise'), AppStrings.get('mode_exercise_sub'), Icons.bolt_rounded, AppColors.modeExercise, '/exercise', 'assets/modes/exercise.jpg'),
+              (AppStrings.get('mode_free_play'), AppStrings.get('mode_free_play_sub'), Icons.music_note_rounded, AppColors.modeFreePlay, '/free-play', 'assets/modes/free_play.jpg'),
+              (AppStrings.get('mode_tuning'), AppStrings.get('mode_tuning_sub'), Icons.tune_rounded, AppColors.modeTuning, '/tuning', 'assets/modes/tuning.jpg'),
+              (AppStrings.get('mode_mezmur_tenat'), AppStrings.get('mode_mezmur_tenat_sub'), Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat', 'assets/modes/mezmur.jpg'),
+              (AppStrings.get('mode_progress'), AppStrings.get('mode_progress_sub'), Icons.bar_chart_rounded, AppColors.modeProgress, '/progress', 'assets/modes/progress.jpg'),
+              (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan', 'assets/modes/training_plan.jpg'),
+              ('Leaderboard', 'See how you rank', Icons.leaderboard_rounded, AppColors.modeFreePlay, '/leaderboard', 'assets/modes/leaderboard.jpg'),
+              ('Course', 'Chapters, quizzes and assignments', Icons.menu_book_rounded, AppColors.modeProgress, '/course', 'assets/modes/course.jpg'),
+              ('7-day plan', 'Your daily tasks', Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan', 'assets/modes/daily_plan.jpg'),
             ];
 
             return Scaffold(
@@ -126,6 +126,7 @@ class DashboardScreen extends StatelessWidget {
                                           icon: i.$3,
                                           color: i.$4,
                                           onTap: () => context.go(i.$5),
+                                          image: i.$6,
                                         ),
                                       ))
                                   .toList(),

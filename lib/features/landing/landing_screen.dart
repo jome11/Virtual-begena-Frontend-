@@ -303,7 +303,7 @@ class _EnterButtonState extends State<_EnterButton> {
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 18),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF1D4ED8), Color(0xFF3B82F6)],
+                colors: [Color(0xFF1D4ED8), Color(0xFFC9A24B)],
               ),
               borderRadius: BorderRadius.circular(40),
               boxShadow: [

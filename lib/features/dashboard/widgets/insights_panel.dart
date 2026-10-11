@@ -125,14 +125,14 @@ class _CourseCard extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [Color(0xFF0B1F4B), Color(0xFF2563EB)],
+            colors: [Color(0xFF1A1408), Color(0xFFB8892F)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF2563EB).withValues(alpha: 0.3),
+              color: const Color(0xFFB8892F).withValues(alpha: 0.3),
               blurRadius: 30,
               offset: const Offset(0, 14),
             ),

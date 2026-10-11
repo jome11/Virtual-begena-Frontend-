@@ -39,7 +39,7 @@ class StatsStrip extends StatelessWidget {
             ? TextStyle(
                 fontFamily: 'BelaBereka',
                 color: brand.ink,
-                fontSize: narrow ? 26 : 36,
+                fontSize: narrow ? 34 : 46,
                 fontWeight: FontWeight.w800,
                 height: 1.2,
               )
@@ -73,7 +73,7 @@ class StatsStrip extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: am ? 'BelaBereka' : null,
                       color: brand.ink.withValues(alpha: 0.75),
-                      fontSize: narrow ? 14 : 16.5,
+                      fontSize: am ? (narrow ? 18 : 22) : (narrow ? 14 : 16.5),
                     ),
                   ),
                   const SizedBox(height: 48),
@@ -161,7 +161,7 @@ class _StatCard extends StatelessWidget {
             style: TextStyle(
               fontFamily: am ? 'BelaBereka' : null,
               color: brand.inkMuted,
-              fontSize: 14.5,
+              fontSize: am ? 23 : 20,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -201,7 +201,7 @@ class _CountUpState extends State<_CountUp> {
         builder: (context, v, _) => Text(
           v.round().toString(),
           style: GoogleFonts.poppins(
-            fontSize: 38,
+            fontSize: 64,
             fontWeight: FontWeight.w800,
             color: brand.ink,
           ),

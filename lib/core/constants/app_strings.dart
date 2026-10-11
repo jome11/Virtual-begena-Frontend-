@@ -176,7 +176,7 @@ class AppStrings {
       'lp_chip_1': 'ቀጥታ የእጅ ክትትል',
       'lp_chip_2': 'AI የበገና መምህር',
       'lp_chip_3': 'የኢትዮጵያ ቅርስ',
-      'stat_strings': 'ክሮች',
+      'stat_strings': 'አውታሮች',
       'stat_qenet': 'ቅኝቶች',
       'stat_modes': 'የልምምድ ዓይነቶች',
       'try_free': 'በነጻ ይሞክሩ',
