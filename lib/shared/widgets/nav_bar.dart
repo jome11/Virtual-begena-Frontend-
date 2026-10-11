@@ -45,17 +45,6 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
         final compact = width < 700;
         final howToLabel = lang == Language.en ? 'How to use' : 'እንዴት መጠቀም';
 
-        final logo = InkWell(
-          onTap: () => context.go('/home'),
-          child: Image.asset(
-            Theme.of(context).brightness == Brightness.dark
-                ? 'assets/images/logodarkmode.jpg'
-                : 'assets/images/logolighmode.jpg',
-            height: compact ? 60 : 76,
-            fit: BoxFit.contain,
-          ),
-        );
-
         // Floating controls: sit directly on the page background.
         final controls = FittedBox(
           fit: BoxFit.scaleDown,
@@ -190,10 +179,13 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
           child: wide
               ? Row(
                   children: [
-                    logo,
-                    const Spacer(),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: SectionNav.attached ? const _Logo() : const SizedBox(),
+                      ),
+                    ),
                     links,
-                    const Spacer(),
                     Expanded(child: Align(alignment: Alignment.centerRight, child: controls)),
                   ],
                 )
@@ -201,8 +193,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     menu,
                     const SizedBox(width: 8),
-                    logo,
-                    const Spacer(),
+                    if (SectionNav.attached) ...[const _Logo(height: 40), const SizedBox(width: 8)],
                     Expanded(child: Align(alignment: Alignment.centerRight, child: controls)),
                   ],
                 ),
@@ -257,6 +248,21 @@ class _Glass extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Logo extends StatelessWidget {
+  final double height;
+  const _Logo({this.height = 84});
+
+  @override
+  Widget build(BuildContext context) {
+    // Always the dark-mode logo, in both light and dark themes.
+    return Image.asset(
+      'assets/images/logodarkmode.png',
+      height: height,
+      fit: BoxFit.contain,
     );
   }
 }

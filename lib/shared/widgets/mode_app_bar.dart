@@ -30,15 +30,14 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
     title: Row(
       children: [
         Flexible(
-          child: InkWell(
-            onTap: () => context.go('/dashboard'),
-            child: Image.asset(
-              Theme.of(context).brightness == Brightness.dark
-                  ? 'assets/images/logodarkmode.jpg'
-                  : 'assets/images/logolighmode.jpg',
-              height: 64,
-              fit: BoxFit.contain,
+          child: Text(
+            'Virtual Begena',
+            style: TextStyle(
+              color: context.colors.accent,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         if (leading != null) ...[const SizedBox(width: 12), Flexible(flex: 2, child: leading!)],

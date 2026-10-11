@@ -113,7 +113,7 @@ class HeroSection extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.fromLTRB(
                       narrow ? 24 : 72,
-                      narrow ? 120 : 64,
+                      narrow ? 160 : 110,
                       narrow ? 24 : 72,
                       narrow ? 48 : 64,
                     ),
@@ -148,17 +148,6 @@ class _HeroText extends StatelessWidget {
     return Column(
       crossAxisAlignment: cross,
       children: [
-        Text(
-          copy.kicker,
-          textAlign: align,
-          style: TextStyle(
-            color: _goldSoft,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 3,
-          ),
-        ),
-        const SizedBox(height: 20),
         Text.rich(
           TextSpan(
             children: [
