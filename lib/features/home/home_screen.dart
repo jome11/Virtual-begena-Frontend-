@@ -14,6 +14,7 @@ import 'widgets/how_it_works_section.dart';
 import 'widgets/orthodox_sections.dart';
 import 'widgets/popular_mezmurs_section.dart';
 import 'widgets/stats_strip.dart';
+import 'widgets/videos_section.dart';
 
 class HomeScreen extends StatefulWidget {
   /// Optional section name from the URL (?section=about) to scroll to.
@@ -133,9 +134,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   KeyedSubtree(
                     key: _keys[SiteSection.home],
-                    child: const Column(
+                    child: Column(
                       children: [
                         Reveal(child: HeroSection()),
+                        Reveal(child: VideosSection()),
                         Reveal(child: StatsStrip()),
                         ScriptureSection(),
                         Reveal(child: ExploreInstrumentSection()),

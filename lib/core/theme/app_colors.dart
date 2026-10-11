@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF0B1F4B); // Brand primary (royal navy)
+  static const Color primary = Color(0xFF1A1408); // Brand primary (dark brown-black)
   static const Color secondary = Color(0xFFD4AF37); // Brand gold accent
-  static const Color accent = Color(0xFF2563EB); // Royal Blue
+  static const Color accent = Color(0xFFB8892F); // Gold
 
   // Mode accent colors — used as icon-badge tints on the cards.
-  static const Color modeExercise = Color(0xFF0EA5E9); // cyan
+  static const Color modeExercise = Color(0xFFA8763E); // bronze
   static const Color modeFreePlay = Color(0xFFD4AF37); // gold
   static const Color modeTuning = Color(0xFF8B5CF6); // purple
   static const Color modeMezmurTenat = Color(0xFF10B981); // green
   static const Color modeProgress = Color(0xFF64748B); // muted slate
-  static const Color modeTrainingPlan = Color(0xFF0EA5E9); // cyan
+  static const Color modeTrainingPlan = Color(0xFFA8763E); // bronze
   static const Color modeRealPlay = Color(0xFF10B981); // green
 
   // Qenet-specific colors
-  static const Color qenetSelamta = Color(0xFF0EA5E9);
+  static const Color qenetSelamta = Color(0xFFA8763E);
   static const Color qenetTezeta = Color(0xFFD4AF37);
   static const Color qenetAnchihoye = Color(0xFF8B5CF6);
 

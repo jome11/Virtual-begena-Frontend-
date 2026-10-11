@@ -246,10 +246,10 @@ class _StepTile extends StatelessWidget {
               width: 36,
               height: 36,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFC9A24B), Color(0xFF8A6A1F)],
                 ),
               ),
               child: Text('$index',
@@ -294,7 +294,7 @@ class _TipsCard extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0B1F4B), Color(0xFF2563EB)],
+          colors: [Color(0xFF1A1408), Color(0xFFB8892F)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

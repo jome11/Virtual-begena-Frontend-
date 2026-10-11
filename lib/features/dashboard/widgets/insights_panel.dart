@@ -426,7 +426,7 @@ class _Badge extends StatelessWidget {
               shape: BoxShape.circle,
               gradient: earned
                   ? const LinearGradient(
-                      colors: [Color(0xFF60A5FA), Color(0xFF1D4ED8)])
+                      colors: [Color(0xFFE0B84F), Color(0xFF8A6A1F)])
                   : null,
               color: earned ? null : c.border,
             ),

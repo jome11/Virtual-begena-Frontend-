@@ -219,7 +219,7 @@ class _GlassChip extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: const Color(0xFF0B1F4B),
+                  color: const Color(0xFF1A1408),
                   fontWeight: FontWeight.w600,
                   fontSize: 13.5,
                   fontFamily:
@@ -262,7 +262,7 @@ class _LanguageToggle extends StatelessWidget {
                   child: Text(
                     lang == Language.en ? 'አማ' : 'EN',
                     style: const TextStyle(
-                      color: Color(0xFF0B1F4B),
+                      color: Color(0xFF1A1408),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -308,7 +308,7 @@ class _EnterButtonState extends State<_EnterButton> {
               borderRadius: BorderRadius.circular(40),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF2563EB)
+                  color: const Color(0xFFB8892F)
                       .withValues(alpha: _hover ? 0.55 : 0.35),
                   blurRadius: _hover ? 30 : 18,
                   offset: const Offset(0, 8),
@@ -369,7 +369,7 @@ class _TryButton extends StatelessWidget {
                   Text(
                     AppStrings.get('try_free'),
                     style: TextStyle(
-                      color: const Color(0xFF0B1F4B),
+                      color: const Color(0xFF1A1408),
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       fontFamily:

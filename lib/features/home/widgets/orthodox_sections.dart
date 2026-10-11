@@ -549,7 +549,7 @@ class _YaredBanner extends StatelessWidget {
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0B1F4B), Color(0xFF2563EB)],
+          colors: [Color(0xFF1A1408), Color(0xFFB8892F)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

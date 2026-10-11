@@ -48,7 +48,7 @@ class _TodayPlanCardState extends State<TodayPlanCard> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0B1F4B), Color(0xFF2563EB)],
+          colors: [Color(0xFF1A1408), Color(0xFFB8892F)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -84,7 +84,7 @@ class _TodayPlanCardState extends State<TodayPlanCard> {
           FilledButton(
             onPressed: () => context.go('/daily-plan'),
             style: FilledButton.styleFrom(
-                backgroundColor: Colors.white, foregroundColor: const Color(0xFF0B1F4B)),
+                backgroundColor: Colors.white, foregroundColor: const Color(0xFF1A1408)),
             child: Text(_start == null ? tr('ጀምር', 'Start') : tr('ክፈት', 'Open')),
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../shared/widgets/youtube_embed.dart';
 
 // Sacred, dark palette for the hero band only — independent of the light
 // brand theme used by the rest of the page, so it reads as its own moment.
@@ -68,6 +69,7 @@ class HeroSection extends StatelessWidget {
         return LayoutBuilder(
           builder: (context, c) {
             final narrow = c.maxWidth < 900;
+            final showVideo = c.maxWidth >= 1150;
             return Container(
               width: double.infinity,
               height: narrow ? 640 : 720,
@@ -126,6 +128,14 @@ class HeroSection extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (showVideo)
+                    Positioned(
+                      right: 72,
+                      top: 0,
+                      bottom: 0,
+                      width: (c.maxWidth * 0.38).clamp(420.0, 680.0),
+                      child: const Center(child: _HeroVideo()),
+                    ),
                 ],
               ),
             );
@@ -228,6 +238,83 @@ class _HeroText extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _HeroVideo extends StatefulWidget {
+  const _HeroVideo();
+
+  @override
+  State<_HeroVideo> createState() => _HeroVideoState();
+}
+
+class _HeroVideoState extends State<_HeroVideo> {
+  // id = the part after "v=" in a YouTube link. (id, English, Amharic)
+  static const _videos = [
+    ('nAlD9nkJzLc', 'The Story of the Begena', 'የበገና ታሪክ'),
+    ('DykDffdo8yk', 'Learn to play: intro', 'መጫወት ይማሩ፦ መግቢያ'),
+    ('SLZc4q3vp38', 'Finger exercises', 'የጣት ልምምዶች'),
+    ('lW645IYBLXg', 'Begena mezmur', 'የበገና መዝሙር'),
+  ];
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Language>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        final am = lang == Language.am;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: _gold.withValues(alpha: 0.35)),
+                boxShadow: [
+                  BoxShadow(
+                    color: _gold.withValues(alpha: 0.25),
+                    blurRadius: 40,
+                    offset: const Offset(0, 18),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(21),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: YoutubeEmbed(videoId: _videos[_index].$1),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (var i = 0; i < _videos.length; i++)
+                  ChoiceChip(
+                    label: Text(am ? _videos[i].$3 : _videos[i].$2),
+                    selected: i == _index,
+                    showCheckmark: false,
+                    selectedColor: _gold,
+                    backgroundColor: _ink.withValues(alpha: 0.7),
+                    side: BorderSide(color: _gold.withValues(alpha: 0.4)),
+                    labelStyle: TextStyle(
+                      fontFamily: am ? 'BelaBereka' : null,
+                      color: i == _index ? _ink : _cream,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.5,
+                    ),
+                    onSelected: (_) => setState(() => _index = i),
+                  ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

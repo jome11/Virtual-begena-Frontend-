@@ -138,13 +138,13 @@ class _StatCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               gradient: const LinearGradient(
-                colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+                colors: [Color(0xFFC9A24B), Color(0xFF8A6A1F)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF2563EB).withValues(alpha: 0.35),
+                  color: const Color(0xFFB8892F).withValues(alpha: 0.35),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 ),
