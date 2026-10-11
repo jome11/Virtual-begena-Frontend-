@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import '../constants/app_strings.dart';
+
 class ContentBlock {
   final String type; // 'p' | 'li' | 'table'
   final String text;
@@ -34,5 +38,43 @@ class ContentSection {
 }
 
 class CourseContent {
-  static Future<List<ContentSection>?> chapter(int n) async => null;
+  static final Map<String, Map<int, List<ContentSection>>> _cache = {};
+
+  static Future<List<ContentSection>?> chapter(int n) async {
+    final en = languageNotifier.value == Language.en;
+    final key = en ? 'en' : 'am';
+    try {
+      _cache[key] ??= await _load(en);
+    } catch (_) {
+      return null;
+    }
+    return _cache[key]![n];
+  }
+
+  static Future<Map<int, List<ContentSection>>> _load(bool en) async {
+    return _parse(
+      await rootBundle.loadString(
+        en ? 'assets/course/chapters_en.json' : 'assets/course/chapters.json',
+      ),
+      extra: false,
+    );
+  }
+
+  static Map<int, List<ContentSection>> _parse(String raw, {required bool extra}) {
+    final data = jsonDecode(raw) as Map<String, dynamic>;
+    return {
+      for (final c in data['chapters'] as List)
+        (c['number'] as num).toInt(): [
+          for (final s in c['sections'] as List)
+            ContentSection(
+              s['heading'] as String?,
+              [
+                for (final b in s['blocks'] as List)
+                  ContentBlock.fromJson(b as Map<String, dynamic>),
+              ],
+              extra: extra,
+            ),
+        ],
+    };
+  }
 }

@@ -47,11 +47,25 @@ class _ChapterScreenState extends State<ChapterScreen> {
         });
       }
     });
+    languageNotifier.addListener(_reload);
+  }
+
+  @override
+  void dispose() {
+    languageNotifier.removeListener(_reload);
+    super.dispose();
   }
 
   Future<void> _reload() async {
     final s = await CourseProgress.load();
-    if (mounted) setState(() => _snap = s);
+    final sections = await CourseContent.chapter(widget.number);
+    if (mounted) {
+      setState(() {
+        _snap = s;
+        _sections = sections;
+        _contentLoaded = true;
+      });
+    }
   }
 
   @override
