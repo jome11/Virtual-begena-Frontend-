@@ -124,66 +124,59 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: BlueFadeBackground(
-        child: Column(
+        child: Stack(
+          key: _areaKey,
           children: [
-            // Sticky: lives outside the scroll view.
-            const NavBar(),
-            Expanded(
-              child: Stack(
-                key: _areaKey,
+            SingleChildScrollView(
+              controller: _scroll,
+              child: Column(
                 children: [
-                  SingleChildScrollView(
-                    controller: _scroll,
-                    child: Column(
+                  KeyedSubtree(
+                    key: _keys[SiteSection.home],
+                    child: const Column(
                       children: [
-                        KeyedSubtree(
-                          key: _keys[SiteSection.home],
-                          child: const Column(
-                            children: [
-                              Reveal(child: HeroSection()),
-                              Reveal(child: StatsStrip()),
-                              ScriptureSection(),
-                              Reveal(child: ExploreInstrumentSection()),
-                              SymbolismSection(),
-                              HowItWorksSection(),
-                              TraditionSection(),
-                              Reveal(child: PopularMezmursSection()),
-                            ],
-                          ),
-                        ),
-                        KeyedSubtree(
-                          key: _keys[SiteSection.howTo],
-                          child: const HowToSection(),
-                        ),
-                        KeyedSubtree(
-                          key: _keys[SiteSection.about],
-                          child: const AboutSection(),
-                        ),
-                        KeyedSubtree(
-                          key: _keys[SiteSection.contact],
-                          child: const ContactSection(),
-                        ),
-                        const SiteFooter(),
+                        Reveal(child: HeroSection()),
+                        Reveal(child: StatsStrip()),
+                        ScriptureSection(),
+                        Reveal(child: ExploreInstrumentSection()),
+                        SymbolismSection(),
+                        HowItWorksSection(),
+                        TraditionSection(),
+                        Reveal(child: PopularMezmursSection()),
                       ],
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: ValueListenableBuilder<double>(
-                      valueListenable: _progress,
-                      builder: (context, v, _) => LinearProgressIndicator(
-                        value: v,
-                        minHeight: 3,
-                        backgroundColor: Colors.transparent,
-                        color: brand.amber,
-                      ),
-                    ),
+                  KeyedSubtree(
+                    key: _keys[SiteSection.howTo],
+                    child: const HowToSection(),
                   ),
+                  KeyedSubtree(
+                    key: _keys[SiteSection.about],
+                    child: const AboutSection(),
+                  ),
+                  KeyedSubtree(
+                    key: _keys[SiteSection.contact],
+                    child: const ContactSection(),
+                  ),
+                  const SiteFooter(),
                 ],
               ),
             ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: ValueListenableBuilder<double>(
+                valueListenable: _progress,
+                builder: (context, v, _) => LinearProgressIndicator(
+                  value: v,
+                  minHeight: 3,
+                  backgroundColor: Colors.transparent,
+                  color: brand.amber,
+                ),
+              ),
+            ),
+            const Positioned(top: 0, left: 0, right: 0, child: NavBar()),
           ],
         ),
       ),

@@ -19,12 +19,13 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(84);
 
   @override
   Widget build(BuildContext context) => AppBar(
-    backgroundColor: context.colors.surface,
+    backgroundColor: Colors.transparent,
     elevation: 0,
+    scrolledUnderElevation: 0,
     titleSpacing: 20,
     title: Row(
       children: [

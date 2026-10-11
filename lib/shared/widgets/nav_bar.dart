@@ -60,65 +60,69 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
         final controls = FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _LanguageToggle(),
-              const SizedBox(width: 8),
-              if (!compact) ...[
-                OutlinedButton(
-                  onPressed: () => context.go('/login'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: brand.ink,
-                    side: BorderSide(color: brand.ink.withValues(alpha: 0.3)),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          child: _Glass(
+            radius: 28,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _LanguageToggle(),
+                const SizedBox(width: 8),
+                if (!compact) ...[
+                  OutlinedButton(
+                    onPressed: () => context.go('/login'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: brand.ink,
+                      side: BorderSide(color: brand.ink.withValues(alpha: 0.3)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    ),
+                    child: Text(
+                      AppStrings.get('sign_in'),
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+                ElevatedButton(
+                  onPressed: () => context.go('/signup'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: brand.amber,
+                    foregroundColor: brand.background,
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: compact ? 14 : 20,
+                      vertical: compact ? 12 : 14,
+                    ),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   ),
-                  child: Text(
-                    AppStrings.get('sign_in'),
-                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                  ),
-                ),
-                const SizedBox(width: 10),
-              ],
-              ElevatedButton(
-                onPressed: () => context.go('/signup'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: brand.amber,
-                  foregroundColor: brand.background,
-                  elevation: 0,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: compact ? 14 : 20,
-                    vertical: compact ? 12 : 14,
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (!compact) ...[
-                      const Icon(Icons.rocket_launch_outlined, size: 18),
-                      const SizedBox(width: 8),
-                    ],
-                    Text(
-                      AppStrings.get('get_started'),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: compact ? 13 : 15,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (!compact) ...[
+                        const Icon(Icons.rocket_launch_outlined, size: 18),
+                        const SizedBox(width: 8),
+                      ],
+                      Text(
+                        AppStrings.get('get_started'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: compact ? 13 : 15,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: brand.amber.withValues(alpha: 0.5)),
-                  borderRadius: BorderRadius.circular(14),
+                const SizedBox(width: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: brand.amber.withValues(alpha: 0.5)),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const ThemeToggleButton(),
                 ),
-                child: const ThemeToggleButton(),
-              ),
-            ],
+              ],
+            ),
           ),
         );
 

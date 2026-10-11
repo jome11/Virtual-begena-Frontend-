@@ -34,7 +34,7 @@ class SectionNav {
     if (ctx == null || !ctx.mounted) return;
     await Scrollable.ensureVisible(
       ctx,
-      alignment: 0.0,
+      alignment: 90 / MediaQuery.of(ctx).size.height,
       duration: const Duration(milliseconds: 750),
       curve: Curves.easeInOutCubic,
     );

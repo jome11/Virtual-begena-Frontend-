@@ -10,7 +10,7 @@ window.begenaBridge = (() => {
     hoveredId: null,
   };
 
-  function waitForElement(id, timeoutMs = 8000) {
+  function waitForElement(id, timeoutMs = 30000) {
     return new Promise((resolve, reject) => {
       const existing = document.getElementById(id);
       if (existing) return resolve(existing);

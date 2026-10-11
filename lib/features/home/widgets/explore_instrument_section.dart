@@ -19,7 +19,9 @@ class _ExploreInstrumentSectionState extends State<ExploreInstrumentSection> {
   @override
   void initState() {
     super.initState();
-    _service.mount(containerId: BegenaViewRegistrar.stageViewId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _service.mount(containerId: BegenaViewRegistrar.stageViewId);
+    });
   }
 
   @override
