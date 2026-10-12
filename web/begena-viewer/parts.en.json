@@ -1,0 +1,219 @@
+{
+ "parts": [
+  {
+   "id": "kenber",
+   "name": "ቀንበር (Qenber)",
+   "alt": "also called ጋድም (Gadm)",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What is it?",
+     "text": "The horizontal piece at the top of the Begena. The ten strings are stretched between this part and the መወጠሪያ (Mewetteriya) at the bottom."
+    },
+    {
+     "label": "What it stands for",
+     "text": "A symbol of the authority of God (ስልጣነ እግዚአብሔር, Siltane Egziabher)."
+    }
+   ]
+  },
+  {
+   "id": "get",
+   "name": "ጌጥ (Get)",
+   "alt": "the cross · መስቀል (Meskel)",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What it stands for",
+     "text": "A symbol of the Cross (መስቀል, Meskel), on which God showed his perfect love for humankind."
+    }
+   ]
+  },
+  {
+   "id": "mekagn",
+   "name": "መቃኛ (Meqanya)",
+   "alt": "",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "On the model",
+     "text": "Ten small Meqanya pieces can be seen at the top of the strings."
+    },
+    {
+     "label": "What it stands for",
+     "list": [
+      "It is likened to the Holy Spirit (መንፈስ ቅዱስ, Menfes Qidus), because it is He who protects the life of the faithful by giving the laws.",
+      "Alternatively: the Meqanya are likened to the saints, the righteous and the martyrs who overcame this world and joined the body of the victorious Church in heaven.",
+      "Alternatively: a symbol of the angels."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pillarR",
+   "name": "ቀኝ ምሰሶ (Qegn Miseso)",
+   "alt": "the right pillar",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What it stands for",
+     "text": "A symbol of the love of God (ፍቅረ እግዚአብሔር, Fikre Egziabher). Alternatively: of the Old Testament (ብሉይ ኪዳን, Bluy Kidan). Alternatively: of Megabe Bluy (መጋቤ ብሉይ), Saint Michael (ቅዱስ ሚካኤል, Qidus Mikael)."
+    }
+   ]
+  },
+  {
+   "id": "pillarL",
+   "name": "ግራ ምሰሶ (Gra Miseso)",
+   "alt": "the left pillar",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What it stands for",
+     "text": "A symbol of the love of one’s neighbor, that is, of people (ፍቅረ ቢጽ, Fikre Bits). Alternatively: of the New Testament (ሐዲስ ኪዳን, Hadis Kidan). Alternatively: of Megabe Hadis (መጋቤ ሐዲስ), Saint Gabriel (ቅዱስ ገብርኤል, Qidus Gebre’el)."
+    }
+   ]
+  },
+  {
+   "id": "strings",
+   "name": "አውታር (Awtar)",
+   "alt": "the strings",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What is it?",
+     "text": "The Begena has ten strings (Awtar). The strings are twisted from cattle (ox) gut."
+    },
+    {
+     "label": "What it stands for",
+     "text": "A symbol of the Ten Commandments (አሥርቱ ትዕዛዛት, Asirtu Te’zazat) (Exodus 20:1–17). The ten strings also stand for the following:"
+    },
+    {
+     "label": "",
+     "list": [
+      "The ten senses. The outer five: eye, nose, ear, tongue and palm. The inner five: ዓይነ ልቦና (Ayne Libona), አንፈ ልቦና (Anfe Libona), እዝነ ልቦና (Izne Libona), አፈ ልቦና (Afe Libona) and እደ ልቦና (Ede Libona), literally the eye, nose, ear, mouth and hand of the heart.",
+      "The three modes (melodic styles) of Saint Yared: ግእዝ (Ge’ez) for the Father, ዕዝል (Ezl) for the Son, and አራራይ (Araray) for the Holy Spirit.",
+      "The ten headings of Saint David’s Psalms (the 150 psalms divided into ten).",
+      "The ten ranks of the saints: ንጽሐ ሥጋ (Nitsehe Sega, purity of body), ንጽሐ ነፍስ (Nitsehe Nefs, purity of soul) and ንጽሐ ልቦና (Nitsehe Libona, purity of heart), arranged in three groups called ወጣንያን (Wetanyan), ማዕከላውያን (Ma’ekelawiyan) and ፍጹማን (Fitsuman)."
+     ]
+    },
+    {
+     "label": "Notes",
+     "text": "Strings 1, 4, 6, 8 and 10 give the main notes. The other five strings are resting and accompanying strings (ማረፊያ, Marefiya, and ማጀቢያ, Majebiya)."
+    }
+   ]
+  },
+  {
+   "id": "gebete",
+   "name": "ገበቴ (Gebete)",
+   "alt": "the sound box · የድምጽ ሳጥን (Yedimts Satin)",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What is it?",
+     "text": "The sound of the Begena comes from the sound box (the Gebete)."
+    },
+    {
+     "label": "What it stands for",
+     "text": "A symbol of Our Lady, the Holy Virgin Mary (እመቤታችን ድንግል ማርያም, Emebetachin Dingil Mariyam). Just as the sound of the Begena comes from the sound box, from Our Lady came the incarnate Word (አካላዊ ቃል, Akalawi Qal), the Son, our Lord, Saviour and God, Jesus Christ."
+    }
+   ]
+  },
+  {
+   "id": "berkuma",
+   "name": "በርኩማ (Berkuma)",
+   "alt": "",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "On the model",
+     "text": "The raised bar on the front of the sound box, with its two end posts."
+    },
+    {
+     "label": "What it stands for",
+     "text": "A symbol of Mount Sinai (ደብረ ሲና, Debre Sina)."
+    }
+   ]
+  },
+  {
+   "id": "mewetcheria",
+   "name": "መወጠሪያ (Mewetteriya)",
+   "alt": "",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "What is it?",
+     "text": "Made from wood and skin, it is found at the lower part of the Begena. It is used to stretch the strings together with the ቀንበር (Qenber). The ten strings connect the Qenber and the Mewetteriya."
+    },
+    {
+     "label": "What it stands for",
+     "text": "The Mewetteriya is likened to the dwelling place of people (the earth). It shows people entering the kingdom of heaven from earth by the ladder of God’s commandments (ትዕዛዛተ እግዚእ, Te’zazate Egzi’). Alternatively: a symbol of the descendants of Adam (humankind) living on earth."
+    }
+   ]
+  },
+  {
+   "id": "enzira",
+   "name": "እንዚራ (Enzira)",
+   "alt": "",
+   "onModel": true,
+   "blocks": [
+    {
+     "label": "On the model",
+     "text": "The ten small pegs on top of the በርኩማ (Berkuma)."
+    },
+    {
+     "label": "What it stands for",
+     "text": "The Enzira are likened to Christians in spiritual struggle (ተጋድሎ, Tegadlo). Just as the Enzira sit on the ten strings, Christians struggle to enrich their spiritual life in their worldly living, taking as their guide the commandments of God, which the ten strings stand for."
+    }
+   ]
+  },
+  {
+   "id": "dehnts",
+   "name": "ድህንጻ (Dehntsa)",
+   "alt": "",
+   "onModel": false,
+   "blocks": [
+    {
+     "label": "What is it?",
+     "text": "A striker made of horn. It is used to strike the strings so that they give sound."
+    },
+    {
+     "label": "What it stands for",
+     "text": "It is likened to Christ. Just as the Dehntsa goes back and forth striking the ten strings, so Jesus Christ, Saviour of the world, confirmed in the New Testament the ten commandments he gave in the Old Testament."
+    }
+   ]
+  },
+  {
+   "id": "backcross",
+   "name": "የመስቀል ምልክት (Yemeskel Milikit)",
+   "alt": "the cross mark on the back of the Gebete",
+   "onModel": false,
+   "blocks": [
+    {
+     "label": "What it stands for",
+     "text": "The cross-shaped mark on the back of the sound box (the Gebete) is a sign of how Saint David was saved from the spear of Saul. In the New Testament too, the Cross is our sign of being saved from the arrows of the devil, so this mark is made."
+    }
+   ]
+  }
+ ],
+ "notOnModelNote": "This part is not identified on the 3D model, so only its explanation is shown.",
+ "intro": {
+  "title": "The Begena (በገና)",
+  "blocks": [
+   {
+    "label": "",
+    "text": "The Begena (በገና) is classed among the stringed musical instruments (chordophones). It is more than 5,800 years old and can be called the father of the stringed instruments."
+   },
+   {
+    "label": "How it is made",
+    "text": "The Begena is made from wood and animal products (skin, gut, horn). Its height is between 90 and 140 cm. The strings are twisted from cattle (ox) gut."
+   },
+   {
+    "label": "How to use this page",
+    "text": "Tap a part on the model, or choose a name from the list below."
+   },
+   {
+    "label": "About the names",
+    "text": "The names of the parts are kept as they are given in Amharic. The Latin letters in brackets show roughly how each name sounds when read aloud."
+   }
+  ]
+ }
+}

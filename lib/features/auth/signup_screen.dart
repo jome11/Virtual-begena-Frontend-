@@ -6,6 +6,7 @@ import '../../core/services/auth_service.dart';
 import '../../shared/widgets/gradient_background.dart';
 import '../../shared/widgets/language_toggle.dart';
 import '../../shared/widgets/theme_toggle_button.dart';
+import 'widgets/social_buttons.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -136,6 +137,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           Expanded(child: Divider(color: context.colors.border)),
                         ]),
+                        const SizedBox(height: 12),
+                        const SocialButtons(signUp: true),
                         const SizedBox(height: 12),
                         SizedBox(
                           width: double.infinity,

@@ -274,7 +274,7 @@ class _PathCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Your learning path',
+          Text(tr('የመማሪያ መንገድዎ', 'Your learning path'),
               style: TextStyle(
                   color: c.textPrimary,
                   fontSize: 18,
@@ -368,13 +368,13 @@ class _PathRow extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(qenet.label,
+                  Text(_qenetName(qenet),
                       style: TextStyle(
                           color: c.textPrimary,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 1)),
+                          letterSpacing: languageNotifier.value == Language.am ? 0 : 1)),
                   const Spacer(),
-                  Text('$count sessions · ${avg.round()}%',
+                  Text(tr('$count ክፍለ ጊዜዎች · ${avg.round()}%', '$count sessions · ${avg.round()}%'),
                       style: TextStyle(color: c.textSecondary, fontSize: 12)),
                 ],
               ),
@@ -439,3 +439,9 @@ class _Badge extends StatelessWidget {
     );
   }
 }
+
+String _qenetName(Qenet q) => switch (q) {
+      Qenet.selamta => tr('ሰላምታ', 'SELAMTA'),
+      Qenet.tezeta => tr('ትዝታ', 'TEZETA'),
+      Qenet.anchihoye => tr('አንቺ ሆዬ', 'ANCHIHOYE'),
+    };

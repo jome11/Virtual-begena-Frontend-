@@ -7,6 +7,7 @@ import '../../core/services/auth_service.dart';
 import '../../shared/widgets/motion.dart';
 import '../../shared/widgets/language_toggle.dart';
 import '../../shared/widgets/theme_toggle_button.dart';
+import '../../core/data/curriculum.dart' show tr;
 import '../daily/today_plan_card.dart';
 import 'widgets/feature_card.dart';
 import 'widgets/streak_banner.dart';
@@ -31,9 +32,9 @@ class DashboardScreen extends StatelessWidget {
               (AppStrings.get('mode_mezmur_tenat'), AppStrings.get('mode_mezmur_tenat_sub'), Icons.library_music_rounded, AppColors.modeMezmurTenat, '/mezmur-tenat', 'assets/modes/mezmur.jpg'),
               (AppStrings.get('mode_progress'), AppStrings.get('mode_progress_sub'), Icons.bar_chart_rounded, AppColors.modeProgress, '/progress', 'assets/modes/progress.jpg'),
               (AppStrings.get('mode_training_plan'), AppStrings.get('mode_training_plan_sub'), Icons.psychology_alt_rounded, AppColors.modeTrainingPlan, '/training-plan', 'assets/modes/training_plan.jpg'),
-              ('Leaderboard', 'See how you rank', Icons.leaderboard_rounded, AppColors.modeFreePlay, '/leaderboard', 'assets/modes/leaderboard.jpg'),
-              ('Course', 'Chapters, quizzes and assignments', Icons.menu_book_rounded, AppColors.modeProgress, '/course', 'assets/modes/course.jpg'),
-              ('7-day plan', 'Your daily tasks', Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan', 'assets/modes/daily_plan.jpg'),
+              (tr('የደረጃ ሰንጠረዥ', 'Leaderboard'), tr('ደረጃዎን ይመልከቱ', 'See how you rank'), Icons.leaderboard_rounded, AppColors.modeFreePlay, '/leaderboard', 'assets/modes/leaderboard.jpg'),
+              (tr('ኮርስ', 'Course'), tr('ምዕራፎች፣ ፈተናዎችና ሥራዎች', 'Chapters, quizzes and assignments'), Icons.menu_book_rounded, AppColors.modeProgress, '/course', 'assets/modes/course.jpg'),
+              (tr('የ7 ቀን እቅድ', '7-day plan'), tr('የዕለት ተግባራትዎ', 'Your daily tasks'), Icons.event_available_rounded, AppColors.modeTrainingPlan, '/daily-plan', 'assets/modes/daily_plan.jpg'),
             ];
 
             return Scaffold(

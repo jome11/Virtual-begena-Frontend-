@@ -119,9 +119,9 @@ class HowToSection extends StatelessWidget {
             ),
             Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 760),
+                constraints: const BoxConstraints(maxWidth: 1300),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: [
                       for (var i = 0; i < t.steps.length; i++)
@@ -178,7 +178,7 @@ class HowToSection extends StatelessWidget {
                       for (final f in t.faqs)
                         Reveal(
                           child: Container(
-                            margin: const EdgeInsets.only(bottom: 10),
+                            margin: const EdgeInsets.only(bottom: 8),
                             child: Material(
                               color: brand.surface,
                               shape: RoundedRectangleBorder(
@@ -190,16 +190,20 @@ class HowToSection extends StatelessWidget {
                                 data: Theme.of(context)
                                     .copyWith(dividerColor: Colors.transparent),
                                 child: ExpansionTile(
+                                  dense: true,
+                                  leading: const SizedBox(width: 24),
                                   title: Text(f.$1,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: brand.ink,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 14)),
+                                          fontSize: 15)),
                                   childrenPadding:
                                       const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                                  expandedAlignment: Alignment.centerLeft,
+                                  expandedAlignment: Alignment.center,
                                   children: [
                                     Text(f.$2,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: brand.inkMuted, height: 1.6)),
                                   ],
@@ -240,15 +244,15 @@ class _StepTile extends StatelessWidget {
           border: Border.all(color: brand.beige),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 36,
               height: 36,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [Color(0xFFC9A24B), Color(0xFF8A6A1F)],
                 ),
               ),
@@ -259,25 +263,34 @@ class _StepTile extends StatelessWidget {
                       fontSize: 16)),
             ),
             const SizedBox(width: 16),
-            Icon(step.icon, color: brand.amber, size: 26),
-            const SizedBox(width: 14),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(step.title,
-                      style: TextStyle(
-                          color: brand.ink,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(step.icon, color: brand.amber, size: 26),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Text(step.title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: brand.ink,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 17)),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 6),
                   Text(step.body,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: brand.inkMuted, height: 1.6, fontSize: 14)),
+                          color: brand.inkMuted, height: 1.6, fontSize: 14.5)),
                 ],
               ),
             ),
+            const SizedBox(width: 48), // balances the number circle
           ],
         ),
       ),

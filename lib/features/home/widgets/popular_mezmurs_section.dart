@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/brand_palette.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/data/curriculum.dart' show tr;
 import '../../../shared/widgets/song_carousel.dart';
 
 class PopularMezmursSection extends StatelessWidget {
@@ -25,18 +26,18 @@ class PopularMezmursSection extends StatelessWidget {
                     color: brand.ink.withValues(alpha: 0.85),
                     fontSize: 24,
                     height: 1.4,
-                    fontFamily: 'Poppins', // Ensure consistency with app font
+                    fontFamily: lang == Language.am ? 'BelaBereka' : 'Poppins',
                   ),
                   children: [
-                    const TextSpan(text: 'Take a look at some of the '),
+                    TextSpan(text: tr('ተማሪዎቻችን አሁን እየተለማመዷቸው ካሉት ', 'Take a look at some of the ')),
                     TextSpan(
-                      text: 'most popular Mezmurs',
+                      text: tr('ተወዳጅ መዝሙሮች', 'most popular Mezmurs'),
                       style: TextStyle(
                         fontWeight: FontWeight.w800,
                         color: brand.ink,
                       ),
                     ),
-                    const TextSpan(text: '\nour students are practicing right now.'),
+                    TextSpan(text: tr('\nጥቂቶቹን ይመልከቱ።', '\nour students are practicing right now.')),
                   ],
                 ),
               ),

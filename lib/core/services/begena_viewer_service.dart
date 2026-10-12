@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:js_interop';
 import 'package:flutter/material.dart';
+import 'package:web/web.dart' as web;
+import '../constants/app_strings.dart';
 import 'js/begena_viewer_interop.dart';
 
 class BegenaViewerService extends ChangeNotifier {
@@ -10,18 +13,36 @@ class BegenaViewerService extends ChangeNotifier {
   String? _selectedId;
   String? _hoveredId;
   Map<String, dynamic>? _partsData;
+  Map<String, dynamic>? _enParts;
 
   bool get ready => _ready;
   String? get error => _error;
   String? get selectedId => _selectedId;
   String? get hoveredId => _hoveredId;
-  Map<String, dynamic>? get partsData => _partsData;
+  Map<String, dynamic>? get partsData {
+    if (languageNotifier.value == Language.en && _enParts != null) return _enParts;
+    return _partsData;
+  }
+
+  Future<void> _loadEnglish() async {
+    try {
+      final res = await web.window.fetch('/begena-viewer/parts.en.json'.toJS).toDart;
+      if (!res.ok) return;
+      final text = (await res.text().toDart).toDart;
+      _enParts = jsonDecode(text) as Map<String, dynamic>;
+      notifyListeners();
+    } catch (_) {
+      // falls back to the Amharic text
+    }
+  }
 
   Future<void> mount({
     required String containerId,
     String modelUrl = '/begena-viewer/Gebena.glb',
     String partsUrl = '/begena-viewer/parts.am.json',
   }) async {
+    languageNotifier.addListener(notifyListeners);
+    _loadEnglish();
     await BegenaViewerInterop.mount(containerId, modelUrl, partsUrl);
     _poll?.cancel();
     _poll = Timer.periodic(const Duration(milliseconds: 150), (_) => _tick());
@@ -78,6 +99,7 @@ class BegenaViewerService extends ChangeNotifier {
 
   @override
   void dispose() {
+    languageNotifier.removeListener(notifyListeners);
     _poll?.cancel();
     BegenaViewerInterop.destroy();
     super.dispose();
